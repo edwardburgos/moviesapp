@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import s from './App.module.css';
+import s from './SearchBar.module.css';
 import { Form } from 'react-bootstrap';
-import closeCircle from './img/icons/close-circle-outline.svg';
-import search from './img/icons/search-outline.svg'
+import closeCircle from '../../img/icons/close-circle-outline.svg';
+import search from '../../img/icons/search-outline.svg'
 
 export default function SearchBar() {
 
