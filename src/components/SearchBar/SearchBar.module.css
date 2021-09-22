@@ -1,0 +1,25 @@
+.searchInput {
+    width: 100%;
+    display: inline-block;
+} 
+  
+.input {
+    padding-right: 2.5rem !important;
+    width: 100%;
+}
+  
+.test {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+  
+.iconDumb {
+    vertical-align: middle;
+    position: absolute;
+    right: 12px;
+    max-height: 50%;
+    cursor: pointer;
+}
+  
