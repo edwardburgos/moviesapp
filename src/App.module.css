@@ -63,9 +63,3 @@
     transform: rotate(360deg);
   }
 }
-
-@media screen and (min-width: 576px) {
-  .cardsContainer {
-    justify-content: space-around;
-  }
-}
