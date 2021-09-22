@@ -1,5 +1,8 @@
 .container {
   padding: 0 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .titleContainer {
@@ -14,6 +17,12 @@
   margin-right: 10px;
 }
 
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1587px;
+}
 
 
 .App {
@@ -52,5 +61,11 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .cardsContainer {
+    justify-content: space-around;
   }
 }

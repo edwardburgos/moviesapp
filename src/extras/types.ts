@@ -1,8 +1,4 @@
 export type Movie = {
-    title: string;
-}
-
-export type SearchResult = {
     adult: boolean,
     backdrop_path: string,
     genre_ids: number[],
@@ -17,4 +13,8 @@ export type SearchResult = {
     video: boolean,
     vote_average: number,
     vote_count: number
+}
+
+export type CardProps = {
+    movie: Movie
 }

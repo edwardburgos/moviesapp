@@ -20,12 +20,15 @@ export default function App() {
       <SearchBar></SearchBar>
 
       {
-        movies.length ? 
-          movies.map((e, index) => <Card key={index} title={e.title} />)
-        :
-        null
-        }
-      
+        movies.length ?
+        
+          <div className={s.cardsContainer}>
+            {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
+          </div>
+          :
+          null
+      }
+
     </div>
   );
 }

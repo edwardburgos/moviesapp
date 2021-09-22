@@ -4,7 +4,6 @@ import { Form } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
 import search from '../../img/icons/search-outline.svg';
 import axios from 'axios';
-import { SearchResult } from '../../extras/types';
 import { useDispatch } from 'react-redux';
 import { modifyMovies } from '../../actions';
 import { showMessage } from '../../extras/functions';
@@ -17,7 +16,7 @@ export default function SearchBar() {
     async function searchMovie(title: string) {
         try {
             const movies = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${title}&page=1`)
-            dispatch(modifyMovies(movies.data.results.map((e: SearchResult) => { return { title: e.title } })))
+            dispatch(modifyMovies(movies.data.results))
         } catch (e) {
             showMessage('Sorry, an error ocurred')
         }

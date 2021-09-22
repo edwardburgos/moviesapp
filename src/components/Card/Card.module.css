@@ -1,0 +1,23 @@
+.card {
+    width: 280px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.poster {
+    border-radius: 10px;
+    width: 280px;
+    height: 414px;
+    min-height: 414px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+@media screen and (min-width: 375px) {.card { width: 337px; } .poster { width: 337px; height: 498px; min-height: 498px;}}
+@media screen and (min-width: 490px) {.card { width: 440px; } .poster { width: 440px; height: 651px; min-height: 651px;}}
+@media screen and (min-width: 576px) {.card { width: 250px; } .poster { width: 250px; height: 370px; min-height: 370px;}}
+@media screen and (min-width: 768px) {.card { width: 336px; } .poster { width: 336px; height: 497px; min-height: 497px;}}
+@media screen and (min-width: 960px) {.card { width: 202px; } .poster { width: 202px; height: 303px; min-height: 303px;}}
+@media screen and (min-width: 1121px) {.card { width: 238px; } .poster { width: 238px; height: 357px; min-height: 357px;}}
+@media screen and (min-width: 1300px) {.card { width: 229px; } .poster { width: 229px; height: 343px; min-height: 343px;}}
+@media screen and (min-width: 1516px) {.card { width: 267px; }.poster { width: 267px; height: 400px; min-height: 400px;}}
