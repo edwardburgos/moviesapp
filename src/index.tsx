@@ -8,7 +8,7 @@ import Detail from './components/Detail/Detail'
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { BrowserRouter, Route, Redirect, Switch, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 
 ReactDOM.render(
