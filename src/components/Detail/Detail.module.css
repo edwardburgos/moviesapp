@@ -29,7 +29,24 @@
     margin-bottom: 16px;
 }
 
+.voteInfo {
+    display: flex;
+    margin: 8px 0;
+    align-items: center;
+}
 
+.label {
+    font-weight: 600;
+    margin-right: 16px;
+    display: block;
+    width: 50%;
+}
+
+.description {
+    display: block;
+    width: 50%;
+}
+ 
 @media screen and (min-width: 768px) {
     .info {
         width: 55%;
@@ -37,4 +54,10 @@
     .posterContainer {
         width: 40%;
     } 
+    .label {
+        width: 30%;
+    }
+    .description {
+        width: 70%;
+    }
 }

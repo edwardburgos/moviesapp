@@ -3,6 +3,7 @@ import defaultPoster from '../../img/defaultPoster.jpg';
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { ProgressBar } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
@@ -85,17 +86,34 @@ export default function Detail({ id }: DetailProps) {
                     :
                     <ul>{movie.genres.map(e => <li><Link className='customLink' to={`/genre/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
                 }
-                <span className='bold'>Production companies</span>
-                {movie.production_companies.length === 1 ?
-                    <p><Link className='customLink' to={`/companie/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></p>
-                    :
-                    <ul>{movie.production_companies.map(e => <li><Link className='customLink' to={`/companie/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>}
+                {
+                    movie.production_companies.length !== 0 ?
+                        movie.production_companies.length === 1 ?
+                            <>
+                                <span className='bold'>Production company</span>
+                                <p><Link className='customLink' to={`/companie/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></p>
+                            </>
+                            :
+                            <>
+                                <span className='bold'>Production companies</span>
+                                <ul>{movie.production_companies.map(e => <li><Link className='customLink' to={`/companie/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
+                            </>
+                        :
+                        null
+                }
                 {movie.vote_average && movie.vote_count ?
                     <>
-                        <span className='bold'>Vote Count</span>
-                        <p>{movie.vote_count} votes</p>
-                        <span className='bold'>Vote Average</span>
-                        <p>{movie.vote_average} of 10</p>
+                        <div className={s.voteInfo}>
+                            <span className={s.label}>Vote Average</span>
+                            <span className={s.description}>{movie.vote_average} of 10</span>
+                        </div>
+                        <div className={s.voteInfo}>
+                            <span className={s.label}>Vote Count</span>
+                            <span className={s.description}>{movie.vote_count} votes</span>
+                        </div>
+                        <div className='mb-3'>
+                            <ProgressBar now={(movie.vote_average) * 10} />
+                        </div>
                     </>
                     : null
                 }
