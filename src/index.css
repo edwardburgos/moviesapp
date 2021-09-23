@@ -37,6 +37,10 @@ h1, h2, h3, h4, h5, h6, .bold{
   text-decoration: none;
 }
 
-.customLink:hover {
+.customLink:hover, .customLink:active {
   color: #0d6efd;
+}
+
+.block {
+  display: block;
 }
