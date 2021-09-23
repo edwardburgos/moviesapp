@@ -1,12 +1,13 @@
 import { CardProps } from '../../extras/types';
 import s from './Card.module.css'
-import defaultPoster from '../../img/defaultPoster.jpg'
+import defaultPoster from '../../img/defaultPoster.jpg';
+import { Link } from 'react-router-dom';
 
 export default function Card({ movie }: CardProps) {
     return (
         <div className={s.card}>
         <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : defaultPoster} alt={movie.title} className={s.poster}></img>
-        <p className='bold mb-0'>{movie.title}</p>
+        <Link className='bold mb-0 customLink' to={`/detail/${movie.id}`}>{movie.title}</Link>
         { movie.release_date ? <p className='mb-0'>{movie.release_date}</p> : null}
         
         </div>

@@ -18,3 +18,7 @@ export type Movie = {
 export type CardProps = {
     movie: Movie
 }
+
+export type DetailProps = {
+    id: number
+}

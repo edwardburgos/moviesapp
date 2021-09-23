@@ -31,3 +31,12 @@ h1, h2, h3, h4, h5, h6, .bold{
 .Toastify__progress-bar--default {
   background: #2962ff !important;
 }
+
+.customLink {
+  color: #000;
+  text-decoration: none;
+}
+
+.customLink:hover {
+  color: #0d6efd;
+}
