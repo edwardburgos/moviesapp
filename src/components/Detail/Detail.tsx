@@ -80,11 +80,19 @@ export default function Detail({ id }: DetailProps) {
                         <span className='bold'>Revenue</span>
                         <p>$ {movie.revenue.toLocaleString()}</p>
                     </> : null}
-                <span className='bold'>Genres</span>
-                {movie.genres.length === 1 ?
-                    <p><Link className='customLink' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></p>
-                    :
-                    <ul>{movie.genres.map(e => <li><Link className='customLink' to={`/genre/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
+
+                {movie.genres.length !== 0 ?
+                    movie.genres.length === 1 ?
+                        <>
+                            <span className='bold'>Genre</span>
+                            <p><Link className='customLink' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></p>
+                        </>
+                        :
+                        <>
+                            <span className='bold'>Genres</span>
+                            <ul>{movie.genres.map(e => <li><Link className='customLink' to={`/genre/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
+                        </>
+                    : null
                 }
                 {
                     movie.production_companies.length !== 0 ?
@@ -98,8 +106,7 @@ export default function Detail({ id }: DetailProps) {
                                 <span className='bold'>Production companies</span>
                                 <ul>{movie.production_companies.map(e => <li><Link className='customLink' to={`/companie/${e.id}/${e.name.toLowerCase().replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
                             </>
-                        :
-                        null
+                        : null
                 }
                 {movie.vote_average && movie.vote_count ?
                     <>
