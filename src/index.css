@@ -51,3 +51,33 @@ h1, h2, h3, h4, h5, h6, .bold{
   -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
   border: 1px transparent solid !important;
 }
+
+
+::-webkit-scrollbar {
+  width: 8px;     /* Tamaño del scroll en vertical */
+  height: 8px;    /* Tamaño del scroll en horizontal */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #787878;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #787878;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #787878;
+}
+
+::-webkit-scrollbar-track {
+  background: #e1e1e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track:hover,
+::-webkit-scrollbar-track:active {
+background: #d4d4d4;
+}
