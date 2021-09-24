@@ -1,4 +1,4 @@
-import { CastMember, DetailProps, MovieDetail } from '../../extras/types';
+import { CastMember, SearchProps, MovieDetail } from '../../extras/types';
 import defaultPoster from '../../img/defaultPoster.jpg';
 import defaultProfile from '../../img/icons/person-outline.svg';
 import s from './Detail.module.css'
@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
 import loadingGif from '../../img/loadingGif.gif';
 
-export default function Detail({ id }: DetailProps) {
+export default function Detail({ id }: SearchProps) {
 
     const [movie, setMovie] = useState<MovieDetail>({
         adult: false, belongs_to_collection: { id: 0, name: "" },
@@ -75,13 +75,12 @@ export default function Detail({ id }: DetailProps) {
                                     <span className='bold block'>Cast</span>
                                     <div className={s.castContainer}>
                                         {cast.map((e, index) =>
-                                            <div key={index} className={s.castMember}>
-                                                <img className={s.profilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
+                                            <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                <img className={s.profilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                                 <div className={s.name}>
                                                     <span className='bold block'>{e.name}</span>
                                                     <span>{e.character}</span>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         )}
                                         {showAll ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => getAllCast()}>Show all</button></div> : null}
                                     </div>
@@ -198,13 +197,13 @@ export default function Detail({ id }: DetailProps) {
                         allCast.length ?
                             <div className={s.fullCastContainer}>
                                 {allCast.map((e, index) =>
-                                    <div className={s.fullCastMember}>
+                                    <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
                                         <img className={e.profile_path ? s.profilePic : s.defualtProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                         <div className={s.name}>
                                             <span className='bold block'>{e.name}</span>
                                             <span>{e.character}</span>
                                         </div>
-                                    </div>
+                                    </Link>
                                 )}
                             </div>
                             :

@@ -1,5 +1,5 @@
-import { CompanyProps } from "../../extras/types"
+import { SearchProps } from "../../extras/types"
 
-export default function Company({id}:CompanyProps) {
+export default function Company({id}:SearchProps) {
     return (<h1>COMPANY</h1>)
 }

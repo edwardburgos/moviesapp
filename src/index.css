@@ -33,7 +33,7 @@ h1, h2, h3, h4, h5, h6, .bold{
   background: #0d6efd !important;
 }
 
-.customLink {
+.customLink, .linkDiv, .linkDiv:hover, .linkDiv:hover {
   color: #000;
   text-decoration: none;
 }

@@ -12,6 +12,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Genre from './components/Genre/Genre';
 import Collection from './components/Collection/Collection';
 import Company from './components/Company/Company';
+import Person from './components/Person/Person';
 
 
 ReactDOM.render(
@@ -24,6 +25,7 @@ ReactDOM.render(
           <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
           <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
           <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)} />} />
+          <Route path="/person/:id/:name" render={({ match }) => <Person id={parseInt(match.params.id)} />} />
         </Switch>
       </React.StrictMode>
     </BrowserRouter>

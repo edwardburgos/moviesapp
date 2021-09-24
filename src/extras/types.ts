@@ -19,19 +19,7 @@ export type CardProps = {
     movie: Movie
 }
 
-export type DetailProps = {
-    id: number
-}
-
-export type CollectionProps = {
-    id: number
-}
-
-export type CompanyProps = {
-    id: number
-}
-
-export type GenreProps = {
+export type SearchProps = {
     id: number
 }
 
