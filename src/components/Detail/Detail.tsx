@@ -1,10 +1,10 @@
-import { CastMember, SearchProps, MovieDetail } from '../../extras/types';
+import { CastMember, SearchProps, MovieDetail, MovieVideo } from '../../extras/types';
 import defaultPoster from '../../img/defaultPoster.jpg';
 import defaultProfile from '../../img/icons/person-outline.svg';
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ProgressBar, Modal, ModalTitle } from 'react-bootstrap'
+import { ProgressBar, Modal } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
@@ -23,6 +23,7 @@ export default function Detail({ id }: SearchProps) {
     const [showAll, setShowAll] = useState(false)
     const [allCast, setAllCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
     const [showAllCast, setShowAllCast] = useState(false)
+    const [trailer, setTrailer] = useState<MovieVideo>({key: '', site: '', type: '', official: false})
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -43,6 +44,14 @@ export default function Detail({ id }: SearchProps) {
                 }
                 setShowAll(filteredCast.length === 11)
                 setCast(filteredCast.slice(0, 10))
+                const trailer = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
+                const officialTrailer = trailer.data.results.filter((e: MovieVideo) => e.type === 'Trailer' && e.site === 'YouTube');
+                console.log('selena', officialTrailer[0])
+                if (officialTrailer.length) {
+                    const official = officialTrailer.filter((e: MovieVideo) => e.official)
+                    official.length ? setTrailer(official[0]) : setTrailer(officialTrailer[0])
+                }
+
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
@@ -70,6 +79,10 @@ export default function Detail({ id }: SearchProps) {
                             <div className={s.posterContainer}>
                                 <img className={s.poster} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
                             </div>
+                            
+                            {trailer.key ? <div className='text-center mb-3'><a className='btn btn-primary w-50' href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
+
+
                             {cast.length ?
                                 <div className='w-100'>
                                     <span className='bold block'>Cast</span>

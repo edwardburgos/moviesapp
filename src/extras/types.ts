@@ -52,3 +52,10 @@ export type CastMember = {
     known_for_department: string,
     character: string
 }
+
+export type MovieVideo = {
+    key: string,
+    site: string,
+    type: string,
+    official: boolean
+}
