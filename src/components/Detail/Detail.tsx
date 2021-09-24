@@ -1,5 +1,6 @@
-import { DetailProps, MovieDetail } from '../../extras/types';
+import { CastMember, DetailProps, MovieDetail } from '../../extras/types';
 import defaultPoster from '../../img/defaultPoster.jpg';
+import defaultProfile from '../../img/icons/person-outline.svg';
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -17,6 +18,7 @@ export default function Detail({ id }: DetailProps) {
         poster_path: "", production_companies: [{ id: 0, name: "" }], release_date: "", revenue: 0,
         status: "", title: "", vote_average: 0, vote_count: 0
     })
+    const [cast, setCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -27,6 +29,16 @@ export default function Detail({ id }: DetailProps) {
                 setLoading(true)
                 const movie = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
                 setMovie(movie.data)
+                const cast = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
+                let filteredCast = []
+                for (let e of cast.data.cast) {
+                    if (filteredCast.length < 11) {
+                        if (e.known_for_department === 'Acting') {
+                            filteredCast.push(e)
+                        }
+                    } else { break; }
+                }
+                setCast(filteredCast.slice(0, 10))
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
@@ -42,8 +54,25 @@ export default function Detail({ id }: DetailProps) {
         <div className={s.detail}>
             {!loading ?
                 <div className={s.container}>
-                    <div className={s.posterContainer}>
-                        <img className={s.poster} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
+                    <div className={s.leftContainer}>
+                        <div className={s.posterContainer}>
+                            <img className={s.poster} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
+                        </div>
+                        {cast.length ?
+                            <div className='w-100'>
+                                <span className='bold block mb-1'>Cast</span>
+                                <div className={s.castContainer}>
+                                    {cast.map((e, index) =>
+                                        <div key={index} className={index ? s.castMemberMargin : s.castMember}>
+                                            <img className={s.profilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
+                                            <div className={s.name}>
+                                                <span className='bold block'>{e.name}</span>
+                                                <span>{e.character}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div> : null}
                     </div>
                     <div className={s.info}>
                         <h1 className={s.title}>{movie.title}</h1>

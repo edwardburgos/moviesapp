@@ -25,15 +25,15 @@ export type DetailProps = {
 
 export type CollectionProps = {
     id: number
-} 
+}
 
 export type CompanyProps = {
     id: number
-} 
+}
 
 export type GenreProps = {
     id: number
-} 
+}
 
 export type MovieDetail = {
     adult: boolean,
@@ -55,4 +55,12 @@ export type MovieDetail = {
     title: string,
     vote_average: number,
     vote_count: number
+}
+
+export type CastMember = {
+    id: number,
+    name: string,
+    profile_path: string,
+    known_for_department: string,
+    character: string
 }
