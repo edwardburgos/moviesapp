@@ -27,7 +27,6 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 16px;
 }
 
 .poster {
@@ -133,10 +132,11 @@
     margin-right: 16px;
 }
 
-@media screen and (min-width: 768px) {
-    .poster {
-        margin-bottom: 0;
-    }
+.aWidth {
+    width: 267px;
+}
+
+@media screen and (min-width: 768px) { 
     .info {
         width: 55%;
     }

@@ -1,3 +1,5 @@
+export let months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
 export let isoLangs: {[key: string]: {name: string, nativeName: string}} = {
     ab:{
       name:"Abkhaz",

@@ -9,6 +9,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
 import loadingGif from '../../img/loadingGif.gif';
+import { months } from '../../extras/globalVariables';
+
 
 export default function Detail({ id }: SearchProps) {
 
@@ -80,7 +82,7 @@ export default function Detail({ id }: SearchProps) {
                                 <img className={s.poster} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
                             </div>
                             
-                            {trailer.key ? <div className='text-center mb-3'><a className='btn btn-primary w-50' href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
+                            {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.aWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
 
 
                             {cast.length ?
@@ -115,7 +117,7 @@ export default function Detail({ id }: SearchProps) {
                             {movie.status !== 'Canceled' && movie.release_date ?
                                 <>
                                     <span className='bold'>Release date</span>
-                                    <p>{movie.release_date}</p>
+                                    <p>{`${movie.release_date.split('-')[2]} ${months[parseInt(movie.release_date.split('-')[1]) - 1]} ${movie.release_date.split('-')[0]}`}</p>
                                 </> : null}
                             <span className='bold'>Suitable for</span>
                             <p>{movie.adult ? 'Adults only' : 'Whole family'}</p>
