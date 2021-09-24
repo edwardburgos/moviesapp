@@ -23,6 +23,18 @@ export type DetailProps = {
     id: number
 }
 
+export type CollectionProps = {
+    id: number
+} 
+
+export type CompanyProps = {
+    id: number
+} 
+
+export type GenreProps = {
+    id: number
+} 
+
 export type MovieDetail = {
     adult: boolean,
     belongs_to_collection: {

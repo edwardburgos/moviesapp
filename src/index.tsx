@@ -9,6 +9,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Genre from './components/Genre/Genre';
+import Collection from './components/Collection/Collection';
+import Company from './components/Company/Company';
 
 
 ReactDOM.render(
@@ -17,7 +20,10 @@ ReactDOM.render(
       <React.StrictMode>
         <Switch>
           <Route exact path="/" component={App} />
-          <Route path="/detail/:id" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
+          <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
+          <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
+          <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
+          <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)} />} />
         </Switch>
       </React.StrictMode>
     </BrowserRouter>
