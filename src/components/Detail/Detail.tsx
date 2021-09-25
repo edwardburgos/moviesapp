@@ -146,12 +146,12 @@ export default function Detail({ id }: SearchProps) {
                                 movie.genres.length === 1 ?
                                     <>
                                         <span className='bold'>Genre</span>
-                                        <p><Link className='customLink' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></p>
+                                        <div><Link className='btn btn-primary customLink block m-2' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></div>
                                     </>
                                     :
                                     <>
                                         <span className='bold'>Genres</span>
-                                        <ul>{movie.genres.map(e => <li><Link className='customLink' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
+                                        <div>{movie.genres.map(e => <Link className='btn btn-primary customLink block m-2' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                     </>
                                 : null
                             }
@@ -160,12 +160,12 @@ export default function Detail({ id }: SearchProps) {
                                     movie.production_companies.length === 1 ?
                                         <>
                                             <span className='bold'>Production company</span>
-                                            <p><Link className='customLink' to={`/company/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></p>
+                                            <div><Link className='btn btn-primary customLink block m-2' to={`/company/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></div>
                                         </>
                                         :
                                         <>
                                             <span className='bold'>Production companies</span>
-                                            <ul>{movie.production_companies.map(e => <li><Link className='customLink' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link></li>)}</ul>
+                                            <div>{movie.production_companies.map(e => <Link className='btn btn-primary customLink block m-2' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                         </>
                                     : null
                             }
