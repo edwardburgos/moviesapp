@@ -49,3 +49,10 @@ export type MovieVideo = {
     type: string,
     official: boolean
 }
+
+export type CollectionType = {
+    id: number,
+    name: string,
+    overview: string,
+    parts: Movie[]
+}
