@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import s from './SearchBar.module.css';
 import { Form } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
@@ -21,6 +21,10 @@ export default function SearchBar() {
             showMessage('Sorry, an error ocurred')
         }
     }
+
+    useEffect(() => {
+        return () => {dispatch(modifyMovies([]))};
+    }, [dispatch])
 
     return (
         <div className={`${s.test} ${s.searchInput}`}>

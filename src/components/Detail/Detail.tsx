@@ -86,8 +86,8 @@ export default function Detail({ id }: SearchProps) {
 
 
                             {cast.length ?
-                                <div className='w-100'>
-                                    <span className='bold block'>Cast</span>
+                                <div className={s.castInfo}>
+                                    <div className='w-100'><span className='bold'>Cast</span></div>
                                     <div className={s.castContainer}>
                                         {cast.map((e, index) =>
                                             <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                <img className={s.profilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>

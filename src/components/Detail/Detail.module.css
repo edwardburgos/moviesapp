@@ -74,6 +74,13 @@
     width: 25%;
 } 
 
+.castInfo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .fullCastContainer {
     display: flex;
     flex-wrap: wrap;
@@ -83,7 +90,7 @@
 .castContainer {
     overflow-x: scroll;
     display: flex;
-    max-width: 90vw;
+    max-width: 88vw;
     margin-bottom: 16px;
 }
 
@@ -129,7 +136,7 @@
 .showAllContainer {
     display: flex;
     align-items: center;
-    margin-right: 16px;
+    margin: 8px;
 }
 
 .aWidth {
@@ -150,6 +157,6 @@
         width: 70%;
     }
     .castContainer {
-        max-width: 50vw;
+        max-width: 60vw;
     }
 }
