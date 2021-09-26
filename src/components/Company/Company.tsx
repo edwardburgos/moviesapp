@@ -22,7 +22,7 @@ export default function Company({ id }: SearchProps) {
             try {
                 setLoading(true)
                 const company = await axios.get(`https://api.themoviedb.org/3/company/${id}?api_key=${process.env.REACT_APP_API_KEY}`)
-                const companyMovies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=primary_release_date.desc&page=1&with_companies=${id}`)
+                const companyMovies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_companies=${id}`)
                 setCompanyMovies(companyMovies.data.results)
                 setCompany(company.data)
                 setLoading(false)

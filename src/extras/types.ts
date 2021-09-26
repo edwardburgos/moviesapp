@@ -67,3 +67,8 @@ export type CompanyType = {
     origin_country: string,
     parent_company: string | null
 }
+
+export type GenreType = {
+    id: number,
+    name: string
+}

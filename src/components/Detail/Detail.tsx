@@ -48,7 +48,6 @@ export default function Detail({ id }: SearchProps) {
                 setCast(filteredCast.slice(0, 10))
                 const trailer = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
                 const officialTrailer = trailer.data.results.filter((e: MovieVideo) => e.type === 'Trailer' && e.site === 'YouTube');
-                console.log('selena', officialTrailer[0])
                 if (officialTrailer.length) {
                     const official = officialTrailer.filter((e: MovieVideo) => e.official)
                     official.length ? setTrailer(official[0]) : setTrailer(officialTrailer[0])

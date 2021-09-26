@@ -22,9 +22,9 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/" component={App} />
           <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
-          <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
+          <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)}/>} />
           <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
-          <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)} />} />
+          <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)}/>} />
           <Route path="/person/:id/:name" render={({ match }) => <Person id={parseInt(match.params.id)} />} />
         </Switch>
       </React.StrictMode>
