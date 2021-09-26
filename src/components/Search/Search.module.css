@@ -22,3 +22,18 @@
     max-height: 50%;
     cursor: pointer;
 }
+
+.cardsContainerFull {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1587px;
+    min-height: calc(100vh - 134px);
+    align-items: center;
+}
+
+.noResults {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 16px;
+}

@@ -44,8 +44,8 @@ export default function Collection({ id }: SearchProps) {
                     </div>
                 </div>
                 :
-                <div className={s.contentCenter}>
-                    <img className={s.loading} src={loadingGif} alt='loadingGif'></img>
+                <div className='contentCenter'>
+                    <img className='loading' src={loadingGif} alt='loadingGif'></img>
                 </div>
             }
         </>
