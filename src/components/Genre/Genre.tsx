@@ -37,9 +37,9 @@ export default function Genre({ id }: SearchProps) {
     return (
         <>
             {!loading ?
-                <div className={s.container}>
+                <div className='flexCentered'>
                     <h1 className='w-100 text-center'>{genreName} Movies</h1>
-                    <div className={s.cardsContainer}>
+                    <div className='cardsContainer'>
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div> 
                 </div>

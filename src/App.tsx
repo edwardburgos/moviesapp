@@ -1,34 +1,31 @@
 import s from './App.module.css';
 import videocam from './img/icons/videocam-outline.svg'
-import SearchBar from './components/SearchBar/SeachBar';
-import Card from './components/Card/Card'
-import { useSelector } from 'react-redux'
-import { Movie } from './extras/types'
+import SearchBar from './components/Search/Search';
+import { Route, Switch } from 'react-router-dom';
+import Genre from './components/Genre/Genre';
+import Collection from './components/Collection/Collection';
+import Company from './components/Company/Company';
+import Person from './components/Person/Person';
+import Detail from './components/Detail/Detail';
+
 
 export default function App() {
 
-  const movies = useSelector((state: { movies: Movie[] }) => state.movies)
-
   return (
-    <div className={s.container}>
-
-      <div className={s.titleContainer}>
+    <>
+      <div className={s.header}>
         <img src={videocam} className={s.logo} alt={'Movies app'} />
-        <h1 className='mb-0'>Movies app</h1>
       </div>
-
-      <SearchBar></SearchBar>
-
-      {
-        movies.length ?
-        
-          <div className={s.cardsContainer}>
-            {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
-          </div>
-          :
-          null
-      }
-
-    </div>
+      <div className={s.container}>
+        <Switch>
+          <Route exact path="/" component={SearchBar}></Route>
+          <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
+          <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
+          <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
+          <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)} />} />
+          <Route path="/person/:id/:name" render={({ match }) => <Person id={parseInt(match.params.id)} />} />
+        </Switch>
+      </div>
+    </>
   );
 }

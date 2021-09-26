@@ -85,3 +85,22 @@ h1 {
 ::-webkit-scrollbar-track:active {
 background: #d4d4d4;
 }
+
+.flexCentered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.cardsContainer, .cardsContainerMargin {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 1587px;
+}
+
+.cardsContainerMargin {
+  margin-top: 16px;
+}

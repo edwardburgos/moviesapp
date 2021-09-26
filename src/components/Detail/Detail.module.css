@@ -1,16 +1,8 @@
-.detail {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    justify-content: center;
-}
-
 .container {
-    padding: 0 5%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 100%;
 }
 
 .info {

@@ -3,27 +3,27 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
 }
 
-.titleContainer {
-  margin: 16px 0;
+
+.header {
+  margin-bottom: 16px;
+  padding: 8px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  width: 100%;
+  /* box-shadow: 0 4px 2px -2px gray; */
+  box-shadow: 0 1px 12px -1px rgb(0 0 0 / 24%) !important;
+  -webkit-box-shadow: 0 1px 12px -1px rgb(0 0 0 / 24%) !important;
 }
 
 .logo {
   height: 30px;
-  margin-right: 10px;
+  margin: 0 2px 2px 2px;
 }
-
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  max-width: 1587px;
-}
-
 
 .App {
   text-align: center;

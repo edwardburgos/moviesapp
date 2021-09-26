@@ -1,16 +1,7 @@
-.container {
-    padding: 0 5%;
+.companyInfo {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-}
-
-.cardsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    max-width: 1587px;
-    margin-top: 16px;
+    width: 100%;
 }
 
 .left {
@@ -24,7 +15,10 @@
 
 .logo {
     width: 100%;
-    max-width: 267px;
+    max-width: 300px;
+    max-height: 450px;
+    object-fit: contain;
+    border-radius: 10px;
 }
 
 .right {

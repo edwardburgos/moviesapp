@@ -75,7 +75,7 @@ export default function Person({ id }: SearchProps) {
                             {person.gender ? <><span className='w-100 bold'>Gender</span>{person.gender === 1 ? <p>Female</p> : person.gender === 2 ? <p>Male</p> : person.gender === 3 ? <p>Non-binary</p> : null}</> : null}
                         </div>
                     </div>
-                    <div className={s.cardsContainer}>
+                    <div className='cardsContainerMargin'>
                         <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
