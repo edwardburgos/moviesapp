@@ -15,7 +15,6 @@ export type SearchProps = {
 
 export type MovieDetail = {
     id: number,
-    adult: boolean,
     belongs_to_collection: { id: number, name: string } | null,
     budget: number,
     genres: { id: number, name: string }[],

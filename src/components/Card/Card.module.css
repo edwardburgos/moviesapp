@@ -14,7 +14,18 @@
     margin-bottom: 8px;
 }
 
-.poster:hover {
+.posterDefault {
+    border-radius: 10px;
+    width: 267px;
+    height: 400px;
+    min-height: 400px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    padding: 16px;
+    background-color: #fff;
+}
+
+.poster:hover, .posterDefault:hover {
     box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
     -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
 }
