@@ -51,7 +51,7 @@ export default function Person({ id }: SearchProps) {
                             <Carousel className={s.profilePic}>
                                 {
                                     photos.map((e, index) =>
-                                        <Carousel.Item>
+                                        <Carousel.Item key={index}>
                                             <img
                                                 className={s.profilePic}
                                                 src={`https://image.tmdb.org/t/p/w500${e}`}
@@ -62,7 +62,7 @@ export default function Person({ id }: SearchProps) {
                                 }
                             </Carousel>
                             :
-                            <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile}></img>
+                            <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile} alt={person.name}></img>
                         }
                     </div>
                     <div className={s.right}>

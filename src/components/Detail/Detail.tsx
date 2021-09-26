@@ -86,7 +86,7 @@ export default function Detail({ id }: SearchProps) {
                                     <div className='w-100'><span className='bold'>Cast</span></div>
                                     <div className={s.castContainer}>
                                         {cast.map((e, index) =>
-                                            <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                
+                                            <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                
                                                 <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                                 <div className={s.name}>
                                                     <span className='bold block'>{e.name}</span>
@@ -137,7 +137,7 @@ export default function Detail({ id }: SearchProps) {
                                     :
                                     <>
                                         <span className='bold'>Genres</span>
-                                        <div className='mb-2'>{movie.genres.map(e => <Link className='btn btn-primary customLink block m-2' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
+                                        <div className='mb-2'>{movie.genres.map((e, index) => <Link key={index} className='btn btn-primary customLink block m-2' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                     </>
                                 : null
                             }
@@ -151,7 +151,7 @@ export default function Detail({ id }: SearchProps) {
                                         :
                                         <>
                                             <span className='bold'>Production companies</span>
-                                            <div className='mb-2'>{movie.production_companies.map(e => <Link className='btn btn-primary customLink block m-2' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
+                                            <div className='mb-2'>{movie.production_companies.map((e, index) => <Link key={index} className='btn btn-primary customLink block m-2' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                         </>
                                     : null
                             }
@@ -208,7 +208,7 @@ export default function Detail({ id }: SearchProps) {
                         allCast.length ?
                             <div className={s.fullCastContainer}>
                                 {allCast.map((e, index) =>
-                                    <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
+                                    <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
                                         <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                         <div className={s.name}>
                                             <span className='bold block'>{e.name}</span>
