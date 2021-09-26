@@ -61,8 +61,7 @@ export type CompanyType = {
     homepage: string,
     logo_path: string,
     name: string,
-    origin_country: string,
-    parent_company: string | null
+    origin_country: string
 }
 
 export type GenreType = {

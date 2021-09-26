@@ -30,7 +30,7 @@ export default function Person({ id }: SearchProps) {
                 const movies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&with_cast=${id}`);
                 setMovies(movies.data.results)
                 const photos = await axios.get(`https://api.themoviedb.org/3/person/${id}/images?api_key=${process.env.REACT_APP_API_KEY}`)
-                setPhotos(photos.data.profiles.map((e:{file_path: string}) => e.file_path).filter((e:string) => e))
+                setPhotos(photos.data.profiles.map((e: { file_path: string }) => e.file_path).filter((e: string) => e))
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
@@ -47,30 +47,34 @@ export default function Person({ id }: SearchProps) {
             {!loading ?
                 <div className={s.container}>
                     <div className={s.left}>
-                        <Carousel className={s.profilePic}>
-                            {
-                                photos.map((e, index) =>
-                                    <Carousel.Item>
-                                        <img
-                                            className={s.profilePic}
-                                            src={`https://image.tmdb.org/t/p/w500${e}`}
-                                            alt={`Slide number ${index}`}
-                                        />
-                                    </Carousel.Item>
-                                    
-                                )
-                            }
-                        </Carousel>
+                        {photos.length > 1 ?
+                            <Carousel className={s.profilePic}>
+                                {
+                                    photos.map((e, index) =>
+                                        <Carousel.Item>
+                                            <img
+                                                className={s.profilePic}
+                                                src={`https://image.tmdb.org/t/p/w500${e}`}
+                                                alt={`Slide number ${index}`}
+                                            />
+                                        </Carousel.Item>
 
-                        {/* <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile}></img> */}
+                                    )
+                                }
+                            </Carousel>
+                            :
+                            <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile}></img>
+                        }
                     </div>
                     <div className={s.right}>
-                        <h1 className='w-100 text-center'>{person.name}</h1>
-                        {person.birthday ? <><span className='w-100 bold'>Birthday</span><p>{person.birthday}</p></> : null}
-                        {person.deathday ? <><span className='w-100 bold'>Deathday</span><p>{person.deathday}</p></> : null}
-                        {person.place_of_birth ? <><span className='w-100 bold'>Place of birth</span><p>{person.place_of_birth}</p></> : null}
-                        {person.biography ? <><span className='w-100 bold'>Biography</span><p>{person.biography}</p></> : null}
-                        {person.gender ? <><span className='w-100 bold'>Gender</span>{person.gender === 1 ? <p>Female</p> : person.gender === 2 ? <p>Male</p> : person.gender === 3 ? <p>Non-binary</p> : null}</> : null }
+                        <div>
+                            <h1 className='w-100 text-center'>{person.name}</h1>
+                            {person.birthday ? <><span className='w-100 bold'>Birthday</span><p>{person.birthday}</p></> : null}
+                            {person.deathday ? <><span className='w-100 bold'>Deathday</span><p>{person.deathday}</p></> : null}
+                            {person.place_of_birth ? <><span className='w-100 bold'>Place of birth</span><p>{person.place_of_birth}</p></> : null}
+                            {person.biography ? <><span className='w-100 bold'>Biography</span><p>{person.biography}</p></> : null}
+                            {person.gender ? <><span className='w-100 bold'>Gender</span>{person.gender === 1 ? <p>Female</p> : person.gender === 2 ? <p>Male</p> : person.gender === 3 ? <p>Non-binary</p> : null}</> : null}
+                        </div>
                     </div>
                     <div className={s.cardsContainer}>
                         <h2 className='w-100 mb-3 text-center'>Movies</h2>

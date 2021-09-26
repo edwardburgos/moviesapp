@@ -10,8 +10,7 @@ export default function Company({ id }: SearchProps) {
 
     const [company, setCompany] = useState<CompanyType>({
         description: "", headquarters: "", homepage: "",
-        id: 0, logo_path: "", name: "", origin_country: "", parent_company: ""
-    })
+        id: 0, logo_path: "", name: "", origin_country: ""})
     const [companyMovies, setCompanyMovies] = useState<Movie[]>([])
     const [loading, setLoading] = useState(false)
 
@@ -44,12 +43,16 @@ export default function Company({ id }: SearchProps) {
                         <img className={s.logo} src={company.logo_path ? `https://image.tmdb.org/t/p/w500${company.logo_path}` : defaultLogo} alt={company.name}></img>
                     </div>
                     <div className={s.right}>
-                        <h1 className={!company.description && !company.headquarters && !company.homepage ? 'mb-0 w-100' : 'w-100'}>{company.name}</h1>
-                        {company.description ? <p className='w-100'>{company.description}</p> : null}
-                        {company.headquarters ? <p className='w-100'>{company.headquarters}</p> : null}
-                        {company.homepage ? <a className='btn btn-primary' href={company.homepage} target="_blank" rel="noreferrer">Visit website</a> : null}
+                        <div>
+                            <h1 className='w-100'>{company.name}</h1>
+                            {company.description ? <><span className='w-100 bold'>Description</span><p className='w-100'>{company.description}</p></> : null}
+                            {company.headquarters ? <><span className='w-100 bold'>Headquarters</span><p className='w-100'>{company.headquarters}</p></> : null}
+                            {company.origin_country ? <><span className='w-100 bold'>Origin country</span><p className='w-100'>{company.origin_country}</p></> : null}
+                            {company.homepage ? <a className='btn btn-primary' href={company.homepage} target="_blank" rel="noreferrer">Visit website</a> : null}
+                        </div>
                     </div>
                     <div className={s.cardsContainer}>
+                        <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {companyMovies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

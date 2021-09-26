@@ -35,8 +35,9 @@ export default function Collection({ id }: SearchProps) {
             {!loading ?
                 <div className={s.container}>
                     <h1 className='w-100 text-center'>{collection.name}</h1>
-                    <p className='text-center'>{collection.overview}</p>
+                    {collection.overview ? <p className='text-center'>{collection.overview}</p> : null}
                     <div className={s.cardsContainer}>
+                        <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {collection.parts.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

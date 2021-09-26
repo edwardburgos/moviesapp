@@ -10,6 +10,7 @@
     flex-wrap: wrap;
     justify-content: space-around;
     max-width: 1587px;
+    margin-top: 16px;
 }
 
 .left {
@@ -18,20 +19,20 @@
     width: 100%;
     /* padding-right: 30px; */
     flex-wrap: wrap;
-    margin-bottom: 16px;
 }
 
 .profilePic {
     width: 100%;
     max-width: 300px;
+    border-radius: 10px;
 }
 
 .defaultProfilePic {
     width: 100%;
     max-width: 300px;
     padding: 16px;
-    border-radius: 10px 10px 0 0;
     background-color: #fff;
+    border-radius: 10px;
 }
 
 .right {
