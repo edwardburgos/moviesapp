@@ -3,7 +3,6 @@ import s from './Collection.module.css'
 import loadingGif from '../../img/loadingGif.gif';
 import { useEffect, useState } from "react"
 import { CollectionType, SearchProps } from "../../extras/types"
-import { months } from '../../extras/globalVariables';
 import Card from "../Card/Card";
 
 
@@ -29,8 +28,7 @@ export default function Collection({ id }: SearchProps) {
         }
         getCollection();
         return () => { source.cancel("Unmounted"); }
-
-    }, [])
+    }, [id])
 
     return (
         <>

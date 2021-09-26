@@ -1,0 +1,43 @@
+.container {
+    padding: 0 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1587px;
+    margin-top: 16px;
+}
+
+.left {
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    padding-right: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    width: 100%;
+    max-width: 267px;
+}
+
+.right {
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+
+@media screen and (min-width: 768px) {
+    /* .logo { 
+        width: 307px; 
+        padding: 0 20px;
+    }  */
+}
