@@ -12,8 +12,9 @@
   margin-bottom: 16px;
   padding: 8px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
+  position: relative;
   width: 100%;
   /* box-shadow: 0 4px 2px -2px gray; */
   box-shadow: 0 1px 12px -1px rgb(0 0 0 / 24%) !important;
@@ -22,7 +23,12 @@
 
 .logo {
   height: 30px;
-  margin: 0 2px 2px 2px;
+}
+
+.searchIcon {
+  height: 20px;
+  position: absolute;
+  right: 5%;
 }
 
 .App {

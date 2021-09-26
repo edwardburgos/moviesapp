@@ -1,7 +1,8 @@
 import s from './App.module.css';
 import videocam from './img/icons/videocam-outline.svg'
+import lens from './img/icons/search-outline.svg'
 import SearchBar from './components/Search/Search';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import Genre from './components/Genre/Genre';
 import Collection from './components/Collection/Collection';
 import Company from './components/Company/Company';
@@ -14,7 +15,8 @@ export default function App() {
   return (
     <>
       <div className={s.header}>
-        <img src={videocam} className={s.logo} alt={'Movies app'} />
+        <Link to="/"><img src={videocam} className={s.logo} alt={'Movies app'} /></Link>
+        <Link to="/"><img src={lens} className={s.searchIcon} alt={'Movies app'} /></Link>
       </div>
       <div className={s.container}>
         <Switch>
