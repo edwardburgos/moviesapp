@@ -5,6 +5,7 @@ import defaultLogo from '../../img/icons/videocam-outline.svg'
 import s from './Company.module.css'
 import loadingGif from '../../img/loadingGif.gif';
 import Card from "../Card/Card"
+import { showMessage } from "../../extras/functions"
 
 export default function Company({ id }: SearchProps) {
 
@@ -29,6 +30,7 @@ export default function Company({ id }: SearchProps) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
                 }
+                showMessage('Sorry, an error ocurred')
             }
         }
         getCompany();
@@ -62,7 +64,5 @@ export default function Company({ id }: SearchProps) {
                 </div>
             }
         </>
-
-
     )
 }

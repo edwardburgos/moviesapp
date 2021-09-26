@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
 import loadingGif from '../../img/loadingGif.gif';
 import { months } from '../../extras/globalVariables';
-
+import { showMessage } from '../../extras/functions';
 
 export default function Detail({ id }: SearchProps) {
 
@@ -52,12 +52,12 @@ export default function Detail({ id }: SearchProps) {
                     const official = officialTrailer.filter((e: MovieVideo) => e.official)
                     official.length ? setTrailer(official[0]) : setTrailer(officialTrailer[0])
                 }
-
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
-                }
+                } 
+                showMessage('Sorry, an error ocurred')
             }
         }
         getMovieInfo();
@@ -80,10 +80,7 @@ export default function Detail({ id }: SearchProps) {
                             <div className={s.posterContainer}>
                                 <img className={s.poster} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
                             </div>
-                            
                             {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.aWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
-
-
                             {cast.length ?
                                 <div className={s.castInfo}>
                                     <div className='w-100'><span className='bold'>Cast</span></div>
@@ -225,7 +222,6 @@ export default function Detail({ id }: SearchProps) {
                     }
                 </Modal.Body>
             </Modal>
-
         </>
     );
 }

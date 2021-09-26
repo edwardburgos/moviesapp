@@ -5,6 +5,7 @@ import axios from "axios"
 import s from './Genre.module.css'
 import Card from "../Card/Card"
 import loadingGif from '../../img/loadingGif.gif';
+import { showMessage } from "../../extras/functions"
 
 export default function Genre({ id }: SearchProps) {
     const [genreName, setGenreName] = useState('')
@@ -25,7 +26,8 @@ export default function Genre({ id }: SearchProps) {
             } catch (e) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
-                }
+                } 
+                showMessage('Sorry, an error ocurred')
             }
         }
         getCollection();
@@ -41,7 +43,6 @@ export default function Genre({ id }: SearchProps) {
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div> 
                 </div>
-
                 :
                 <div className={s.contentCenter}>
                     <img className={s.loading} src={loadingGif} alt='loadingGif'></img>

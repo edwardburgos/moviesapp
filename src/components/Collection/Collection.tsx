@@ -4,6 +4,7 @@ import loadingGif from '../../img/loadingGif.gif';
 import { useEffect, useState } from "react"
 import { CollectionType, SearchProps } from "../../extras/types"
 import Card from "../Card/Card";
+import { showMessage } from "../../extras/functions";
 
 
 export default function Collection({ id }: SearchProps) {
@@ -23,7 +24,8 @@ export default function Collection({ id }: SearchProps) {
             } catch (e) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
-                }
+                } 
+                showMessage('Sorry, an error ocurred')
             }
         }
         getCollection();
@@ -41,7 +43,6 @@ export default function Collection({ id }: SearchProps) {
                         {collection.parts.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>
-
                 :
                 <div className={s.contentCenter}>
                     <img className={s.loading} src={loadingGif} alt='loadingGif'></img>

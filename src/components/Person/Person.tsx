@@ -6,8 +6,7 @@ import Card from "../Card/Card"
 import loadingGif from '../../img/loadingGif.gif';
 import defaultProfile from '../../img/icons/person-outline.svg';
 import { Carousel } from 'react-bootstrap'
-
-
+import { showMessage } from "../../extras/functions"
 
 export default function Person({ id }: SearchProps) {
 
@@ -36,6 +35,7 @@ export default function Person({ id }: SearchProps) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
                 }
+                showMessage('Sorry, an error ocurred')
             }
         }
         getCollection();
@@ -58,7 +58,6 @@ export default function Person({ id }: SearchProps) {
                                                 alt={`Slide number ${index}`}
                                             />
                                         </Carousel.Item>
-
                                     )
                                 }
                             </Carousel>
@@ -81,7 +80,6 @@ export default function Person({ id }: SearchProps) {
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>
-
                 :
                 <div className={s.contentCenter}>
                     <img className={s.loading} src={loadingGif} alt='loadingGif'></img>
