@@ -14,14 +14,11 @@ export type SearchProps = {
 }
 
 export type MovieDetail = {
+    id: number,
     adult: boolean,
-    belongs_to_collection: {
-        id: number,
-        name: string
-    } | null,
+    belongs_to_collection: { id: number, name: string } | null,
     budget: number,
     genres: { id: number, name: string }[],
-    id: number,
     original_language: string,
     original_title: string,
     overview: string | null,
@@ -58,10 +55,10 @@ export type CollectionType = {
 }
 
 export type CompanyType = {
+    id: number,
     description: string,
     headquarters: string,
     homepage: string,
-    id: number,
     logo_path: string,
     name: string,
     origin_country: string,
@@ -71,4 +68,15 @@ export type CompanyType = {
 export type GenreType = {
     id: number,
     name: string
+}
+
+export type PersonType = {
+    id: number,
+    biography: string,
+    birthday: string | null,
+    deathday: string | null,
+    gender: 0 | 1 | 2 | 3,
+    name: string,
+    place_of_birth: string,
+    profile_path: string
 }

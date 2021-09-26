@@ -1,0 +1,52 @@
+.container {
+    padding: 0 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1587px;
+}
+
+.left {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    /* padding-right: 30px; */
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.profilePic {
+    width: 100%;
+    max-width: 300px;
+}
+
+.defaultProfilePic {
+    width: 100%;
+    max-width: 300px;
+    padding: 16px;
+    border-radius: 10px 10px 0 0;
+    background-color: #fff;
+}
+
+.right {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+@media screen and (min-width: 768px) { 
+    .left {
+        width: 40%;
+        padding-right: 30px;
+    }
+    .right {
+        width: 60%
+    }
+}

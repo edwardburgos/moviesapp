@@ -89,7 +89,8 @@ export default function Detail({ id }: SearchProps) {
                                     <div className='w-100'><span className='bold'>Cast</span></div>
                                     <div className={s.castContainer}>
                                         {cast.map((e, index) =>
-                                            <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                <img className={s.profilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
+                                            <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>                                                
+                                                <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                                 <div className={s.name}>
                                                     <span className='bold block'>{e.name}</span>
                                                     <span>{e.character}</span>
@@ -211,7 +212,7 @@ export default function Detail({ id }: SearchProps) {
                             <div className={s.fullCastContainer}>
                                 {allCast.map((e, index) =>
                                     <Link className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
-                                        <img className={e.profile_path ? s.profilePic : s.defualtProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
+                                        <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
                                         <div className={s.name}>
                                             <span className='bold block'>{e.name}</span>
                                             <span>{e.character}</span>
