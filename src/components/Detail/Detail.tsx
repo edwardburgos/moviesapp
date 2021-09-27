@@ -11,6 +11,7 @@ import { isoLangs } from '../../extras/globalVariables';
 import loadingGif from '../../img/loadingGif.gif';
 import { months } from '../../extras/globalVariables';
 import { showMessage } from '../../extras/functions';
+import { useDispatch } from 'react-redux'
 
 export default function Detail({ id }: SearchProps) {
 
@@ -26,6 +27,8 @@ export default function Detail({ id }: SearchProps) {
     const [allCast, setAllCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
     const [showAllCast, setShowAllCast] = useState(false)
     const [trailer, setTrailer] = useState<MovieVideo>({ key: '', site: '', type: '', official: false })
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -62,7 +65,7 @@ export default function Detail({ id }: SearchProps) {
         }
         getMovieInfo();
         return () => { source.cancel("Unmounted"); }
-    }, [id])
+    }, [id, dispatch])
 
     async function getAllCast() {
         const cast = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
@@ -116,7 +119,6 @@ export default function Detail({ id }: SearchProps) {
                                     <span className='bold'>Release date</span>
                                     <p>{`${movie.release_date.split('-')[2]} ${months[parseInt(movie.release_date.split('-')[1]) - 1]} ${movie.release_date.split('-')[0]}`}</p>
                                 </> : null}
-                            <span className='bold'>Suitable for</span>
                             {movie.status !== 'Released' ?
                                 <>
                                     <span className='bold'>Current state</span>

@@ -1,8 +1,13 @@
 .card {
-    width: 267px;
+    width: 100%;
     margin-bottom: 16px;
     cursor: pointer;
-    
+    display: flex;
+    justify-content: center;
+}
+
+.cardContent {
+    width: 267px;
 }
 
 .poster {
@@ -30,9 +35,11 @@
     -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
 }
 
-@media screen and (min-width: 375px) {
-    .card { 
-        width: 307px; 
-        padding: 0 20px;
-    } 
+.maxWidth {
+    max-width: 170;
 }
+
+@media screen and (min-width: 400px) { .card { width: 50%; } .poster { width: 170px; height: 255px; min-height: 255px; }
+                                       .cardContent { width: 170px; } .posterDefault { width: 170px; height: 255px; min-height: 255px; }}
+@media screen and (min-width: 800px) { .card {width: 25%} }
+@media screen and (min-width: 1200px) { .card {width: 20%} }
