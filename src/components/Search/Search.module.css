@@ -1,18 +1,21 @@
-.searchInput {
-    width: 100%;
-    display: inline-block;
-} 
-  
 .input {
     padding-right: 2.5rem !important;
     width: 100%;
 }
   
 .test {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+
+.searchInput {
     position: relative;
     display: flex;
     align-items: center;
-    margin-bottom: 16px;
+    width: 100%;
 }
   
 .iconDumb {
@@ -28,11 +31,18 @@
     flex-wrap: wrap;
     justify-content: space-around;
     max-width: 1587px;
-    min-height: calc(100vh - 134px);
+    min-height: calc(100vh - 224px);
 }
 
 .noResults {
     width: 100%;
     max-width: 300px;
     margin-bottom: 16px;
+}
+
+.noResultsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }

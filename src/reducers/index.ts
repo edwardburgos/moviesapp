@@ -1,23 +1,23 @@
 import { Movie } from '../extras/types';
 
 export type PossibleStates = {
-  movies: Movie[] | null,
+  results: Movie[] | null,
   totalPages: number,
   searchURL: string
 }
 
 const initialState = {
-  movies:  null,
+  results:  null,
   totalPages: 1,
   searchURL: ''
 } as PossibleStates
 
-export default function reducer(state = initialState, action: { type: string, movies: Movie[] | null, totalPages: number, searchURL: string}) {
+export default function reducer(state = initialState, action: { type: string, results: Movie[] | null, totalPages: number, searchURL: string}) {
   switch (action.type) {
-    case 'MODIFY_MOVIES':
+    case 'MODIFY_RESULTS':
       return {
         ...state,
-        movies: action.movies
+        results: action.results
       }
     case 'MODIFY_TOTAL_PAGES':
       return {
