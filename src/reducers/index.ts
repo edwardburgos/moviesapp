@@ -1,4 +1,4 @@
-import { Movie } from '../extras/types';
+import { Movie, PersonTypeShort } from '../extras/types';
 
 export type PossibleStates = {
   results: Movie[] | null,

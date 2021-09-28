@@ -6,13 +6,14 @@ import search from '../../img/icons/search-outline.svg';
 import axios from 'axios';
 import { showMessage } from '../../extras/functions';
 import Card from '../Card/Card'
-import { Movie } from '../../extras/types';
+import { Movie, PersonTypeShort } from '../../extras/types';
 import loadingGif from '../../img/loadingGif.gif';
 import noResults from '../../img/noResults.svg';
 import PaginationComponent from '../PaginationComponent/PaginationComponent'
 import { useDispatch, useSelector } from 'react-redux'
 import { modifyTotalPages, modifySearchURL, modifyResults } from '../../actions';
 import { genres } from '../../extras/globalVariables';
+import CardPerson from '../CardPerson/CardPerson'
 
 export default function SearchBar() {
 
@@ -112,7 +113,13 @@ export default function SearchBar() {
                     <div className={s.cardsContainerFull}>
                         {results.length ?
                             <>
-                                {results.map((e, index) => <Card key={index} movie={e}></Card>)}
+                                {results.map((e, index) => 
+                                    radioValue === '1' ? 
+                                        <Card key={index} movie={e}></Card>
+                                    :
+                                    <CardPerson key={index} movie={e}></CardPerson>
+                                )
+                                }
                                 <PaginationComponent />
                             </>
                             :

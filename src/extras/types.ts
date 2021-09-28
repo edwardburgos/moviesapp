@@ -1,8 +1,11 @@
 export type Movie = {
     id: number,
-    poster_path: string,
-    release_date: string,
-    title: string
+    poster_path: string | null,
+    release_date: string | null,
+    title: string | null,
+    name: string | null,
+    profile_path: string | null,
+    known_for_department: string | null,
 }
 
 export type CardProps = {
@@ -37,6 +40,17 @@ export type CastMember = {
     profile_path: string,
     known_for_department: string,
     character: string
+}
+
+export type PersonTypeShort = {
+    id: number,
+    name: string,
+    profile_path: string,
+    known_for_department: string,
+}
+
+export type CardPersonProps = {
+    person: PersonTypeShort
 }
 
 export type MovieVideo = {
