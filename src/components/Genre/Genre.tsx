@@ -8,6 +8,7 @@ import loadingGif from '../../img/loadingGif.gif';
 import { showMessage } from "../../extras/functions";
 import { Form } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
+import { sortingOptions } from "../../extras/globalVariables"
 
 
 export default function Genre({ id }: SearchProps) {
@@ -52,16 +53,7 @@ export default function Genre({ id }: SearchProps) {
                     <h1 className='w-100 text-center'>{genreName} Movies</h1>
                     <div className={s.selectContainer}>
                         <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                            <option value='popularity.asc'>Sort by current popularity ascending</option>
-                            <option value='popularity.desc'>Sort by current popularity descending</option>
-                            <option value='primary_release_date.asc'>Sort by release date ascending</option>
-                            <option value='primary_release_date.desc'>Sort by release date descending</option>
-                            <option value='revenue.asc'>Sort by revenue ascending</option>
-                            <option value='revenue.desc'>Sort by revenue descending</option>
-                            <option value='vote_average.asc'>Sort by best rated ascending</option>
-                            <option value='vote_average.desc'>Sort by best rated descending</option>
-                            <option value='vote_count.asc'>Sort by most rated ascending</option>
-                            <option value='vote_count.desc'>Sort by most rated descending</option>
+                        {sortingOptions.map(e => <option value={e.value}>{e.complete}</option> )}
                         </Form.Select>
                         <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />

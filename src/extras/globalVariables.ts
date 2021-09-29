@@ -1,5 +1,17 @@
 export let months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
+export let sortingOptions = [
+  { value: 'popularity.asc', complete: 'Sort by current popularity ascending' },
+  { value: 'popularity.desc', complete: 'Sort by current popularity descending' },
+  { value: 'primary_release_date.asc', complete: 'Sort by release date ascending' },
+  { value: 'primary_release_date.desc', complete: 'Sort by release date descending' },
+  { value: 'revenue.asc', complete: 'Sort by revenue ascending' },
+  { value: 'revenue.desc', complete: 'Sort by revenue descending' },
+  { value: 'vote_average.asc', complete: 'Sort by best rated ascending' },
+  { value: 'vote_average.desc', complete: 'Sort by best rated descending' },
+  { value: 'vote_count.asc', complete: 'Sort by most rated ascending' },
+  { value: 'vote_count.desc', complete: 'Sort by most rated descending' },
+]
 export let genres: { id: number, name: string }[] = [
   {
     id: 28,
