@@ -1,0 +1,36 @@
+.card {
+    width: 100%;
+    margin-bottom: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.cardContent {
+    width: 267px;
+}
+
+.poster {
+    border-radius: 10px;
+    width: 267px;
+    height: 400px;
+    min-height: 400px;
+    object-fit: contain;
+    margin-bottom: 8px;
+    padding: 16px;
+    background-color: #fff;
+}
+
+.poster:hover, .posterDefault:hover {
+    box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+    -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+}
+
+.maxWidth {
+    max-width: 170;
+}
+
+@media screen and (min-width: 400px) { .card { width: 50%; } .poster { width: 170px; height: 255px; min-height: 255px; }
+                                       .cardContent { width: 170px; } .posterDefault { width: 170px; height: 255px; min-height: 255px; }}
+@media screen and (min-width: 800px) { .card {width: 25%} }
+@media screen and (min-width: 1200px) { .card {width: 20%} }

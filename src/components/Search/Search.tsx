@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { modifyTotalPages, modifySearchURL, modifyResults } from '../../actions';
 import { genres } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
+import CardCompany from '../CardCompany/CardCompany';
 
 export default function SearchBar() {
 
@@ -118,7 +119,10 @@ export default function SearchBar() {
                                     ['1', '5'].includes(radioValue) ?
                                         <Card key={index} movie={e}></Card>
                                         :
-                                        <CardPerson key={index} movie={e}></CardPerson>
+                                        radioValue === '3' ?
+                                            <CardCompany key={index} movie={e}></CardCompany>
+                                            :
+                                            <CardPerson key={index} movie={e}></CardPerson>
                                 )
                                 }
                                 <PaginationComponent />

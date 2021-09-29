@@ -6,6 +6,8 @@ export type Movie = {
     name: string | null,
     profile_path: string | null,
     known_for_department: string | null,
+    logo_path: string | null,
+    origin_country: string | null
 }
 
 export type CardProps = {
