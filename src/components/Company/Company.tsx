@@ -7,6 +7,7 @@ import loadingGif from '../../img/loadingGif.gif';
 import Card from "../Card/Card"
 import { showMessage } from "../../extras/functions"
 import { countries } from "../../extras/globalVariables"
+import { Form } from 'react-bootstrap';
 
 export default function Company({ id }: SearchProps) {
 
@@ -16,6 +17,8 @@ export default function Company({ id }: SearchProps) {
     })
     const [companyMovies, setCompanyMovies] = useState<Movie[]>([])
     const [loading, setLoading] = useState(false)
+    const [sorting, setSorting] = useState('popularity.desc')
+
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -39,6 +42,12 @@ export default function Company({ id }: SearchProps) {
         return () => { source.cancel("Unmounted"); }
     }, [id])
 
+    async function sortBy(sortParameter: string) {
+        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_companies=${id}`
+        const results = await axios.get(url)
+        setCompanyMovies(results.data.results)
+    }
+
     return (
         <>
             {!loading ?
@@ -57,8 +66,20 @@ export default function Company({ id }: SearchProps) {
                             </div>
                         </div>
                     </div>
+                    <h2 className='w-100 mb-3 text-center'>Movies</h2>
+                    <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
+                        <option value='popularity.asc'>Sort by current popularity ascending</option>
+                        <option value='popularity.desc'>Sort by current popularity descending</option>
+                        <option value='primary_release_date.asc'>Sort by release date ascending</option>
+                        <option value='primary_release_date.desc'>Sort by release date descending</option>
+                        <option value='revenue.asc'>Sort by revenue ascending</option>
+                        <option value='revenue.desc'>Sort by revenue descending</option>
+                        <option value='vote_average.asc'>Sort by best rated ascending</option>
+                        <option value='vote_average.desc'>Sort by best rated descending</option>
+                        <option value='vote_count.asc'>Sort by most rated ascending</option>
+                        <option value='vote_count.desc'>Sort by most rated descending</option>
+                    </Form.Select>
                     <div className='cardsContainerMargin'>
-                        <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {companyMovies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

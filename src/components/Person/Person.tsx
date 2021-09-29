@@ -7,6 +7,8 @@ import loadingGif from '../../img/loadingGif.gif';
 import defaultProfile from '../../img/icons/person-outline.svg';
 import { Carousel } from 'react-bootstrap'
 import { showMessage } from "../../extras/functions"
+import { Form } from 'react-bootstrap';
+
 
 export default function Person({ id }: SearchProps) {
 
@@ -17,6 +19,8 @@ export default function Person({ id }: SearchProps) {
     const [movies, setMovies] = useState<Movie[]>([])
     const [loading, setLoading] = useState(false)
     const [photos, setPhotos] = useState<string[]>([])
+    const [sorting, setSorting] = useState('popularity.desc')
+
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -26,7 +30,7 @@ export default function Person({ id }: SearchProps) {
                 setLoading(true)
                 const person = await axios.get(`https://api.themoviedb.org/3/person/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
                 setPerson(person.data)
-                const movies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&with_cast=${id}`);
+                const movies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&with_people=${id}`);
                 setMovies(movies.data.results)
                 const photos = await axios.get(`https://api.themoviedb.org/3/person/${id}/images?api_key=${process.env.REACT_APP_API_KEY}`)
                 setPhotos(photos.data.profiles.map((e: { file_path: string }) => e.file_path).filter((e: string) => e))
@@ -41,6 +45,12 @@ export default function Person({ id }: SearchProps) {
         getCollection();
         return () => { source.cancel("Unmounted"); }
     }, [id])
+
+    async function sortBy(sortParameter: string) {
+        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_people=${id}`
+        const results = await axios.get(url)
+        setMovies(results.data.results)
+    }
 
     return (
         <>
@@ -76,8 +86,20 @@ export default function Person({ id }: SearchProps) {
                             {person.gender ? <><span className='w-100 bold'>Gender</span>{person.gender === 1 ? <p>Female</p> : person.gender === 2 ? <p>Male</p> : person.gender === 3 ? <p>Non-binary</p> : null}</> : null}
                         </div>
                     </div>
+                    <h2 className='w-100 mb-3 text-center'>Movies</h2>
+                    <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
+                        <option value='popularity.asc'>Sort by current popularity ascending</option>
+                        <option value='popularity.desc'>Sort by current popularity descending</option>
+                        <option value='primary_release_date.asc'>Sort by release date ascending</option>
+                        <option value='primary_release_date.desc'>Sort by release date descending</option>
+                        <option value='revenue.asc'>Sort by revenue ascending</option>
+                        <option value='revenue.desc'>Sort by revenue descending</option>
+                        <option value='vote_average.asc'>Sort by best rated ascending</option>
+                        <option value='vote_average.desc'>Sort by best rated descending</option>
+                        <option value='vote_count.asc'>Sort by most rated ascending</option>
+                        <option value='vote_count.desc'>Sort by most rated descending</option>
+                    </Form.Select>
                     <div className='cardsContainerMargin'>
-                        <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

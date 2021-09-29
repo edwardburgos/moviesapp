@@ -98,6 +98,7 @@ background: #d4d4d4;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  width: 100%;
   max-width: 1587px;
 }
 

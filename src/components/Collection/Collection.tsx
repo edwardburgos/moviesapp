@@ -1,5 +1,4 @@
 import axios from "axios"
-import s from './Collection.module.css'
 import loadingGif from '../../img/loadingGif.gif';
 import { useEffect, useState } from "react"
 import { CollectionType, SearchProps } from "../../extras/types"
@@ -38,8 +37,8 @@ export default function Collection({ id }: SearchProps) {
                 <div className='flexCentered'>
                     <h1 className='w-100 text-center'>{collection.name}</h1>
                     {collection.overview ? <p className='text-center'>{collection.overview}</p> : null}
-                    <div className='cardsContainer'>
                     <h2 className='w-100 mb-3 text-center'>Movies</h2>
+                    <div className='cardsContainer'>
                         {collection.parts.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

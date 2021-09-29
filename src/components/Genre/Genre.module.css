@@ -1,0 +1,11 @@
+.selectInput {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+@media screen and (min-width: 576px) { 
+    .selectInput {
+        width: auto;
+    }
+}
+
