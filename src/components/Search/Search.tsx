@@ -15,6 +15,7 @@ import { modifyTotalPages, modifySearchURL, modifyResults } from '../../actions'
 import { genres } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
+import CardCollection from '../CardCollection/CardCollection';
 
 export default function SearchBar() {
 
@@ -122,7 +123,10 @@ export default function SearchBar() {
                                         radioValue === '3' ?
                                             <CardCompany key={index} movie={e}></CardCompany>
                                             :
-                                            <CardPerson key={index} movie={e}></CardPerson>
+                                            radioValue === '4' ?
+                                                <CardCollection key={index} movie={e}></CardCollection>
+                                                :
+                                                <CardPerson key={index} movie={e}></CardPerson>
                                 )
                                 }
                                 <PaginationComponent />

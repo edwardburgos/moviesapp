@@ -64,7 +64,7 @@ export default function PaginationComponent() {
   }
 
   return (
-    <Pagination className={s.pagination}>
+    <Pagination className={`${s.pagination} mb-0`}>
       {currentClickedNumber > 1 ?
         <>
           <Pagination.Item className={s.item} key='first' onClick={e => { setCurrentClickedNumber(1); modifyResult('1') }}>
