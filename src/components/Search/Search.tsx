@@ -49,7 +49,7 @@ export default function SearchBar() {
     }
 
     useEffect(() => {
-        setTitle('')
+        if (radioValue === '5') { setTitle('') } else { if (title) searchData(title) }
         setGenre('')
         return () => { dispatch(modifyResults(null)); dispatch(modifyTotalPages(1)); dispatch(modifySearchURL('')) }
     }, [dispatch, radioValue])
@@ -133,12 +133,12 @@ export default function SearchBar() {
                         }
                     </div>
                     :
-                    <div className='contentCenter224'>
+                    <div className='contentCenter170'>
                         <img className='loading' src={loadingGif} alt='loadingGif'></img>
                     </div>
                 :
                 loading ?
-                    <div className='contentCenter224'>
+                    <div className='contentCenter170'>
                         <img className='loading' src={loadingGif} alt='loadingGif'></img>
                     </div>
                     :

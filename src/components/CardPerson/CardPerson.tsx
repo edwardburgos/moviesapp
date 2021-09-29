@@ -7,7 +7,7 @@ export default function CardPerson({ movie }: CardProps) {
     return (
         <>
             {
-                movie.id && movie.name && movie.known_for_department ?
+                movie.id && movie.name ?
                     <div className={s.card}>
                         <div className={s.cardContent}>
                             <Link to={`/person/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}><img src={movie.profile_path ? `https://image.tmdb.org/t/p/w500${movie.profile_path}` : defaultProfile} alt={movie.name} className={movie.profile_path ? s.poster : s.posterDefault}></img></Link>

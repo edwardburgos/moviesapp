@@ -9,7 +9,7 @@ export default function Card({ movie }: CardProps) {
     return (
         <>
             {
-                movie.id && movie.title && movie.release_date ?
+                movie.id && movie.title ?
                     <div className={s.card}>
                         <div className={s.cardContent}>
                             <Link to={`/detail/${movie.id}/${movie.title.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}><img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title} className={movie.poster_path ? s.poster : s.posterDefault}></img></Link>

@@ -105,7 +105,7 @@ background: #d4d4d4;
   margin-top: 16px;
 }
 
-.contentCenter, .contentCenter224 {
+.contentCenter, .contentCenter170 {
   width: 100%;
   max-width: 330px;
   min-height: calc(100vh - 64px);
@@ -115,8 +115,8 @@ background: #d4d4d4;
   align-items: center;
 }
 
-.contentCenter224 {
-  min-height: calc(100vh - 224px);
+.contentCenter170 {
+  min-height: calc(100vh - 170px);
 }
 
 .loading {
