@@ -65,6 +65,7 @@ export default function SearchBar() {
             setLoading(true)
             const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genreId}&page=`
             const results = await axios.get(`${url}1`)
+            console.log(results.data)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
@@ -104,7 +105,7 @@ export default function SearchBar() {
                         :
                         <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
                             {genre ? null : <option>Select a movie genre</option>}
-                            {genres.map(e => <option value={e.id}>{e.name}</option>)}
+                            {genres.map((e, index) => <option value={e.id} key={index}>{e.name}</option>)}
                         </Form.Select>
                 }
             </div>
@@ -113,11 +114,11 @@ export default function SearchBar() {
                     <div className={s.cardsContainerFull}>
                         {results.length ?
                             <>
-                                {results.map((e, index) => 
-                                    radioValue === '1' ? 
+                                {results.map((e, index) =>
+                                    ['1', '5'].includes(radioValue) ?
                                         <Card key={index} movie={e}></Card>
-                                    :
-                                    <CardPerson key={index} movie={e}></CardPerson>
+                                        :
+                                        <CardPerson key={index} movie={e}></CardPerson>
                                 )
                                 }
                                 <PaginationComponent />

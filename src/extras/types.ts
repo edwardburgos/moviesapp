@@ -90,5 +90,6 @@ export type PersonType = {
     gender: 0 | 1 | 2 | 3,
     name: string,
     place_of_birth: string,
-    profile_path: string
+    profile_path: string,
+    known_for_department: string
 }

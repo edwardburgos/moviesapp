@@ -11,7 +11,7 @@ import { showMessage } from "../../extras/functions"
 export default function Person({ id }: SearchProps) {
 
     const [person, setPerson] = useState<PersonType>({
-        id: 0, biography: "", birthday: "", deathday: "",
+        id: 0, biography: "", birthday: "", deathday: "", known_for_department: "",
         gender: 0, name: "", place_of_birth: "", profile_path: ""
     })
     const [movies, setMovies] = useState<Movie[]>([])
@@ -68,6 +68,7 @@ export default function Person({ id }: SearchProps) {
                     <div className={s.right}>
                         <div>
                             <h1 className='w-100 text-center'>{person.name}</h1>
+                            {person.known_for_department ? <><span className='w-100 bold'>Known for department</span><p>{person.known_for_department}</p></> : null}
                             {person.birthday ? <><span className='w-100 bold'>Birthday</span><p>{person.birthday}</p></> : null}
                             {person.deathday ? <><span className='w-100 bold'>Deathday</span><p>{person.deathday}</p></> : null}
                             {person.place_of_birth ? <><span className='w-100 bold'>Place of birth</span><p>{person.place_of_birth}</p></> : null}
