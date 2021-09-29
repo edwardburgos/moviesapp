@@ -37,15 +37,35 @@
     align-items: center;
 }
 
-.selectInput {
-    width: 100%;
+.selectContainer {
+    display: flex;
+    position: relative;
+    align-items: center;
     margin-bottom: 16px;
+    width: 100%
 }
 
-@media screen and (min-width: 576px) { 
-    .selectInput {
-        width: auto;
-    }
+.iconContainer {
+    height: 34px;
+    vertical-align: middle;
+    position: absolute;
+    width: 36px;
+    background-color: #fff;
+    right: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.iconDumb {
+    vertical-align: middle;
+    position: absolute;
+    right: 12px;
+    max-height: 50%;
+    cursor: pointer;
+}
+
+.invisible {
+    display: none;
 }
 
 @media screen and (min-width: 768px) { 

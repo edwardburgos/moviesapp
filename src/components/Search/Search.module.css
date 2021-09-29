@@ -47,3 +47,34 @@
     justify-content: center;
     align-items: center;
 }
+
+.selectContainer {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.iconContainer {
+    height: 34px;
+    vertical-align: middle;
+    position: absolute;
+    width: 36px;
+    background-color: #fff;
+    right: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.selectIconDumb {
+    vertical-align: middle;
+    position: absolute;
+    right: 12px;
+    max-height: 50%;
+    cursor: pointer;
+}
+
+.invisible {
+    display: none;
+}

@@ -105,10 +105,15 @@ export default function SearchBar() {
                             <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                         </div>
                         :
-                        <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
-                            {genre ? null : <option>Select a movie genre</option>}
-                            {genres.map((e, index) => <option value={e.id} key={index}>{e.name}</option>)}
-                        </Form.Select>
+                        <div className={s.selectContainer}>
+                            <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
+                                {genre ? null : <option>Select a movie genre</option>}
+                                {genres.map((e, index) => <option value={e.id} key={index}>{e.name}</option>)}
+                            </Form.Select>
+                            <div className={genre === '' ? s.invisible : s.iconContainer}>
+                                <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); }} alt={'Remove selected genre'} />
+                            </div>
+                        </div>
                 }
             </div>
             {results ?
