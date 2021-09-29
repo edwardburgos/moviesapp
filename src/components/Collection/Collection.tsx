@@ -38,8 +38,8 @@ export default function Collection({ id }: SearchProps) {
                 <div className='flexCentered'>
                     <h1 className='w-100 text-center'>{collection.name}</h1>
                     {collection.overview ? <p className='text-center'>{collection.overview}</p> : null}
-                    <h2 className='w-100 mb-3 text-center'>Movies</h2>
                     <div className='cardsContainer'>
+                    <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         {collection.parts.map((e, index) => <Card key={index} movie={e}></Card>)}
                     </div>
                 </div>

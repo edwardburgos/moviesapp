@@ -44,17 +44,6 @@ export type CastMember = {
     character: string
 }
 
-export type PersonTypeShort = {
-    id: number,
-    name: string,
-    profile_path: string,
-    known_for_department: string,
-}
-
-export type CardPersonProps = {
-    person: PersonTypeShort
-}
-
 export type MovieVideo = {
     key: string,
     site: string,

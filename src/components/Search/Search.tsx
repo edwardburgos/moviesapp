@@ -6,7 +6,7 @@ import search from '../../img/icons/search-outline.svg';
 import axios from 'axios';
 import { showMessage } from '../../extras/functions';
 import Card from '../Card/Card'
-import { Movie, PersonTypeShort } from '../../extras/types';
+import { Movie } from '../../extras/types';
 import loadingGif from '../../img/loadingGif.gif';
 import noResults from '../../img/noResults.svg';
 import PaginationComponent from '../PaginationComponent/PaginationComponent'

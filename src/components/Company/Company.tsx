@@ -6,6 +6,7 @@ import s from './Company.module.css'
 import loadingGif from '../../img/loadingGif.gif';
 import Card from "../Card/Card"
 import { showMessage } from "../../extras/functions"
+import { countries } from "../../extras/globalVariables"
 
 export default function Company({ id }: SearchProps) {
 
@@ -51,7 +52,7 @@ export default function Company({ id }: SearchProps) {
                                 <h1 className='w-100'>{company.name}</h1>
                                 {company.description ? <><span className='w-100 bold'>Description</span><p className='w-100'>{company.description}</p></> : null}
                                 {company.headquarters ? <><span className='w-100 bold'>Headquarters</span><p className='w-100'>{company.headquarters}</p></> : null}
-                                {company.origin_country ? <><span className='w-100 bold'>Origin country</span><p className='w-100'>{company.origin_country}</p></> : null}
+                                {company.origin_country ? <><span className='w-100 bold'>Origin country</span><p className='w-100'>{countries.filter(e => e.code === company.origin_country)[0].name}</p></> : null}
                                 {company.homepage ? <a className='btn btn-primary' href={company.homepage} target="_blank" rel="noreferrer">Visit website</a> : null}
                             </div>
                         </div>

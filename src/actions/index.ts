@@ -1,4 +1,4 @@
-import { Movie, PersonTypeShort } from '../extras/types'
+import { Movie } from '../extras/types'
 
 export function modifyResults(results: Movie[] | null) {
     return {
