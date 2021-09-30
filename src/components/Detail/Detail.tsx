@@ -83,7 +83,7 @@ export default function Detail({ id }: SearchProps) {
                             <div className={s.posterContainer}>
                                 <img className={movie.poster_path ? s.poster : s.posterDefault} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
                             </div>
-                            {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.aWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
+                            {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.buttonWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
                             {cast.length ?
                                 <div className={s.castInfo}>
                                     <div className='w-100'><span className='bold'>Cast</span></div>
@@ -102,27 +102,40 @@ export default function Detail({ id }: SearchProps) {
                                 </div> : null}
                         </div>
                         <div className={s.info}>
+                            {movie.overview ?
+                                <div className={s.votesOverview}>
+                                    {movie.vote_average && movie.vote_count ?
+                                        <div className={s.votesContainer}>
+                                            <div className={(movie.vote_average * 10) > 70 ? s.votesGreen : (movie.vote_average * 10) < 40 ? s.votesRed : s.votes}>
+                                                <span>{movie.vote_average * 10}</span><span className={s.percentageSymbol}>%</span>
+                                            </div>
+                                            <span className='block'>{movie.vote_count}</span>
+                                            <span className='block'>votes</span>
+                                        </div>
+                                        : null
+                                    }
+                                    <div>
+                                        <span className='bold'>Overview</span>
+                                        <p>{movie.overview}</p>
+                                    </div>
+                                </div> : null}
+                            {movie.status !== 'Canceled' && movie.release_date ?
+                                <>
+                                    <span className='bold'>Release date</span>
+                                    <p>{`${movie.release_date.split('-')[2]} ${months[parseInt(movie.release_date.split('-')[1]) - 1]} ${movie.release_date.split('-')[0]}`}</p>
+
+                                </> : null}
+                            {movie.status !== 'Released' ?
+                                <>
+                                    <span className='bold'>Current state</span>
+                                    <p>{movie.status === 'Post Production' ? 'In ' : ''}{movie.status}</p>
+                                </> : null}
                             {movie.title !== movie.original_title ?
                                 <>
                                     <span className='bold'>Original Title</span>
                                     <p>{movie.original_title}</p>
                                     <span className='bold'>Original Language</span>
                                     <p>{isoLangs[movie.original_language].name}</p>
-                                </> : null}
-                            {movie.overview ?
-                                <>
-                                    <span className='bold'>Overview</span>
-                                    <p>{movie.overview}</p>
-                                </> : null}
-                            {movie.status !== 'Canceled' && movie.release_date ?
-                                <>
-                                    <span className='bold'>Release date</span>
-                                    <p>{`${movie.release_date.split('-')[2]} ${months[parseInt(movie.release_date.split('-')[1]) - 1]} ${movie.release_date.split('-')[0]}`}</p>
-                                </> : null}
-                            {movie.status !== 'Released' ?
-                                <>
-                                    <span className='bold'>Current state</span>
-                                    <p>{movie.status === 'Post Production' ? 'In ' : ''}{movie.status}</p>
                                 </> : null}
                             {movie.belongs_to_collection ?
                                 <>
@@ -156,22 +169,6 @@ export default function Detail({ id }: SearchProps) {
                                         </>
                                     : null
                             }
-                            {movie.vote_average && movie.vote_count ?
-                                <>
-                                    <div className={s.voteInfo}>
-                                        <span className={s.label}>Vote Average</span>
-                                        <span className={s.description}>{movie.vote_average} of 10</span>
-                                    </div>
-                                    <div className={s.voteInfo}>
-                                        <span className={s.label}>Vote Count</span>
-                                        <span className={s.description}>{movie.vote_count} votes</span>
-                                    </div>
-                                    <div className='mb-3'>
-                                        <ProgressBar now={(movie.vote_average) * 10} />
-                                    </div>
-                                </>
-                                : null
-                            }
                             {movie.budget ?
                                 <>
                                     <span className='bold'>Budget</span>
@@ -184,7 +181,7 @@ export default function Detail({ id }: SearchProps) {
                                 </> : null}
                         </div>
                     </div>
-                    
+
                     <Modal
                         show={showAllCast}
                         aria-labelledby="contained-modal-title-vcenter"

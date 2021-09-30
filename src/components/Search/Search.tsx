@@ -53,7 +53,7 @@ export default function SearchBar() {
     }
 
     useEffect(() => {
-        if (radioValue === '5') { setTitle('') } else { if (title) searchData(title) }
+        if (radioValue === '5') { setTitle(''); dispatch(modifyResults(null)); } else { if (title) searchData(title) }
         setGenre('')
         return () => { dispatch(modifyResults(null)); dispatch(modifyTotalPages(1)); dispatch(modifySearchURL('')) }
     }, [dispatch, radioValue])
@@ -69,7 +69,6 @@ export default function SearchBar() {
             setLoading(true)
             const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genreId}&page=`
             const results = await axios.get(`${url}1`)
-            console.log(results.data)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))

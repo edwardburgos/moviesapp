@@ -131,8 +131,49 @@
     margin: 8px;
 }
 
-.aWidth {
+.buttonWidth {
     width: 267px;
+}
+
+.percentageSymbol {
+    font-size: 10px;
+    margin-left: 2px;
+}
+
+.votesContainer {
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.votes, .votesGreen, .votesRed {
+    background-color: #C9CC30;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    border-radius: 50%;
+    box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+    -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 16px;
+}
+
+.votesGreen {
+    background-color: #21D07A;
+}
+
+.votesRed {
+    background-color: #DB2360;
+}
+
+.votesOverview {
+    display: flex;
 }
 
 @media screen and (min-width: 768px) { 

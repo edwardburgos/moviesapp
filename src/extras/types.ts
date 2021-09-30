@@ -8,6 +8,8 @@ export type Movie = {
     known_for_department: string | null,
     logo_path: string | null,
     origin_country: string | null,
+    vote_average: number | null,
+    vote_count: number | null
 }
 
 export type CardProps = {

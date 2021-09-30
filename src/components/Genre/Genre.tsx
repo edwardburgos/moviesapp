@@ -9,9 +9,16 @@ import { showMessage } from "../../extras/functions";
 import { Form } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
 import { sortingOptions } from "../../extras/globalVariables"
+import PaginationComponent from '../PaginationComponent/PaginationComponent'
+import { useSelector, useDispatch } from 'react-redux'
+
 
 
 export default function Genre({ id }: SearchProps) {
+    const results = useSelector((state: { results: null | Movie[] }) => state.results)
+
+    const dispatch = useDispatch()
+
     const [genreName, setGenreName] = useState('')
     const [movies, setMovies] = useState<Movie[]>([])
     const [loading, setLoading] = useState(false)
@@ -61,6 +68,7 @@ export default function Genre({ id }: SearchProps) {
                     </div>
                     <div className='cardsContainer'>
                         {movies.map((e, index) => <Card key={index} movie={e}></Card>)}
+                        <PaginationComponent />
                     </div>
                 </div>
                 :
