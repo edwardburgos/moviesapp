@@ -33,6 +33,7 @@ export default function Person({ id }: SearchProps) {
                 setLoading(true)
                 const person = await axios.get(`https://api.themoviedb.org/3/person/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
                 setPerson(person.data)
+                document.title = `${person.data.name}`
                 const movies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&with_people=${id}`);
                 setMovies(movies.data.results)
                 const photos = await axios.get(`https://api.themoviedb.org/3/person/${id}/images?api_key=${process.env.REACT_APP_API_KEY}`)

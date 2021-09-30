@@ -38,6 +38,7 @@ export default function Detail({ id }: SearchProps) {
                 setLoading(true)
                 const movie = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
                 setMovie(movie.data)
+                document.title = `${movie.data.title}`
                 const cast = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
                 let filteredCast = []
                 for (let e of cast.data.cast) {

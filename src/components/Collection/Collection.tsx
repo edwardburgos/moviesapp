@@ -8,8 +8,10 @@ import { showMessage } from "../../extras/functions";
 
 export default function Collection({ id }: SearchProps) {
 
+    
     const [collection, setCollection] = useState<CollectionType>({ id: 0, name: "", overview: "", parts: [] })
     const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -18,6 +20,7 @@ export default function Collection({ id }: SearchProps) {
             try {
                 setLoading(true)
                 const collection = await axios.get(`https://api.themoviedb.org/3/collection/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
+                document.title = `${collection.data.name} Collection`
                 setCollection(collection.data)
                 setLoading(false)
             } catch (e) {

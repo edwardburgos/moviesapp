@@ -36,6 +36,9 @@ export default function SearchBar() {
     ];
     const [sorting, setSorting] = useState('popularity.desc')
 
+    useEffect(() => {
+        document.title = `Movies app`
+    }, [])
 
     const dispatch = useDispatch();
 

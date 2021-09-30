@@ -32,7 +32,9 @@ export default function Genre({ id }: SearchProps) {
             try {
                 setLoading(true)
                 const genres = await axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
-                setGenreName(genres.data.genres.filter((e: GenreType) => e.id === id)[0].name)
+                const genreName = genres.data.genres.filter((e: GenreType) => e.id === id)[0].name
+                setGenreName(genreName)
+                document.title = `${genreName} Movies`
                 const movies = await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1&with_genres=${id}`);
                 setMovies(movies.data.results)
                 setLoading(false)
