@@ -1,7 +1,7 @@
 import s from './PaginationComponent.module.css';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { modifyResults } from '../../actions';
+import { modifyResults, modifyLoading } from '../../actions';
 import { Pagination } from 'react-bootstrap';
 import first from '../../img/icons/play-back-circle-outline.svg'
 import back from '../../img/icons/caret-back-circle-outline.svg'
@@ -22,8 +22,10 @@ export default function PaginationComponent() {
 
   // This function modify the movies state
   async function modifyResult(number: string) {
+    dispatch(modifyLoading(true))
     const newResult = await axios.get(`${searchURL}${number}`)
     dispatch(modifyResults(newResult.data.results))
+    dispatch(modifyLoading(false))
   }
 
   // This function load the pagination items

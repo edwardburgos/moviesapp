@@ -32,7 +32,27 @@
     justify-content: space-around;
     width: 100%;
     max-width: 1587px;
+}
+
+.loadingContainer {
+    width: 100%;
+    max-width: 330px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    flex-direction: column;
+
+}
+
+.resultsPagination {
     min-height: calc(100vh - 170px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .noResults {

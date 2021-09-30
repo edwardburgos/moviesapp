@@ -20,3 +20,10 @@ export function modifySearchURL(searchURL: string) {
         searchURL
     }
 }
+
+export function modifyLoading(loading: boolean) {
+    return {
+        type: 'MODIFY_LOADING',
+        loading
+    }
+}

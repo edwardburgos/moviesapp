@@ -11,7 +11,7 @@ import loadingGif from '../../img/loadingGif.gif';
 import noResults from '../../img/noResults.svg';
 import PaginationComponent from '../PaginationComponent/PaginationComponent'
 import { useDispatch, useSelector } from 'react-redux'
-import { modifyTotalPages, modifySearchURL, modifyResults } from '../../actions';
+import { modifyTotalPages, modifySearchURL, modifyResults, modifyLoading } from '../../actions';
 import { genres, sortingOptions } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
@@ -20,10 +20,11 @@ import CardCollection from '../CardCollection/CardCollection';
 export default function SearchBar() {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
+    const loading = useSelector((state: { loading: boolean }) => state.loading)
+
 
     const [genre, setGenre] = useState('')
     const [title, setTitle] = useState<string>('');
-    const [loading, setLoading] = useState(false);
     const [radioValue, setRadioValue] = useState('1');
     const radios = [
         { name: 'Movies', nameSingular: 'movie', search: 'Search a movie', value: '1' },
@@ -39,13 +40,13 @@ export default function SearchBar() {
 
     async function searchData(title: string) {
         try {
-            setLoading(true)
+            dispatch(modifyLoading(true))
             const url = `https://api.themoviedb.org/3/search/${radios.filter(e => e.value === radioValue)[0].nameSingular}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${title}&page=`
             const results = await axios.get(`${url}1`)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
-            setLoading(false)
+            dispatch(modifyLoading(false))
         } catch (e) {
             console.log(e)
             showMessage('Sorry, an error ocurred')
@@ -66,13 +67,13 @@ export default function SearchBar() {
 
     async function searchByGenre(genreId: string) {
         try {
-            setLoading(true)
+            dispatch(modifyLoading(true))
             const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genreId}&page=`
             const results = await axios.get(`${url}1`)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
-            setLoading(false)
+            dispatch(modifyLoading(false))
         } catch (e) {
             console.log(e)
             showMessage('Sorry, an error ocurred')
@@ -126,7 +127,7 @@ export default function SearchBar() {
                                 results && results.length ?
                                     <div className={s.selectContainer}>
                                         <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                                            {sortingOptions.map(e => <option value={e.value}>{e.complete}</option> )}
+                                            {sortingOptions.map(e => <option value={e.value}>{e.complete}</option>)}
                                         </Form.Select>
                                         <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
                                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
@@ -137,47 +138,49 @@ export default function SearchBar() {
                         </>
                 }
             </div>
-            {results ?
-                !loading ?
-                    <div className={s.cardsContainerFull}>
-                        {results.length ?
-                            <>
-                                {results.map((e, index) =>
-                                    ['1', '5'].includes(radioValue) ?
-                                        <Card key={index} movie={e}></Card>
-                                        :
-                                        radioValue === '3' ?
-                                            <CardCompany key={index} movie={e}></CardCompany>
+            <div className={s.resultsPagination}>
+                {results ?
+                    !loading ?
+                        <div className={s.cardsContainerFull}>
+                            {results.length ?
+                                <>
+                                    {results.map((e, index) =>
+                                        ['1', '5'].includes(radioValue) ?
+                                            <Card key={index} movie={e}></Card>
                                             :
-                                            radioValue === '4' ?
-                                                <CardCollection key={index} movie={e}></CardCollection>
+                                            radioValue === '3' ?
+                                                <CardCompany key={index} movie={e}></CardCompany>
                                                 :
-                                                <CardPerson key={index} movie={e}></CardPerson>
-                                )
-                                }
-                                <PaginationComponent />
-                            </>
-                            :
-                            <div className={s.noResultsContainer}>
-                                <div>
-                                    <img className={s.noResults} src={noResults} alt='noResults'></img>
-                                    <p className='bold mb-0 text-center'>No results found</p>
+                                                radioValue === '4' ?
+                                                    <CardCollection key={index} movie={e}></CardCollection>
+                                                    :
+                                                    <CardPerson key={index} movie={e}></CardPerson>
+                                    )
+                                    }
+                                </>
+                                :
+                                <div className={s.noResultsContainer}>
+                                    <div>
+                                        <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                        <p className='bold mb-0 text-center'>No results found</p>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </div>
+                            }
+                        </div>
+                        :
+                        <div className={s.loadingContainer}>
+                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                        </div>
                     :
-                    <div className='contentCenter170'>
-                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                    </div>
-                :
-                loading ?
-                    <div className='contentCenter170'>
-                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                    </div>
-                    :
-                    null
-            }
+                    loading ?
+                        <div className={s.loadingContainer}>
+                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                        </div>
+                        :
+                        null
+                }
+                {results && results.length ? <PaginationComponent /> : null}
+            </div>
         </div>
     )
 }
