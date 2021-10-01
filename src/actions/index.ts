@@ -27,3 +27,10 @@ export function modifyLoading(loading: boolean) {
         loading
     }
 }
+
+export function modifyCurrentPage(currentPage: number) {
+    return {
+        type: 'MODIFY_CURRENT_PAGE',
+        currentPage
+    }
+}

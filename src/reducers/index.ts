@@ -4,17 +4,19 @@ export type PossibleStates = {
   results: Movie[] | null,
   totalPages: number,
   searchURL: string,
-  loading: boolean
+  loading: boolean,
+  currentPage: number
 }
 
 const initialState = {
   results:  null,
   totalPages: 1,
   searchURL: '',
-  loading: false
+  loading: false,
+  currentPage: 1
 } as PossibleStates
 
-export default function reducer(state = initialState, action: { type: string, results: Movie[] | null, totalPages: number, searchURL: string, loading: boolean}) {
+export default function reducer(state = initialState, action: { type: string, results: Movie[] | null, totalPages: number, searchURL: string, loading: boolean, currentPage: number}) {
   switch (action.type) {
     case 'MODIFY_RESULTS':
       return {
@@ -35,6 +37,11 @@ export default function reducer(state = initialState, action: { type: string, re
       return {
         ...state,
         loading: action.loading
+      }
+    case 'MODIFY_CURRENT_PAGE':
+      return {
+        ...state,
+        currentPage: action.currentPage
       }
     default:
       return { ...state }

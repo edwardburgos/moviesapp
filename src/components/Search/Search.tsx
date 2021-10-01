@@ -11,7 +11,7 @@ import loadingGif from '../../img/loadingGif.gif';
 import noResults from '../../img/noResults.svg';
 import PaginationComponent from '../PaginationComponent/PaginationComponent'
 import { useDispatch, useSelector } from 'react-redux'
-import { modifyTotalPages, modifySearchURL, modifyResults, modifyLoading } from '../../actions';
+import { modifyTotalPages, modifySearchURL, modifyResults, modifyLoading, modifyCurrentPage } from '../../actions';
 import { genres, sortingOptions } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
@@ -61,7 +61,13 @@ export default function SearchBar() {
     useEffect(() => {
         if (radioValue === '5') { setTitle(''); dispatch(modifyResults(null)); } else { if (title) searchData(title) }
         setGenre('')
-        return () => { dispatch(modifyResults(null)); dispatch(modifyTotalPages(1)); dispatch(modifySearchURL('')) }
+        return () => {
+            dispatch(modifySearchURL(''))
+            dispatch(modifyResults(null))
+            dispatch(modifyTotalPages(1))
+            dispatch(modifyLoading(false))
+            dispatch(modifyCurrentPage(1))
+        }
     }, [dispatch, radioValue])
 
     useEffect(() => {
