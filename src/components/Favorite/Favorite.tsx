@@ -3,41 +3,50 @@ import s from './Favorite.module.css'
 import defaultPoster from '../../img/icons/alert-circle-outline.svg';
 import { Link } from 'react-router-dom';
 import { months } from '../../extras/globalVariables';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { Movie } from '../../extras/types';
 import { useState, useEffect } from 'react';
 import Card from '../Card/Card';
 import { modifySearchURL, modifyCurrentPage, modifyResults, modifyTotalPages, modifyLoading } from '../../actions';
+import loadingGif from '../../img/loadingGif.gif';
+import PaginationComponent from '../PaginationComponent/PaginationComponent';
+import noResults from '../../img/noResults.svg';
+
+
 
 export default function Favorite() {
 
-    const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([])
+    const results = useSelector((state: { results: null | Movie[] }) => state.results)
+    const loading = useSelector((state: { loading: boolean }) => state.loading)
+
     const dispatch = useDispatch();
+
+    const [initialLoading, setInitialLoading] = useState(false)
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
         const source = cancelToken.source();
         async function getFavoriteMovies() {
             try {
-                // if (localStorage.getItem("favoriteMovies")) {
-                //     let localChoosenCities: Movies[] = []
-                //     const localItems = JSON.parse(localStorage.getItem("choosenCities") || '[]')
-                //     for (const e of localItems) {
-                //         const weatherInfo = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${e[0]},${e[1]},${e[2]}&appid=${process.env.REACT_APP_API_KEY}`)
-                //         const stateCountryName = await axios.get(`https://edwardweatherapp.herokuapp.com/stateCountryName?countryCode=${e[2]}&stateCode=${e[1]}`)
-                //         const { weather, main, wind } = weatherInfo.data
-                //         localChoosenCities = [...localChoosenCities, { name: e[0], country: stateCountryName.data.countryName, flag: images[`${e[2].toLowerCase()}.svg`].default, weather: weather[0].description.slice(0, 1).toUpperCase() + weather[0].description.slice(1).toLowerCase(), weatherIcon: `http://openweathermap.org/img/w/${weather[0].icon}.png`, temperature: main.temp, windSpeed: wind.speed, state: stateCountryName.data.stateName }];
-                //     }
-                //     dispatch(modifyChoosenCities(localChoosenCities))
-                // }
-
-                // // Get countries
-                // const countries = await axios.get('https://edwardweatherapp.herokuapp.com/countries', { cancelToken: source.token })
-                // dispatch(setCountries(countries.data))
-
-                // // The loading state change
-                // setLoading(false)
+                setInitialLoading(true)
+                const movies = localStorage.getItem("favoriteMovies")
+                if (movies) {
+                    let localMovies: Movie[] = []
+                    // const localItems = JSON.parse(localStorage.getItem("favoriteMovies") || '[]')
+                    for (const e of JSON.parse(movies).slice(0, 20)) {
+                        const movieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
+                        const movie = movieInfo.data
+                        localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: null, profile_path: null, known_for_department: null, logo_path: null, origin_country: null }];
+                    }
+                    dispatch(modifyResults(localMovies))
+                    let pages = JSON.parse(movies).length / 20
+                    if (pages % 1 != 0) pages = parseInt(`${pages}`) + 1
+                    dispatch(modifyTotalPages(pages))
+                } else {
+                    dispatch(modifyResults([]))
+                }
+                setInitialLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
                     if (e.message !== "Unmounted") return;
@@ -57,12 +66,60 @@ export default function Favorite() {
 
     return (
         <>
-            <h1>Your favorite movies</h1>
             {
-                favoriteMovies.length ?
-                    favoriteMovies.map((e, index) => <Card key={index} movie={e}></Card>)
+                !initialLoading ?
+                    <>
+                        <h1 className='w-100 text-center'>Your favorite movies</h1>
+                        <div className={results ? s.resultsPagination : s.noResultsPagination}>
+                            {results ?
+                                !loading ?
+                                    <div className={s.cardsContainerFull}>
+                                        {results.length ?
+                                            <>{results.map((e, index) => <Card key={index} movie={e}></Card>)}</>
+                                            :
+                                            <div className={s.noResultsContainer}>
+                                                <div>
+                                                    <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                                    <p className='bold mb-0 text-center'>You have not liked any movie yet</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    :
+                                    <div className={s.loadingContainer}>
+                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                    </div>
+                                :
+                                loading ?
+                                    <div className={s.loadingContainer}>
+                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                    </div>
+                                    :
+                                    null
+                            }
+                            {results && results.length ? <PaginationComponent origin='favorite' /> : null}
+                        </div>
+                    </>
+
+                    // {!loading ?
+                    //     <>
+                    //         {
+                    //             results && results.length ?
+                    //                 results.map((e, index) => <Card key={index} movie={e}></Card>)
+                    //                 :
+                    //                 null
+                    //         }
+                    //     </>
+                    //     :
+                    //     <div className='contentCenter'>
+                    //         <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                    //     </div>
+                    // }
+                    // <PaginationComponent origin='favorite' />
                     :
-                    null
+                    <div className='contentCenter'>
+                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                    </div>
             }
         </>
     );

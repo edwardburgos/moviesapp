@@ -7,13 +7,15 @@ export type Movie = {
     profile_path: string | null,
     known_for_department: string | null,
     logo_path: string | null,
-    origin_country: string | null,
-    vote_average: number | null,
-    vote_count: number | null
+    origin_country: string | null
 }
 
 export type CardProps = {
     movie: Movie
+}
+
+export type PaginationProps = {
+    origin: string
 }
 
 export type SearchProps = {

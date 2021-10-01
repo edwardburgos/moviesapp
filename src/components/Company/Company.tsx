@@ -124,7 +124,7 @@ export default function Company({ id }: SearchProps) {
                                 :
                                 null
                         }
-                        {results && results.length ? <PaginationComponent /> : null}
+                        {results && results.length ? <PaginationComponent origin=''/> : null}
                     </div>
                 </div>
                 :

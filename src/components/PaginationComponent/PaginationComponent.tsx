@@ -9,12 +9,14 @@ import next from '../../img/icons/caret-forward-circle-outline.svg'
 import last from '../../img/icons/play-forward-circle-outline.svg'
 import axios from 'axios';
 import { modifyCurrentPage } from '../../actions';
+import { PaginationProps, Movie } from '../../extras/types';
+import { showMessage } from '../../extras/functions';
 
-export default function PaginationComponent() {
+export default function PaginationComponent({ origin }: PaginationProps) {
 
   const totalPages = useSelector((state: { totalPages: number }) => state.totalPages)
   const searchURL = useSelector((state: { searchURL: string }) => state.searchURL)
-  const currentPage = useSelector((state: {currentPage: number}) => state.currentPage)
+  const currentPage = useSelector((state: { currentPage: number }) => state.currentPage)
 
   const dispatch = useDispatch();
 
@@ -22,10 +24,30 @@ export default function PaginationComponent() {
 
   // This function modify the movies state
   async function modifyResult(number: string) {
-    dispatch(modifyLoading(true))
-    const newResult = await axios.get(`${searchURL}${number}`)
-    dispatch(modifyResults(newResult.data.results))
-    dispatch(modifyLoading(false))
+    try {
+      let newResult = []
+      dispatch(modifyLoading(true))
+      if (origin === 'favorite') {
+        const movies = localStorage.getItem("favoriteMovies")
+        if (movies) {
+          let localMovies: Movie[] = []
+          for (const e of JSON.parse(movies).slice((parseInt(number) === 1 ? 0 : (parseInt(number) - 1) * 20), (parseInt(number) === 1 ? 20 : ((parseInt(number) - 1) * 20) + 20))) {
+            const movieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
+            const movie = movieInfo.data
+            localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: null, profile_path: null, known_for_department: null, logo_path: null, origin_country: null }];
+          }
+          newResult = localMovies
+        }
+      } else {
+        const movies = await axios.get(`${searchURL}${number}`)
+        newResult = movies.data.results
+      }
+      dispatch(modifyResults(newResult))
+      dispatch(modifyLoading(false))
+    } catch (e) {
+      console.log(e)
+      showMessage('Sorry, an error ocurred')
+    }
   }
 
   // This function load the pagination items
