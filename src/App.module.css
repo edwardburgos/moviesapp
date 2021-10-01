@@ -23,13 +23,28 @@
 
 .logo {
   height: 30px;
+  cursor: pointer;
 }
 
-.searchIcon {
+.trendingIcon {
   height: 20px;
   position: absolute;
   right: 5%;
   top: 13px;
+  cursor: pointer;
+}
+
+.modalBody {
+  text-align: center;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 1587px;
+    text-align: left;
 }
 
 .App {

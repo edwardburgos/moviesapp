@@ -13,7 +13,7 @@ export default function CardCompany({ movie }: CardProps) {
                         <div className={s.cardContent}>
                             <Link to={`/company/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}><img src={movie.logo_path ? `https://image.tmdb.org/t/p/w500${movie.logo_path}` : defaultLogo} alt={movie.name} className={s.poster}></img></Link>
                             <Link className='bold block mb-0 customLink' to={`/company/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.name}</Link>
-                            {movie.origin_country ? <span className='block'>{countries.filter(e => e.code === movie.origin_country)[0].name}</span> : null}
+                            {movie.origin_country && countries.filter(e => e.code === movie.origin_country).length ? <span className='block'>{countries.filter(e => e.code === movie.origin_country)[0].name}</span> : null}
                         </div>
                     </div>
                     :

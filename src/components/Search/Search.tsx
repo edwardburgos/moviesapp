@@ -90,7 +90,7 @@ export default function SearchBar() {
     return (
         <div className='flexCentered'>
             <div className={`${s.test} ${results ? 'mb-3' : ''}`}>
-                <ButtonGroup>
+                <ButtonGroup id='searchType'>
                     {radios.map((radio, idx) => (
                         <ToggleButton
                             key={idx}
@@ -118,7 +118,7 @@ export default function SearchBar() {
                             <div className={s.selectContainer}>
                                 <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
                                     {genre ? null : <option>Select a movie genre</option>}
-                                    {genres.map((e, index) => <option value={e.id} key={index}>{e.name}</option>)}
+                                    {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
                                 </Form.Select>
                                 <div className={genre === '' ? s.invisible : s.iconContainer}>
                                     <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); }} alt={'Remove selected genre'} />
@@ -126,9 +126,9 @@ export default function SearchBar() {
                             </div>
                             {
                                 results && results.length ?
-                                    <div className={s.selectContainer}>
+                                    <div className={s.selectSortingContainer}>
                                         <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                                            {sortingOptions.map(e => <option value={e.value}>{e.complete}</option>)}
+                                            {sortingOptions.map(e => <option key={e.value} value={e.value}>{e.complete}</option>)}
                                         </Form.Select>
                                         <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
                                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
@@ -139,25 +139,25 @@ export default function SearchBar() {
                         </>
                 }
             </div>
-            <div className={s.resultsPagination}>
+            <div className={results ? s.resultsPagination : s.noResultsPagination}>
                 {results ?
                     !loading ?
                         <div className={s.cardsContainerFull}>
                             {results.length ?
                                 <>
                                     {results.map((e, index) =>
-                                        ['1', '5'].includes(radioValue) ?
-                                            <Card key={index} movie={e}></Card>
-                                            :
-                                            radioValue === '3' ?
-                                                <CardCompany key={index} movie={e}></CardCompany>
+                                        e.id && (e.name || e.title) ?
+                                            ['1', '5'].includes(radioValue) ?
+                                                <Card key={index} movie={e}></Card>
                                                 :
-                                                radioValue === '4' ?
-                                                    <CardCollection key={index} movie={e}></CardCollection>
+                                                radioValue === '3' ?
+                                                    <CardCompany key={index} movie={e}></CardCompany>
                                                     :
-                                                    <CardPerson key={index} movie={e}></CardPerson>
-                                    )
-                                    }
+                                                    radioValue === '4' ?
+                                                        <CardCollection key={index} movie={e}></CardCollection>
+                                                        :
+                                                        <CardPerson key={index} movie={e}></CardPerson>
+                                            : null)}
                                 </>
                                 :
                                 <div className={s.noResultsContainer}>

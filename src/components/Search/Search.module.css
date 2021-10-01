@@ -49,6 +49,10 @@
 
 }
 
+.noResultsPagination {
+    display: none;
+}
+
 .resultsPagination {
     min-height: calc(100vh - 170px);
     display: flex;
@@ -72,12 +76,15 @@
     align-items: center;
 }
 
-.selectContainer {
+.selectContainer, .selectSortingContainer {
     display: flex;
     position: relative;
     align-items: center;
-    margin-bottom: 16px;
     width: 100%;
+}
+
+.selectSortingContainer {
+    margin-top: 16px;
 }
 
 .iconContainer {

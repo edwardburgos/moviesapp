@@ -64,7 +64,7 @@ export default function Company({ id }: SearchProps) {
                                 <h1 className='w-100'>{company.name}</h1>
                                 {company.description ? <><span className='w-100 bold'>Description</span><p className='w-100'>{company.description}</p></> : null}
                                 {company.headquarters ? <><span className='w-100 bold'>Headquarters</span><p className='w-100'>{company.headquarters}</p></> : null}
-                                {company.origin_country ? <><span className='w-100 bold'>Origin country</span><p className='w-100'>{countries.filter(e => e.code === company.origin_country)[0].name}</p></> : null}
+                                {company.origin_country && countries.filter(e => e.code === company.origin_country).length ? <><span className='w-100 bold'>Origin country</span><p className='w-100'>{countries.filter(e => e.code === company.origin_country)[0].name}</p></> : null}
                                 {company.homepage ? <a className='btn btn-primary' href={company.homepage} target="_blank" rel="noreferrer">Visit website</a> : null}
                             </div>
                         </div>
@@ -72,7 +72,7 @@ export default function Company({ id }: SearchProps) {
                     <h2 className='w-100 mb-3 text-center'>Movies</h2>
                     <div className={s.selectContainer}>
                         <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                        {sortingOptions.map(e => <option value={e.value}>{e.complete}</option> )}
+                        {sortingOptions.map(e => <option key={e.value} value={e.value}>{e.complete}</option> )}
                         </Form.Select>
                         <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />

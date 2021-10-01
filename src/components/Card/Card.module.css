@@ -1,7 +1,6 @@
 .card {
     width: 100%;
-    margin-bottom: 16px;
-    padding: 0 8px;
+    padding: 8px;
     cursor: pointer;
     display: flex;
     justify-content: center;

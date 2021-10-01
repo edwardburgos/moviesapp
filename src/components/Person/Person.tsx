@@ -93,7 +93,7 @@ export default function Person({ id }: SearchProps) {
                     <h2 className='w-100 mb-3 text-center'>Movies</h2>
                     <div className={s.selectContainer}>
                         <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                        {sortingOptions.map(e => <option value={e.value}>{e.complete}</option> )}
+                        {sortingOptions.map(e => <option key={e.value} value={e.value}>{e.complete}</option> )}
                         </Form.Select>
                         <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
