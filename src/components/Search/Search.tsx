@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import s from './Search.module.css';
-import { Form, ToggleButton, ButtonGroup } from 'react-bootstrap';
+import { Form, ToggleButton, ButtonGroup, Modal } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
 import search from '../../img/icons/search-outline.svg';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import { genres, sortingOptions } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
+import config from '../../img/icons/options-outline.svg'
 
 export default function SearchBar() {
 
@@ -34,6 +35,7 @@ export default function SearchBar() {
         { name: 'Genres', nameSingular: 'genre', value: '5' }
     ];
     const [sorting, setSorting] = useState('popularity.desc')
+    const [showSorting, setShowSorting] = useState(false)
 
     useEffect(() => {
         document.title = `Movies app`
@@ -88,100 +90,130 @@ export default function SearchBar() {
     }
 
     return (
-        <div className='flexCentered'>
-            <div className={`${s.test} ${results ? 'mb-3' : ''}`}>
-                <ButtonGroup id='searchType'>
-                    {radios.map((radio, idx) => (
-                        <ToggleButton
-                            key={idx}
-                            id={`radio-${idx}`}
-                            type="radio"
-                            variant='outline-primary'
-                            className='mb-3'
-                            name="radio"
-                            value={radio.value}
-                            checked={radioValue === radio.value}
-                            onChange={(e) => setRadioValue(e.currentTarget.value)}
-                        >
-                            {radio.name}
-                        </ToggleButton>
-                    ))}
-                </ButtonGroup>
-                {
-                    ['1', '2', '3', '4'].includes(radioValue) ?
-                        <div className={s.searchInput}>
-                            <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
-                            <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
-                        </div>
-                        :
-                        <>
-                            <div className={s.selectContainer}>
-                                <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
-                                    {genre ? null : <option>Select a movie genre</option>}
-                                    {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
-                                </Form.Select>
-                                <div className={genre === '' ? s.invisible : s.iconContainer}>
-                                    <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); }} alt={'Remove selected genre'} />
-                                </div>
+        <>
+            <div className='flexCentered'>
+                <div className={`${s.test} ${results ? 'mb-3' : ''}`}>
+                    <ButtonGroup id='searchType'>
+                        {radios.map((radio, idx) => (
+                            <ToggleButton
+                                key={idx}
+                                id={`radio-${idx}`}
+                                type="radio"
+                                variant='outline-primary'
+                                className='mb-3'
+                                name="radio"
+                                value={radio.value}
+                                checked={radioValue === radio.value}
+                                onChange={(e) => setRadioValue(e.currentTarget.value)}
+                            >
+                                {radio.name}
+                            </ToggleButton>
+                        ))}
+                    </ButtonGroup>
+                    {
+                        ['1', '2', '3', '4'].includes(radioValue) ?
+                            <div className={s.searchInput}>
+                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
+                                <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                             </div>
-                            {
-                                results && results.length ?
-                                    <div className={s.selectSortingContainer}>
-                                        <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
-                                            {sortingOptions.map(e => <option key={e.value} value={e.value}>{e.complete}</option>)}
-                                        </Form.Select>
-                                        <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
-                                            <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
+                            :
+                            <>
+                                <div className={s.selectContainer}>
+                                    <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
+                                        {genre ? null : <option>Select a movie genre</option>}
+                                        {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
+                                    </Form.Select>
+                                    <div className={genre === '' ? s.invisible : s.iconContainer}>
+                                        <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); }} alt={'Remove selected genre'} />
+                                    </div>
+                                </div>
+                                {
+                                    results && results.length ?
+                                        <img src={config} className={s.configIcon} onClick={() => { setShowSorting(true) }} alt={'Apply sorting'} />
+                                        : null
+                                }
+                            </>
+                    }
+                </div>
+                <div className={results ? s.resultsPagination : s.noResultsPagination}>
+                    {results ?
+                        !loading ?
+                            <div className={s.cardsContainerFull}>
+                                {results.length ?
+                                    <>
+                                        {results.map((e, index) =>
+                                            e.id && (e.name || e.title) ?
+                                                ['1', '5'].includes(radioValue) ?
+                                                    <Card key={index} movie={e}></Card>
+                                                    :
+                                                    radioValue === '3' ?
+                                                        <CardCompany key={index} movie={e}></CardCompany>
+                                                        :
+                                                        radioValue === '4' ?
+                                                            <CardCollection key={index} movie={e}></CardCollection>
+                                                            :
+                                                            <CardPerson key={index} movie={e}></CardPerson>
+                                                : null)}
+                                    </>
+                                    :
+                                    <div className={s.noResultsContainer}>
+                                        <div>
+                                            <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                            <p className='bold mb-0 text-center'>No results found</p>
                                         </div>
                                     </div>
-                                    : null
-                            }
-                        </>
-                }
-            </div>
-            <div className={results ? s.resultsPagination : s.noResultsPagination}>
-                {results ?
-                    !loading ?
-                        <div className={s.cardsContainerFull}>
-                            {results.length ?
-                                <>
-                                    {results.map((e, index) =>
-                                        e.id && (e.name || e.title) ?
-                                            ['1', '5'].includes(radioValue) ?
-                                                <Card key={index} movie={e}></Card>
-                                                :
-                                                radioValue === '3' ?
-                                                    <CardCompany key={index} movie={e}></CardCompany>
-                                                    :
-                                                    radioValue === '4' ?
-                                                        <CardCollection key={index} movie={e}></CardCollection>
-                                                        :
-                                                        <CardPerson key={index} movie={e}></CardPerson>
-                                            : null)}
-                                </>
-                                :
-                                <div className={s.noResultsContainer}>
-                                    <div>
-                                        <img className={s.noResults} src={noResults} alt='noResults'></img>
-                                        <p className='bold mb-0 text-center'>No results found</p>
-                                    </div>
-                                </div>
-                            }
-                        </div>
+                                }
+                            </div>
+                            :
+                            <div className={s.loadingContainer}>
+                                <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                            </div>
                         :
-                        <div className={s.loadingContainer}>
-                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                        </div>
-                    :
-                    loading ?
-                        <div className={s.loadingContainer}>
-                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                        </div>
-                        :
-                        null
-                }
-                {results && results.length ? <PaginationComponent /> : null}
+                        loading ?
+                            <div className={s.loadingContainer}>
+                                <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                            </div>
+                            :
+                            null
+                    }
+                    {results && results.length ? <PaginationComponent /> : null}
+                </div>
             </div>
-        </div>
+
+            <Modal
+                show={showSorting}
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                size="lg"
+                keyboard={false}
+                onHide={() => setShowSorting(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Select a sorting option
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className={s.modalBody}>
+                    <div className={s.cardsContainer}>
+                        <Form>
+                            <div key='default-radio' className="mb-3">
+                                {
+                                    sortingOptions.map(e =>
+                                        <Form.Check
+                                            type='radio'
+                                            id={e.value}
+                                            checked={e.value === sorting}
+                                            label={e.complete}
+                                            name="sortingOptions"
+                                            onClick={() => {sortBy(e.value); setSorting(e.value); setShowSorting(false)}}
+                                        />
+                                    )
+                                }
+                            </div>
+                        </Form>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        </>
     )
 }
