@@ -208,6 +208,7 @@ export default function SearchBar() {
                                         <Form.Check
                                             type='radio'
                                             id={e.value}
+                                            key={e.value}
                                             checked={e.value === sorting}
                                             label={e.complete}
                                             name="sortingOptions"

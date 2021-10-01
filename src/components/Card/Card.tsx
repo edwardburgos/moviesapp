@@ -4,7 +4,6 @@ import defaultPoster from '../../img/icons/alert-circle-outline.svg';
 import { Link } from 'react-router-dom';
 import { months } from '../../extras/globalVariables';
 import heart from '../../img/icons/heart.svg'
-import ellipse from '../../img/icons/ellipse.svg'
 import { useEffect, useState } from 'react';
 
 export default function Card({ movie }: CardProps) {

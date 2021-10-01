@@ -14,6 +14,7 @@ import { showMessage } from '../../extras/functions';
 import { useDispatch } from 'react-redux'
 import Card from '../Card/Card'
 import { Movie } from '../../extras/types';
+import heart from '../../img/icons/heart.svg'
 
 
 export default function Detail({ id }: SearchProps) {
@@ -31,9 +32,11 @@ export default function Detail({ id }: SearchProps) {
     const [showAllCast, setShowAllCast] = useState(false)
     const [trailer, setTrailer] = useState<MovieVideo>({ key: '', site: '', type: '', official: false })
     const [similarMovies, setSimilarMovies] = useState<Movie[]>([])
+    const [selected, setSelected] = useState(false)
+
 
     const dispatch = useDispatch();
-
+    
     useEffect(() => {
         const cancelToken = axios.CancelToken;
         const source = cancelToken.source();
@@ -62,6 +65,10 @@ export default function Detail({ id }: SearchProps) {
                 }
                 const similar = await axios.get(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
                 setSimilarMovies(similar.data.results)
+                const favoriteMovies = localStorage.getItem('favoriteMovies')
+                if (favoriteMovies) {
+                    if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+                }
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
@@ -80,6 +87,27 @@ export default function Detail({ id }: SearchProps) {
         setShowAllCast(true)
     }
 
+    function addToFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteMovies')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies)
+            array.push(movie.id)
+            localStorage.setItem('favoriteMovies', JSON.stringify(array))
+        } else {
+            localStorage.setItem('favoriteMovies', JSON.stringify([movie.id]))
+        }
+        setSelected(true)
+    }
+
+    function deleteFromFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteMovies')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies).filter((e: number) => e !== movie.id)
+            localStorage.setItem('favoriteMovies', JSON.stringify(array))
+        }
+        setSelected(false)
+    }
+
     return (
         <>
             {!loading ?
@@ -89,6 +117,9 @@ export default function Detail({ id }: SearchProps) {
                         <div className={s.leftContainer}>
                             <div className={s.posterContainer}>
                                 <img className={movie.poster_path ? s.poster : s.posterDefault} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
+                                <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                    <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                </div>
                             </div>
                             {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.buttonWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
                             {cast.length ?
