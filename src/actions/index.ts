@@ -34,3 +34,10 @@ export function modifyCurrentPage(currentPage: number) {
         currentPage
     }
 }
+
+export function modifyFavorites(favorites: boolean) {
+    return {
+        type: 'MODIFY_FAVORITES',
+        favorites
+    }
+}
