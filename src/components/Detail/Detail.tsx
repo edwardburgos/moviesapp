@@ -4,7 +4,7 @@ import defaultProfile from '../../img/icons/person-outline.svg';
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ProgressBar, Modal } from 'react-bootstrap'
+import { ProgressBar, Modal, AccordionCollapse } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
@@ -12,6 +12,9 @@ import loadingGif from '../../img/loadingGif.gif';
 import { months } from '../../extras/globalVariables';
 import { showMessage } from '../../extras/functions';
 import { useDispatch } from 'react-redux'
+import Card from '../Card/Card'
+import { Movie } from '../../extras/types';
+
 
 export default function Detail({ id }: SearchProps) {
 
@@ -27,6 +30,7 @@ export default function Detail({ id }: SearchProps) {
     const [allCast, setAllCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
     const [showAllCast, setShowAllCast] = useState(false)
     const [trailer, setTrailer] = useState<MovieVideo>({ key: '', site: '', type: '', official: false })
+    const [similarMovies, setSimilarMovies] = useState<Movie[]>([])
 
     const dispatch = useDispatch();
 
@@ -56,6 +60,8 @@ export default function Detail({ id }: SearchProps) {
                     const official = officialTrailer.filter((e: MovieVideo) => e.official)
                     official.length ? setTrailer(official[0]) : setTrailer(officialTrailer[0])
                 }
+                const similar = await axios.get(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`)
+                setSimilarMovies(similar.data.results)
                 setLoading(false)
             } catch (e) {
                 if (e instanceof Error) {
@@ -181,6 +187,19 @@ export default function Detail({ id }: SearchProps) {
                                     <p>$ {movie.revenue.toLocaleString()}</p>
                                 </> : null}
                         </div>
+                        {
+                            similarMovies.length ?
+                                <div className={s.castInfo}>
+                                    <p className='w-100 bold mb-2'>Similar movies</p>
+                                    <div className={s.similarMoviesContainer}>
+                                        {similarMovies.map((e, index) =>
+                                            <Card key={index} movie={e}></Card>
+                                        )}
+                                    </div>
+                                </div>
+                                :
+                                null
+                        }
                     </div>
 
                     <Modal

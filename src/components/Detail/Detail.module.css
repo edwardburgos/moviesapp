@@ -79,11 +79,17 @@
     justify-content: space-around;
 }
 
-.castContainer {
+.castContainer, .similarMoviesContainer {
     overflow-x: scroll;
     display: flex;
     max-width: 88vw;
     margin-bottom: 16px;
+}
+
+.similarMoviesContainer {
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
 }
 
 
@@ -174,6 +180,11 @@
 
 .votesOverview {
     display: flex;
+}
+
+.cardContainer {
+    margin: 8px;
+    width: 25%;
 }
 
 @media screen and (min-width: 768px) { 

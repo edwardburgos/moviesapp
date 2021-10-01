@@ -16,7 +16,6 @@ import { genres, sortingOptions } from '../../extras/globalVariables';
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
-import { getEffectiveConstraintOfTypeParameter } from 'typescript';
 
 export default function SearchBar() {
 
