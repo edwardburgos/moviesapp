@@ -14,8 +14,10 @@ export default function Card({ movie }: CardProps) {
         const favoriteMovies = localStorage.getItem('favoriteMovies')
         if (favoriteMovies) {
             const array = JSON.parse(favoriteMovies)
-            array.push(movie.id)
-            localStorage.setItem('favoriteMovies', JSON.stringify(array))
+            if (!array.filter((e: number) => e === movie.id).length) {
+                array.push(movie.id)
+                localStorage.setItem('favoriteMovies', JSON.stringify(array))
+            }
         } else {
             localStorage.setItem('favoriteMovies', JSON.stringify([movie.id]))
         }

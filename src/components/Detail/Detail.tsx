@@ -91,8 +91,10 @@ export default function Detail({ id }: SearchProps) {
         const favoriteMovies = localStorage.getItem('favoriteMovies')
         if (favoriteMovies) {
             const array = JSON.parse(favoriteMovies)
-            array.push(movie.id)
-            localStorage.setItem('favoriteMovies', JSON.stringify(array))
+            if (!array.filter((e: number) => e === movie.id).length) {
+                array.push(movie.id)
+                localStorage.setItem('favoriteMovies', JSON.stringify(array))
+            }
         } else {
             localStorage.setItem('favoriteMovies', JSON.stringify([movie.id]))
         }
@@ -121,7 +123,7 @@ export default function Detail({ id }: SearchProps) {
                                     <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
                                 </div>
                             </div>
-                            {trailer.key ? <div className='text-center mb-3'><a className={`btn btn-primary ${s.buttonWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
+                            {trailer.key ? <div className='text-center mb-3 w-100'><a className={`btn btn-primary ${s.buttonWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}
                             {cast.length ?
                                 <div className={s.castInfo}>
                                     <div className='w-100'><span className='bold'>Cast</span></div>
