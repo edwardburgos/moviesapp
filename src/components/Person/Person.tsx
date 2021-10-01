@@ -9,11 +9,11 @@ import { Carousel } from 'react-bootstrap'
 import { showMessage } from "../../extras/functions"
 import { Form } from 'react-bootstrap';
 import closeCircle from '../../img/icons/close-circle-outline.svg';
-import { sortingOptions } from "../../extras/globalVariables"
+import { sortingOptions, months } from "../../extras/globalVariables"
 import { modifyResults, modifyTotalPages, modifySearchURL, modifyLoading, modifyCurrentPage } from '../../actions'
 import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
-
+import moment from 'moment'
 
 
 export default function Person({ id }: SearchProps) {
@@ -106,7 +106,14 @@ export default function Person({ id }: SearchProps) {
                             <div>
                                 <h1 className='w-100 text-center'>{person.name}</h1>
                                 {person.known_for_department ? <><span className='w-100 bold'>Known for department</span><p>{person.known_for_department}</p></> : null}
-                                {person.birthday ? <><span className='w-100 bold'>Birthday</span><p>{person.birthday}</p></> : null}
+                                {person.birthday ? 
+                                <>
+                                <span className='w-100 bold'>Age</span>
+                                <p>{moment().diff(person.birthday, 'years',false)}</p>
+                                <span className='w-100 bold'>Birthday</span>
+                                <p>{`${person.birthday.split('-')[2]} ${months[parseInt(person.birthday.split('-')[1]) - 1]} ${person.birthday.split('-')[0]}`}</p>
+                                </> 
+                                : null}
                                 {person.deathday ? <><span className='w-100 bold'>Deathday</span><p>{person.deathday}</p></> : null}
                                 {person.place_of_birth ? <><span className='w-100 bold'>Place of birth</span><p>{person.place_of_birth}</p></> : null}
                                 {person.biography ? <><span className='w-100 bold'>Biography</span><p>{person.biography}</p></> : null}
