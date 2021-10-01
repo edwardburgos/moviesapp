@@ -59,7 +59,14 @@ export default function App() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className={s.modalBody}>
-          
+          <ButtonGroup id='trending'>
+            <ToggleButton id="daily" type="radio" variant="outline-primary" key="daily" name="trending"
+              className='mb-2' value='daily' checked={selected === 'daily'} onChange={() => setSelected('daily')}
+            > Daily trending </ToggleButton>
+            <ToggleButton id="weekly" type="radio" variant="outline-primary" key="weekly" name="trending"
+              className='mb-2' value='weekly' checked={selected === 'weekly'} onChange={() => setSelected('weekly')}
+            > Weekly trending </ToggleButton>
+          </ButtonGroup>
           <div className={s.cardsContainer}>
             {
               selected === 'daily' ?

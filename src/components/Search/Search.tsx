@@ -101,7 +101,7 @@ export default function SearchBar() {
                                 type="radio"
                                 variant='outline-primary'
                                 className='mb-3'
-                                name="radio"
+                                name="searchType"
                                 value={radio.value}
                                 checked={radioValue === radio.value}
                                 onChange={(e) => setRadioValue(e.currentTarget.value)}
