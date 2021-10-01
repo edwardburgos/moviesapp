@@ -9,10 +9,12 @@ import Company from './components/Company/Company';
 import Card from './components/Card/Card'
 import Person from './components/Person/Person';
 import Detail from './components/Detail/Detail';
+import Favorite from './components/Favorite/Favorite';
 import { Modal, ButtonGroup, ToggleButton } from 'react-bootstrap'
 import axios from 'axios';
 import { Movie } from './extras/types'
 import { useState } from 'react';
+import heart from './img/icons/heart-outline.svg'
 
 export default function App() {
 
@@ -32,12 +34,14 @@ export default function App() {
   return (
     <>
       <div className={s.header}>
+        <Link to="/favoriteMovies"><img src={heart} className={s.heartIcon} alt={'Your favorite movies'} /></Link>
         <Link to="/"><img src={videocam} className={s.logo} alt={'Movies app'} /></Link>
         <div onClick={() => getTrendingMovies()}><img src={trending} className={s.trendingIcon} alt={'Trending movies'} /></div>
       </div>
       <div className={s.container}>
         <Switch>
-          <Route exact path="/" component={SearchBar}></Route>
+          <Route exact path="/" component={SearchBar}/>
+          <Route path="/favoriteMovies" component={Favorite}/>
           <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
           <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
           <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
