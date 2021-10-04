@@ -14,6 +14,8 @@ import { modifyResults, modifyTotalPages, modifySearchURL, modifyLoading, modify
 import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
 import moment from 'moment'
+import heart from '../../img/icons/heart.svg'
+import { modifyFavoriteMovies, modifyShowTrendingModal, modifyFavoritePeople } from '../../actions';
 
 
 export default function Person({ id }: SearchProps) {
@@ -28,6 +30,7 @@ export default function Person({ id }: SearchProps) {
     const [initialLoading, setInitialLoading] = useState(false)
     const [photos, setPhotos] = useState<string[]>([])
     const [sorting, setSorting] = useState('popularity.desc')
+    const [selected, setSelected] = useState(false)
 
 
     const dispatch = useDispatch()
@@ -78,42 +81,80 @@ export default function Person({ id }: SearchProps) {
         dispatch(modifyLoading(false))
     }
 
+
+    function addToFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoritePeople')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies)
+            if (!array.filter((e: number) => e === id).length) {
+                array.push(id)
+                localStorage.setItem('favoritePeople', JSON.stringify(array))
+            }
+        } else {
+            localStorage.setItem('favoritePeople', JSON.stringify([id]))
+        }
+        setSelected(true)
+    }
+
+    function deleteFromFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoritePeople')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies).filter((e: number) => e !== id)
+            localStorage.setItem('favoritePeople', JSON.stringify(array))
+        }
+        setSelected(false)
+        dispatch(modifyFavoritePeople(true))
+    }
+
+    useEffect(() => {
+        const favoriteMovies = localStorage.getItem('favoritePeople')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) { setSelected(true) } else { setSelected(false) }
+        }
+    }, [])
+
+
     return (
         <>
             {!initialLoading ?
                 <div className={s.container}>
                     <div className={s.firstSection}>
                         <div className={s.left}>
-                            {photos.length > 1 ?
-                                <Carousel className={s.profilePic}>
-                                    {
-                                        photos.map((e, index) =>
-                                            <Carousel.Item key={index}>
-                                                <img
-                                                    className={s.profilePic}
-                                                    src={`https://image.tmdb.org/t/p/w500${e}`}
-                                                    alt={`Slide number ${index}`}
-                                                />
-                                            </Carousel.Item>
-                                        )
-                                    }
-                                </Carousel>
-                                :
-                                <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile} alt={person.name}></img>
-                            }
+                            <div className={s.photosContainer}>
+                                {photos.length > 1 ?
+                                    <Carousel className={s.profilePic}>
+                                        {
+                                            photos.map((e, index) =>
+                                                <Carousel.Item key={index}>
+                                                    <img
+                                                        className={s.profilePic}
+                                                        src={`https://image.tmdb.org/t/p/w500${e}`}
+                                                        alt={`Slide number ${index}`}
+                                                    />
+                                                </Carousel.Item>
+                                            )
+                                        }
+                                    </Carousel>
+                                    :
+                                    <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile} alt={person.name}></img>
+                                }
+                                <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                    <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                </div>
+                            </div>
                         </div>
                         <div className={s.right}>
                             <div>
                                 <h1 className='w-100 text-center'>{person.name}</h1>
                                 {person.known_for_department ? <><span className='w-100 bold'>Known for department</span><p>{person.known_for_department}</p></> : null}
-                                {person.birthday ? 
-                                <>
-                                <span className='w-100 bold'>Age</span>
-                                <p>{moment().diff(person.birthday, 'years',false)}</p>
-                                <span className='w-100 bold'>Birthday</span>
-                                <p>{`${person.birthday.split('-')[2]} ${months[parseInt(person.birthday.split('-')[1]) - 1]} ${person.birthday.split('-')[0]}`}</p>
-                                </> 
-                                : null}
+                                {person.birthday ?
+                                    <>
+                                        <span className='w-100 bold'>Age</span>
+                                        <p>{moment().diff(person.birthday, 'years', false)}</p>
+                                        <span className='w-100 bold'>Birthday</span>
+                                        <p>{`${person.birthday.split('-')[2]} ${months[parseInt(person.birthday.split('-')[1]) - 1]} ${person.birthday.split('-')[0]}`}</p>
+                                    </>
+                                    : null}
                                 {person.deathday ? <><span className='w-100 bold'>Deathday</span><p>{person.deathday}</p></> : null}
                                 {person.place_of_birth ? <><span className='w-100 bold'>Place of birth</span><p>{person.place_of_birth}</p></> : null}
                                 {person.biography ? <><span className='w-100 bold'>Biography</span><p>{person.biography}</p></> : null}
@@ -152,7 +193,7 @@ export default function Person({ id }: SearchProps) {
                                 :
                                 null
                         }
-                        {results && results.length ? <PaginationComponent origin=''/> : null}
+                        {results && results.length ? <PaginationComponent origin='' /> : null}
                     </div>
                 </div>
                 :

@@ -35,6 +35,7 @@ export default function Detail({ id }: SearchProps) {
     const [selected, setSelected] = useState(false)
 
 
+    
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -67,7 +68,7 @@ export default function Detail({ id }: SearchProps) {
                 setSimilarMovies(similar.data.results)
                 const favoriteMovies = localStorage.getItem('favoriteMovies')
                 if (favoriteMovies) {
-                    if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+                    if (JSON.parse(favoriteMovies).includes(id)) { setSelected(true) } else { setSelected(false) }
                 }
                 setLoading(false)
             } catch (e) {

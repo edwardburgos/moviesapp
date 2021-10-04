@@ -134,5 +134,10 @@ background: #d4d4d4;
   padding-top: 16px!important;
 }
 
+.carousel-control-prev, .carousel-control-next {
+  top: 35px !important;
+}
+
+
 @media screen and (max-width: 1000px) { .modal-dialog {max-width: 100% !important} }
 @media screen and (max-width: 800px) { .modal-dialog {max-width: 500px !important} } 
