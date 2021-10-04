@@ -6,7 +6,8 @@ export type PossibleStates = {
   searchURL: string,
   loading: boolean,
   currentPage: number,
-  favorites: boolean
+  favorites: boolean,
+  showTrendingModal: boolean
 }
 
 const initialState = {
@@ -15,10 +16,11 @@ const initialState = {
   searchURL: '',
   loading: false,
   currentPage: 1,
-  favorites: false
+  favorites: false,
+  showTrendingModal: false
 } as PossibleStates
 
-export default function reducer(state = initialState, action: { type: string, results: Movie[] | null, totalPages: number, searchURL: string, loading: boolean, currentPage: number, favorites: boolean}) {
+export default function reducer(state = initialState, action: { type: string, results: Movie[] | null, totalPages: number, searchURL: string, loading: boolean, currentPage: number, favorites: boolean, showTrendingModal: boolean}) {
   switch (action.type) {
     case 'MODIFY_RESULTS':
       return {
@@ -49,6 +51,11 @@ export default function reducer(state = initialState, action: { type: string, re
       return {
         ...state,
         favorites: action.favorites
+      }
+    case 'MODIFY_SHOW_TRENDING_MODAL':
+      return {
+        ...state,
+        showTrendingModal: action.showTrendingModal
       }
     default:
       return { ...state }

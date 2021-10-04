@@ -27,7 +27,6 @@ export default function Favorite() {
 
     const dispatch = useDispatch();
 
-    const [initialLoading, setInitialLoading] = useState(false)
     const [radioValue, setRadioValue] = useState('1');
     const radios = [
         { name: 'Movies', nameSingular: 'movie', value: '1' },
@@ -38,7 +37,7 @@ export default function Favorite() {
 
     async function getFavorites(cancelToken: CancelToken) {
         try {
-            setInitialLoading(true)
+            dispatch(modifyLoading(true))
             const movies = localStorage.getItem(radioValue === '1' ? "favoriteMovies" : radioValue === '2' ? "favoritePeople" : radioValue === '3' ? "favoriteCompanies" : "favoriteCollections")
             if (movies) {
                 let localMovies: Movie[] = []
@@ -52,11 +51,12 @@ export default function Favorite() {
                 let pages = JSON.parse(movies).length / 20
                 if (pages % 1 != 0) pages = parseInt(`${pages}`) + 1
                 dispatch(modifyTotalPages(pages))
+                dispatch(modifyCurrentPage(1))
             } else {
                 dispatch(modifyResults([]))
             }
             dispatch(modifyFavoriteMovies(false))
-            setInitialLoading(false)
+            dispatch(modifyLoading(false))
         } catch (e) {
             if (e instanceof Error) {
                 if (e.message !== "Unmounted") return;
@@ -92,72 +92,69 @@ export default function Favorite() {
     }, [dispatch])
 
     return (
-        <>
-            {
-                !initialLoading ?
-                    <>
-                        <ButtonGroup id='searchType'>
-                            {radios.map((radio, idx) => (
-                                <ToggleButton
-                                    key={idx}
-                                    id={`radio-${idx}`}
-                                    type="radio"
-                                    variant='outline-primary'
-                                    className='mb-3'
-                                    name="searchType"
-                                    value={radio.value}
-                                    checked={radioValue === radio.value}
-                                    onChange={(e) => setRadioValue(e.currentTarget.value)}
-                                >
-                                    {radio.name}
-                                </ToggleButton>
-                            ))}
-                        </ButtonGroup>
-                        <h1 className='w-100 text-center'>Your favorite {radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}</h1>
-                        <div className={results ? s.resultsPagination : s.noResultsPagination}>
-                            {results ?
-                                !loading ?
-                                    <div className={s.cardsContainerFull}>
-                                        {results.length ?
-                                            <>
-                                                {results.map((e, index) =>
-                                                    e.id && (e.name || e.title) ?
-                                                        ['1', '5'].includes(radioValue) ?
-                                                            <Card key={index} movie={e}></Card>
-                                                            :
-                                                            radioValue === '3' ?
-                                                                <CardCompany key={index} movie={e}></CardCompany>
-                                                                :
-                                                                radioValue === '4' ?
-                                                                    <CardCollection key={index} movie={e}></CardCollection>
-                                                                    :
-                                                                    <CardPerson key={index} movie={e}></CardPerson>
-                                                        : null)}
-                                            </>
-                                            :
-                                            <div className={s.noResultsContainer}>
-                                                <div>
-                                                    <img className={s.noResults} src={noResults} alt='noResults'></img>
-                                                    <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
-                                    :
-                                    <div className={s.loadingContainer}>
-                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                                    </div>
+        <div className={s.container}>
+            <ButtonGroup id='searchType'>
+                {radios.map((radio, idx) => (
+                    <ToggleButton
+                        key={idx}
+                        id={`radio-${idx}`}
+                        type="radio"
+                        variant='outline-primary'
+                        className='mb-3'
+                        name="searchType"
+                        value={radio.value}
+                        checked={radioValue === radio.value}
+                        onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    >
+                        {radio.name}
+                    </ToggleButton>
+                ))}
+            </ButtonGroup>
+            <h1 className='w-100 text-center'>Your favorite {radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}</h1>
+            <div className={results ? s.resultsPagination : s.noResultsPagination}>
+                {results ?
+                    !loading ?
+                        <div className={s.cardsContainerFull}>
+                            {results.length ?
+                                <>
+                                    {results.map((e, index) =>
+                                        e.id && (e.name || e.title) ?
+                                            ['1', '5'].includes(radioValue) ?
+                                                <Card key={index} movie={e}></Card>
+                                                :
+                                                radioValue === '3' ?
+                                                    <CardCompany key={index} movie={e}></CardCompany>
+                                                    :
+                                                    radioValue === '4' ?
+                                                        <CardCollection key={index} movie={e}></CardCollection>
+                                                        :
+                                                        <CardPerson key={index} movie={e}></CardPerson>
+                                            : null)}
+                                </>
                                 :
-                                loading ?
-                                    <div className={s.loadingContainer}>
-                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                <div className={s.noResultsContainer}>
+                                    <div>
+                                        <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                        <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
                                     </div>
-                                    :
-                                    null
+                                </div>
                             }
-                            {results && results.length ? <PaginationComponent origin='favorite' /> : null}
                         </div>
-                    </>
+                        :
+                        <div className={s.loadingContainer}>
+                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                        </div>
+                    :
+                    loading ?
+                        <div className={s.loadingContainer}>
+                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                        </div>
+                        :
+                        null
+                }
+                {results && results.length ? <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} /> : null}
+            </div>
+        </div>
 
                     // {!loading ?
                     //     <>
@@ -174,11 +171,5 @@ export default function Favorite() {
                     //     </div>
                     // }
                     // <PaginationComponent origin='favorite' />
-                    :
-                    <div className='contentCenter'>
-                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                    </div>
-            }
-        </>
     );
 }

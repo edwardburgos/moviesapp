@@ -62,3 +62,10 @@ export function modifyFavoriteCollections(favoriteCollections: boolean) {
         favoriteCollections
     }
 }
+
+export function modifyShowTrendingModal(showTrendingModal: boolean) {
+    return {
+        type: 'MODIFY_SHOW_TRENDING_MODAL',
+        showTrendingModal
+    }
+}

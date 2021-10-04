@@ -117,3 +117,8 @@
 .invisible {
     display: none;
 }
+
+.modalForm {
+    padding: 8px;
+    padding-top: 0;
+}

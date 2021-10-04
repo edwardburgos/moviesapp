@@ -14,21 +14,27 @@ import { Modal, ButtonGroup, ToggleButton } from 'react-bootstrap'
 import axios from 'axios';
 import { Movie } from './extras/types'
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import heart from './img/icons/heart-outline.svg'
+import { modifyShowTrendingModal } from './actions'
+
 
 export default function App() {
 
+  const showTrendingModal = useSelector((state: { showTrendingModal: boolean }) => state.showTrendingModal)
+
   const [dailyTrending, setDailyTrending] = useState<Movie[]>([])
   const [weeklyTrending, setWeeklyTrending] = useState<Movie[]>([])
-  const [showModal, setShowModal] = useState(false)
   const [selected, setSelected] = useState<'daily' | 'weekly'>('daily')
 
+
+  const dispatch = useDispatch()
   async function getTrendingMovies() {
     const daily = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_API_KEY}`)
     setDailyTrending(daily.data.results)
     const weekly = await axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.REACT_APP_API_KEY}`)
     setWeeklyTrending(weekly.data.results)
-    setShowModal(true)
+    dispatch(modifyShowTrendingModal(true))
   }
 
   return (
@@ -50,12 +56,12 @@ export default function App() {
         </Switch>
       </div>
       <Modal
-        show={showModal}
+        show={showTrendingModal}
         aria-labelledby="contained-modal-title-vcenter"
         centered
         size="xl"
         keyboard={false}
-        onHide={() => setShowModal(false)}
+        onHide={() => dispatch(modifyShowTrendingModal(false))}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">

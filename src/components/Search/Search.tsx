@@ -36,6 +36,7 @@ export default function SearchBar() {
     ];
     const [sorting, setSorting] = useState('popularity.desc')
     const [showSorting, setShowSorting] = useState(false)
+    const [used, setUsed] = useState(false)
 
     useEffect(() => {
         document.title = `Movies app`
@@ -59,7 +60,7 @@ export default function SearchBar() {
     }
 
     useEffect(() => {
-        if (radioValue === '5') { setTitle(''); dispatch(modifyResults(null)); } else { if (title) searchData(title) }
+        if (radioValue === '5') { setUsed(false); setTitle(''); dispatch(modifyResults(null)); } else { if (title) searchData(title) }
         setGenre('')
         return () => {
             dispatch(modifySearchURL(''))
@@ -83,6 +84,7 @@ export default function SearchBar() {
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
             dispatch(modifyLoading(false))
+            setUsed(true);
         } catch (e) {
             console.log(e)
             showMessage('Sorry, an error ocurred')
@@ -119,7 +121,7 @@ export default function SearchBar() {
                     {
                         ['1', '2', '3', '4'].includes(radioValue) ?
                             <div className={s.searchInput}>
-                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
+                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { setUsed(true); setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
                                 <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                             </div>
                             :
@@ -141,7 +143,7 @@ export default function SearchBar() {
                             </>
                     }
                 </div>
-                <div className={results ? s.resultsPagination : s.noResultsPagination}>
+                <div className={used ? s.resultsPagination : s.noResultsPagination}>
                     {results ?
                         !loading ?
                             <div className={s.cardsContainerFull}>
@@ -199,8 +201,8 @@ export default function SearchBar() {
                         Select a sorting option
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className={s.modalBody}>
-                    <div className={s.cardsContainer}>
+                <Modal.Body >
+                    <div className={s.modalForm}>
                         <Form>
                             <div key='default-radio' className="mb-3">
                                 {

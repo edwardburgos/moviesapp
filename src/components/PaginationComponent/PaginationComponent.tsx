@@ -27,14 +27,15 @@ export default function PaginationComponent({ origin }: PaginationProps) {
     try {
       let newResult = []
       dispatch(modifyLoading(true))
-      if (origin === 'favorite') {
-        const movies = localStorage.getItem("favoriteMovies")
+      if (['favoriteMovies', 'favoritePeople', 'favoriteCompanies', 'favoriteCollections'].includes(origin)) {
+        const movies = localStorage.getItem(origin)
         if (movies) {
           let localMovies: Movie[] = []
           for (const e of JSON.parse(movies).slice((parseInt(number) === 1 ? 0 : (parseInt(number) - 1) * 20), (parseInt(number) === 1 ? 20 : ((parseInt(number) - 1) * 20) + 20))) {
-            const movieInfo = await axios.get(`https://api.themoviedb.org/3/movie/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
+            const singular = origin === 'favoriteMovies' ? 'movie' : origin === "favoritePeople" ? 'person' : origin === "favoriteCompanies" ? 'company' : 'collection';
+            const movieInfo = await axios.get(`https://api.themoviedb.org/3/${singular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
             const movie = movieInfo.data
-            localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: null, profile_path: null, known_for_department: null, logo_path: null, origin_country: null }];
+            localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country }];
           }
           newResult = localMovies
         }

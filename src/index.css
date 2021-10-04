@@ -128,3 +128,11 @@ background: #d4d4d4;
   display: flex;
   flex-wrap: wrap;
 }
+
+.modal-body {
+  padding: 8px !important;
+  padding-top: 16px!important;
+}
+
+@media screen and (max-width: 1000px) { .modal-dialog {max-width: 100% !important} }
+@media screen and (max-width: 800px) { .modal-dialog {max-width: 500px !important} } 
