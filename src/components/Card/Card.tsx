@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { months } from '../../extras/globalVariables';
 import heart from '../../img/icons/heart.svg'
 import { useEffect, useState } from 'react';
-import { modifyFavorites } from '../../actions';
+import { modifyFavoriteMovies } from '../../actions';
 import { useDispatch } from 'react-redux'
 
 export default function Card({ movie }: CardProps) {
@@ -34,7 +34,7 @@ export default function Card({ movie }: CardProps) {
             localStorage.setItem('favoriteMovies', JSON.stringify(array))
         }
         setSelected(false)
-        dispatch(modifyFavorites(true))
+        dispatch(modifyFavoriteMovies(true))
     }
 
     useEffect(() => {

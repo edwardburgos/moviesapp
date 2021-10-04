@@ -35,9 +35,30 @@ export function modifyCurrentPage(currentPage: number) {
     }
 }
 
-export function modifyFavorites(favorites: boolean) {
+export function modifyFavoriteMovies(favoriteMovies: boolean) {
     return {
-        type: 'MODIFY_FAVORITES',
-        favorites
+        type: 'MODIFY_FAVORITE_MOVIES',
+        favoriteMovies
+    }
+}
+
+export function modifyFavoritePeople(favoritePeople: boolean) {
+    return {
+        type: 'MODIFY_FAVORITE_PEOPLE',
+        favoritePeople
+    }
+}
+
+export function modifyFavoriteCompanies(favoriteCompanies: boolean) {
+    return {
+        type: 'MODIFY_FAVORITE_COMPANIES',
+        favoriteCompanies
+    }
+}
+
+export function modifyFavoriteCollections(favoriteCollections: boolean) {
+    return {
+        type: 'MODIFY_FAVORITE_COLLECTIONS',
+        favoriteCollections
     }
 }
