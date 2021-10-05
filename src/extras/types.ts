@@ -45,7 +45,8 @@ export type CastMember = {
     name: string,
     profile_path: string,
     known_for_department: string,
-    character: string
+    character: string | null,
+    job: string | null
 }
 
 export type CardPersonDetailProps = {

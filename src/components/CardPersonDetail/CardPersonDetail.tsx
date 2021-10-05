@@ -51,10 +51,10 @@ export default function CardPersonDetail({ movie }: CardPersonDetailProps) {
                             <Link to={`/person/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}><img className={movie.profile_path ? s.profilePic : s.defaultProfilePic} src={movie.profile_path ? `https://image.tmdb.org/t/p/w500${movie.profile_path}` : defaultProfile} alt={movie.name}></img></Link>
                             <Link className={`${s.name} linkDiv`} to={`/person/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
                                 <span className='bold block'>{movie.name}</span>
-                                <span>{movie.character}</span>
+                                { movie.character || movie.job ? <span>{movie.character ? movie.character : movie.job ? movie.job : null}</span> : null }
                             </Link>
                             <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
-                                <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite people'} />
                             </div>
                         </div>
                     :

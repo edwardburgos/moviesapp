@@ -26,15 +26,17 @@ export default function Detail({ id }: SearchProps) {
         poster_path: "", production_companies: [{ id: 0, name: "" }], release_date: "", revenue: 0,
         status: "", title: "", vote_average: 0, vote_count: 0
     })
-    const [cast, setCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
+    const [cast, setCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "", job: null }])
     const [loading, setLoading] = useState(false)
     const [showAll, setShowAll] = useState(false)
-    const [allCast, setAllCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "" }])
     const [showAllCast, setShowAllCast] = useState(false)
+    const [showAllCrew, setShowAllCrew] = useState(false)
+    const [crew, setCrew] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: '', character: "", job: '' }])
+    const [allCast, setAllCast] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: 'Acting', character: "", job: null }])
+    const [allCrew, setAllCrew] = useState<CastMember[]>([{ id: 0, name: "", profile_path: "", known_for_department: '', character: "", job: '' }])
     const [trailer, setTrailer] = useState<MovieVideo>({ key: '', site: '', type: '', official: false })
     const [similarMovies, setSimilarMovies] = useState<Movie[]>([])
     const [selected, setSelected] = useState(false)
-
 
 
     const dispatch = useDispatch();
@@ -50,6 +52,7 @@ export default function Detail({ id }: SearchProps) {
                 document.title = `${movie.data.title}`
                 const cast = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken: source.token })
                 let filteredCast = []
+                let filteredCrew = []
                 for (let e of cast.data.cast) {
                     if (filteredCast.length < 11) {
                         if (e.known_for_department === 'Acting') {
@@ -57,8 +60,16 @@ export default function Detail({ id }: SearchProps) {
                         }
                     } else { break; }
                 }
-                setShowAll(filteredCast.length === 11)
+                for (let e of cast.data.crew) {
+                    if (filteredCrew.length < 11) {
+                        filteredCrew.push(e)
+                    } else { break; }
+                }
+                setShowAllCast(filteredCast.length === 11)
                 setCast(filteredCast.slice(0, 10))
+                setShowAllCrew(filteredCrew.length === 11)
+                setCrew(filteredCrew.slice(0, 10))
+                console.log(filteredCrew)
                 const trailer = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
                 const officialTrailer = trailer.data.results.filter((e: MovieVideo) => e.type === 'Trailer' && e.site === 'YouTube');
                 if (officialTrailer.length) {
@@ -83,10 +94,10 @@ export default function Detail({ id }: SearchProps) {
         return () => { source.cancel("Unmounted"); }
     }, [id, dispatch])
 
-    async function getAllCast() {
+    async function getAllCast(type: string | null) {
         const cast = await axios.get(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
-        setAllCast(cast.data.cast.filter((e: CastMember) => e.known_for_department === 'Acting'))
-        setShowAllCast(true)
+        type === 'crew' ? setAllCrew(cast.data.crew) : setAllCast(cast.data.cast.filter((e: CastMember) => e.known_for_department === 'Acting'))
+        setShowAll(true)
     }
 
     function addToFavoriteMovies() {
@@ -133,7 +144,17 @@ export default function Detail({ id }: SearchProps) {
                                         {cast.map((e, index) =>
                                             <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
-                                        {showAll ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => getAllCast()}>Show all</button></div> : null}
+                                        {showAllCast ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => {setAllCrew([]); getAllCast(null)}}>Show all</button></div> : null}
+                                    </div>
+                                </div> : null}
+                            {crew.length ?
+                                <div className={s.castInfo}>
+                                    <div className='w-100'><span className='bold'>Crew</span></div>
+                                    <div className={s.castContainer}>
+                                        {crew.map((e, index) =>
+                                            <CardPersonDetail key={index} movie={e}></CardPersonDetail>
+                                        )}
+                                        {showAllCrew ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => {setAllCast([]); getAllCast('crew')}}>Show all</button></div> : null}
                                     </div>
                                 </div> : null}
                         </div>
@@ -232,12 +253,12 @@ export default function Detail({ id }: SearchProps) {
                     </div>
 
                     <Modal
-                        show={showAllCast}
+                        show={showAll}
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                         size="xl"
                         keyboard={false}
-                        onHide={() => setShowAllCast(false)}
+                        onHide={() => setShowAll(false)}
                     >
                         <Modal.Header closeButton>
                             <Modal.Title id="contained-modal-title-vcenter">
@@ -246,7 +267,7 @@ export default function Detail({ id }: SearchProps) {
                         </Modal.Header>
                         <Modal.Body className={s.modalBody}>
                             {
-                                allCast.length ?
+                                allCast.length?
                                     <div className={s.fullCastContainer}>
                                         {allCast.map((e, index) =>
                                             <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
@@ -259,7 +280,17 @@ export default function Detail({ id }: SearchProps) {
                                         )}
                                     </div>
                                     :
-                                    null
+                                    <div className={s.fullCastContainer}>
+                                        {allCrew.map((e, index) =>
+                                            <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
+                                                <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
+                                                <div className={s.name}>
+                                                    <span className='bold block'>{e.name}</span>
+                                                    <span>{e.job}</span>
+                                                </div>
+                                            </Link>
+                                        )}
+                                    </div>
                             }
                         </Modal.Body>
                     </Modal>
