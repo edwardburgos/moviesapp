@@ -1,4 +1,4 @@
-import { CardProps } from '../../extras/types';
+import { CardProps, FavoriteProps } from '../../extras/types';
 import s from './Favorite.module.css'
 import defaultPoster from '../../img/icons/alert-circle-outline.svg';
 import { Link } from 'react-router-dom';
@@ -16,9 +16,10 @@ import { ButtonGroup, ToggleButton } from 'react-bootstrap'
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
+import { useHistory } from 'react-router';
 
 
-export default function Favorite() {
+export default function Favorite({type}: FavoriteProps) {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
@@ -30,14 +31,15 @@ export default function Favorite() {
 
 
     const dispatch = useDispatch();
-
-    const [radioValue, setRadioValue] = useState('1');
+    const history = useHistory();
     const radios = [
         { name: 'Movies', nameSingular: 'movie', value: '1' },
         { name: 'People', nameSingular: 'person', value: '2' },
         { name: 'Companies', nameSingular: 'company', value: '3' },
         { name: 'Collections', nameSingular: 'collection', value: '4' },
     ];
+    const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
+    
 
     async function getFavorites(cancelToken: CancelToken | null) {
         try {
@@ -107,7 +109,7 @@ export default function Favorite() {
                         name="searchType"
                         value={radio.value}
                         checked={radioValue === radio.value}
-                        onChange={(e) => setRadioValue(e.currentTarget.value)}
+                        onChange={(e) => {history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(e.currentTarget.value)}}
                     >
                         {radio.name}
                     </ToggleButton>

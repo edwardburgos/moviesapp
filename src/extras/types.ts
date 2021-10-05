@@ -53,6 +53,10 @@ export type CardPersonDetailProps = {
     movie: CastMember
 }
 
+export type FavoriteProps = {
+    type: string
+}
+
 export type MovieVideo = {
     key: string,
     site: string,
