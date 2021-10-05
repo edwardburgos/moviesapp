@@ -218,6 +218,29 @@
     width: 25%;
 }
 
+.providersContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.providerContainer {
+    display: flex;
+    align-items: center;
+    margin: 8px;
+    border: 1px #d4d4d4 solid;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.providerLogo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 8px;
+    border-radius: 5px;
+}
+
 @media screen and (min-width: 768px) { 
     .info {
         width: 55%;

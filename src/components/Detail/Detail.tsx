@@ -1,6 +1,7 @@
 import { CastMember, SearchProps, MovieDetail, MovieVideo } from '../../extras/types';
 import defaultPoster from '../../img/icons/alert-circle-outline.svg';
 import defaultProfile from '../../img/icons/person-outline.svg';
+import defaultLogo from '../../img/icons/tv-outline.svg'
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -16,6 +17,7 @@ import Card from '../Card/Card'
 import { Movie } from '../../extras/types';
 import heart from '../../img/icons/heart.svg'
 import CardPersonDetail from '../CardPersonDetail/CardPersonDetail'
+import { Form } from 'react-bootstrap'
 
 
 export default function Detail({ id }: SearchProps) {
@@ -37,7 +39,8 @@ export default function Detail({ id }: SearchProps) {
     const [trailer, setTrailer] = useState<MovieVideo>({ key: '', site: '', type: '', official: false })
     const [similarMovies, setSimilarMovies] = useState<Movie[]>([])
     const [selected, setSelected] = useState(false)
-
+    const [providers, setProviders] = useState<{ [key: string]: [{ logo_path: string, provider_name: string }] }>({})
+    const [selectedProvider, setSelectedProvider] = useState('')
 
     const dispatch = useDispatch();
 
@@ -81,6 +84,12 @@ export default function Detail({ id }: SearchProps) {
                 const favoriteMovies = localStorage.getItem('favoriteMovies')
                 if (favoriteMovies) {
                     if (JSON.parse(favoriteMovies).includes(id)) { setSelected(true) } else { setSelected(false) }
+                }
+                const providers = await axios.get(`https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${process.env.REACT_APP_API_KEY}`)
+                if (Object.keys(providers.data.results).length && ['buy', 'rent', 'flatrate'].includes(Object.keys(providers.data.results[Object.keys(providers.data.results)[0]])[1])) {
+                    const providersOptions = providers.data.results[Object.keys(providers.data.results)[0]]
+                    setProviders(providersOptions)
+                    setSelectedProvider(Object.keys(providersOptions).slice(1)[0])
                 }
                 setLoading(false)
             } catch (e) {
@@ -186,7 +195,44 @@ export default function Detail({ id }: SearchProps) {
                                 <>
                                     <span className='bold'>Current state</span>
                                     <p>{movie.status === 'Post Production' ? 'In ' : ''}{movie.status}</p>
-                                </> : null}
+                                </>
+                                :
+                                <>
+                                    {
+                                        Object.keys(providers).length && selectedProvider.length ?
+                                            <>
+                                                <Form>
+                                                    <div key='default-radio'>
+                                                        {Object.keys(providers).map(e =>
+                                                            e !== 'link' ?
+                                                            <Form.Check
+                                                                inline
+                                                                type='radio'
+                                                                id={e}
+                                                                key={e}
+                                                                checked={e === selectedProvider}
+                                                                label={['buy' || 'rent'].includes(e) ? `Available to ${e} at` : 'Included in'}
+                                                                name='providers'
+                                                                className='bold'
+                                                                onClick={() => { setSelectedProvider(e) }}
+                                                            /> : null
+                                                        )}
+                                                    </div>
+                                                </Form>
+                                                <div className={s.providersContainer}>
+                                                    {providers[selectedProvider].map(e =>
+                                                        <div className={s.providerContainer}>
+                                                            <img src={e.logo_path ? `https://image.tmdb.org/t/p/w500${e.logo_path}` : defaultLogo} alt={e.provider_name} className={s.providerLogo}></img>
+                                                            <span>{e.provider_name}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </>
+                                            :
+                                            null
+                                    }
+                                </>
+                            }
                             {movie.title !== movie.original_title ?
                                 <>
                                     <span className='bold'>Original Title</span>
