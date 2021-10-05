@@ -17,7 +17,7 @@ export default function CardPerson({ movie }: CardProps) {
         if (favoriteMovies) {
             const array = JSON.parse(favoriteMovies)
             if (!array.filter((e: number) => e === movie.id).length) {
-                array.push(movie.id)
+                array.unshift(movie.id)
                 localStorage.setItem('favoritePeople', JSON.stringify(array))
             }
         } else {

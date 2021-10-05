@@ -94,7 +94,7 @@ export default function Detail({ id }: SearchProps) {
         if (favoriteMovies) {
             const array = JSON.parse(favoriteMovies)
             if (!array.filter((e: number) => e === movie.id).length) {
-                array.push(movie.id)
+                array.unshift(movie.id)
                 localStorage.setItem('favoriteMovies', JSON.stringify(array))
             }
         } else {

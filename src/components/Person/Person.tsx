@@ -87,7 +87,7 @@ export default function Person({ id }: SearchProps) {
         if (favoriteMovies) {
             const array = JSON.parse(favoriteMovies)
             if (!array.filter((e: number) => e === id).length) {
-                array.push(id)
+                array.unshift(id)
                 localStorage.setItem('favoritePeople', JSON.stringify(array))
             }
         } else {
