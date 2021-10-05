@@ -144,7 +144,7 @@ export default function Detail({ id }: SearchProps) {
                                         {cast.map((e, index) =>
                                             <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
-                                        {showAllCast ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => {setAllCrew([]); getAllCast(null)}}>Show all</button></div> : null}
+                                        {showAllCast ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => { setAllCrew([]); getAllCast(null) }}>Show all</button></div> : null}
                                     </div>
                                 </div> : null}
                             {crew.length ?
@@ -154,7 +154,7 @@ export default function Detail({ id }: SearchProps) {
                                         {crew.map((e, index) =>
                                             <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
-                                        {showAllCrew ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => {setAllCast([]); getAllCast('crew')}}>Show all</button></div> : null}
+                                        {showAllCrew ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => { setAllCast([]); getAllCast('crew') }}>Show all</button></div> : null}
                                     </div>
                                 </div> : null}
                         </div>
@@ -267,28 +267,16 @@ export default function Detail({ id }: SearchProps) {
                         </Modal.Header>
                         <Modal.Body className={s.modalBody}>
                             {
-                                allCast.length?
+                                allCast.length ?
                                     <div className={s.fullCastContainer}>
                                         {allCast.map((e, index) =>
-                                            <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
-                                                <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
-                                                <div className={s.name}>
-                                                    <span className='bold block'>{e.name}</span>
-                                                    <span>{e.character}</span>
-                                                </div>
-                                            </Link>
+                                            <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
                                     </div>
                                     :
                                     <div className={s.fullCastContainer}>
                                         {allCrew.map((e, index) =>
-                                            <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
-                                                <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
-                                                <div className={s.name}>
-                                                    <span className='bold block'>{e.name}</span>
-                                                    <span>{e.job}</span>
-                                                </div>
-                                            </Link>
+                                            <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
                                     </div>
                             }
