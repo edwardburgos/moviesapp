@@ -121,8 +121,8 @@ export default function SearchBar() {
                     {
                         ['1', '2', '3', '4'].includes(radioValue) ?
                             <div className={s.searchInput}>
-                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { setUsed(true); setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
-                                <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
+                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { e.target.value ? setUsed(true) : setUsed(false); setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
+                                <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setUsed(false); setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                             </div>
                             :
                             <>
