@@ -40,7 +40,11 @@ export default function Favorite({type}: FavoriteProps) {
     ];
     const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
     
-
+    useEffect(() => {
+        setRadioValue(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
+        
+    }, [type])
+    
     async function getFavorites(cancelToken: CancelToken | null) {
         try {
             dispatch(modifyLoading(true))

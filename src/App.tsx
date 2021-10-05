@@ -41,18 +41,18 @@ export default function App() {
     <>
       <div className={s.header}>
         <Link to="/favorites/movies"><img src={heart} className={s.heartIcon} alt={'Your favorite movies'} /></Link>
-        <Link to="/"><img src={videocam} className={s.logo} alt={'Movies app'} /></Link>
+        <Link to="/movies"><img src={videocam} className={s.logo} alt={'Movies app'} /></Link>
         <div onClick={() => getTrendingMovies()}><img src={trending} className={s.trendingIcon} alt={'Trending movies'} /></div>
       </div>
       <div className={s.container}>
         <Switch>
-          <Route exact path="/" component={SearchBar}/>
           <Route path="/favorites/:type" render={({ match }) => <Favorite type={match.params.type} />} />
           <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
           <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />
           <Route path="/collection/:id/:name" render={({ match }) => <Collection id={parseInt(match.params.id)} />} />
           <Route path="/company/:id/:name" render={({ match }) => <Company id={parseInt(match.params.id)} />} />
           <Route path="/person/:id/:name" render={({ match }) => <Person id={parseInt(match.params.id)} />} />
+          <Route exact path="/:type/:searchedGenre?" render={({ match }) => <SearchBar type={match.params.type} searchedGenre={match.params.searchedGenre} />} />
         </Switch>
       </div>
       <Modal

@@ -56,6 +56,10 @@ export type CardPersonDetailProps = {
 export type FavoriteProps = {
     type: string
 }
+export type SearchComponentProps = {
+    type: string
+    searchedGenre: string | undefined
+}
 
 export type MovieVideo = {
     key: string,

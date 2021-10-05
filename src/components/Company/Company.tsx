@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
 import heart from '../../img/icons/heart.svg'
 import { modifyFavoriteCompanies } from '../../actions';
+import { useHistory, useLocation } from "react-router"
 
 
 
@@ -33,6 +34,15 @@ export default function Company({ id }: SearchProps) {
     const [selected, setSelected] = useState(false)
 
     const dispatch = useDispatch()
+    const location = useLocation()
+    const history = useHistory()
+
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    }
+
+    const query = useQuery()
+    const sortingQuery = query.get('sortBy');
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -43,7 +53,7 @@ export default function Company({ id }: SearchProps) {
                 const company = await axios.get(`https://api.themoviedb.org/3/company/${id}?api_key=${process.env.REACT_APP_API_KEY}`)
                 setCompany(company.data)
                 document.title = `${company.data.name}`
-                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_companies=${id}&page=`
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}`: ''}&with_companies=${id}&page=`
                 const results = await axios.get(`${url}1`);
                 dispatch(modifySearchURL(url))
                 dispatch(modifyResults(results.data.results))
@@ -110,6 +120,16 @@ export default function Company({ id }: SearchProps) {
         }
     }, [])
 
+    // This hooks acts when genre or sortingQuery change
+    useEffect(() => {
+        sortBy(sorting);
+    }, [sorting])
+
+    // This hook allows us to search data using the url
+    useEffect(() => {
+        sortingQuery ? setSorting(sortingQuery) : setSorting('popularity.desc')
+    }, [sortingQuery])
+
     return (
         <>
             {!initialLoading ?
@@ -136,11 +156,11 @@ export default function Company({ id }: SearchProps) {
                         </div>
                         <h2 className='w-100 mb-3 text-center'>Movies</h2>
                         <div className={s.selectContainer}>
-                            <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; sortBy(target.value); setSorting(target.value) }}>
+                            <Form.Select className={s.selectInput} aria-label="Default select example" value={sorting} onChange={(e) => { const target = e.target as HTMLSelectElement; setSorting(target.value); history.push(`${location.pathname}?sortBy=${target.value}`) }}>
                                 {sortingOptions.map(e => <option key={e.value} value={e.value}>{e.complete}</option>)}
                             </Form.Select>
                             <div className={sorting === 'popularity.desc' ? s.invisible : s.iconContainer}>
-                                <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { sortBy('popularity.desc'); setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
+                                <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
                             </div>
                         </div>
                     </div>

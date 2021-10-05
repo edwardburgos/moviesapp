@@ -6,7 +6,7 @@ import search from '../../img/icons/search-outline.svg';
 import axios from 'axios';
 import { showMessage } from '../../extras/functions';
 import Card from '../Card/Card'
-import { Movie } from '../../extras/types';
+import { Movie, SearchComponentProps } from '../../extras/types';
 import loadingGif from '../../img/loadingGif.gif';
 import noResults from '../../img/noResults.svg';
 import PaginationComponent from '../PaginationComponent/PaginationComponent'
@@ -17,16 +17,25 @@ import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
 import config from '../../img/icons/options-outline.svg'
+import { useHistory, useLocation } from 'react-router';
+import { couldStartTrivia } from 'typescript';
 
-export default function SearchBar() {
+export default function SearchBar({ type, searchedGenre }: SearchComponentProps) {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
 
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    }
 
+    const query = useQuery()
+    const searchQuery = query.get('search');
+    const sortingQuery = query.get('sortBy');
+    //const [genre, setGenre] = useState(searchedGenre ? genres.filter(e => e.name.toLowerCase() === searchedGenre)[0].id : '')
+    // const [title, setTitle] = useState<string>(searchQuery ? searchQuery : '');
     const [genre, setGenre] = useState('')
-    const [title, setTitle] = useState<string>('');
-    const [radioValue, setRadioValue] = useState('1');
+    const [title, setTitle] = useState('');
     const radios = [
         { name: 'Movies', nameSingular: 'movie', search: 'Search a movie', value: '1' },
         { name: 'People', nameSingular: 'person', search: 'Search a person', value: '2' },
@@ -34,21 +43,25 @@ export default function SearchBar() {
         { name: 'Collections', nameSingular: 'collection', search: 'Search a collection', value: '4' },
         { name: 'Genres', nameSingular: 'genre', value: '5' }
     ];
+    //const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
+    //const [sorting, setSorting] = useState(sortingQuery ? sortingQuery : 'popularity.desc')
+    const [radioValue, setRadioValue] = useState('1');
     const [sorting, setSorting] = useState('popularity.desc')
     const [showSorting, setShowSorting] = useState(false)
     const [used, setUsed] = useState(false)
 
-    useEffect(() => {
-        document.title = `Movies app`
-    }, [])
+
 
     const dispatch = useDispatch();
+    const history = useHistory();
+
 
     async function searchData(title: string) {
         try {
             dispatch(modifyLoading(true))
             const url = `https://api.themoviedb.org/3/search/${radios.filter(e => e.value === radioValue)[0].nameSingular}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${title}&page=`
             const results = await axios.get(`${url}1`)
+            console.log(results)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
@@ -58,22 +71,6 @@ export default function SearchBar() {
             showMessage('Sorry, an error ocurred')
         }
     }
-
-    useEffect(() => {
-        if (radioValue === '5') { setUsed(false); setTitle(''); dispatch(modifyResults(null)); } else { if (title) searchData(title) }
-        setGenre('')
-        return () => {
-            dispatch(modifySearchURL(''))
-            dispatch(modifyResults(null))
-            dispatch(modifyTotalPages(1))
-            dispatch(modifyLoading(false))
-            dispatch(modifyCurrentPage(1))
-        }
-    }, [dispatch, radioValue])
-
-    useEffect(() => {
-        setSorting('popularity.desc')
-    }, [genre])
 
     async function searchByGenre(genreId: string) {
         try {
@@ -84,7 +81,6 @@ export default function SearchBar() {
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
             dispatch(modifyLoading(false))
-            setUsed(true);
         } catch (e) {
             console.log(e)
             showMessage('Sorry, an error ocurred')
@@ -92,10 +88,62 @@ export default function SearchBar() {
     }
 
     async function sortBy(sortParameter: string) {
-        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_genres=${genre}`
-        const results = await axios.get(url)
-        dispatch(modifyResults(results.data.results))
+        try {
+            dispatch(modifyLoading(true))
+            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_genres=${genre}`
+            const results = await axios.get(url)
+            dispatch(modifyResults(results.data.results))
+            dispatch(modifyLoading(false))
+        } catch (e) {
+            console.log(e)
+            showMessage('Sorry, an error ocurred')
+        }
     }
+
+    // This hook change the document title
+    useEffect(() => {
+        document.title = `Movies app`
+        return () => {
+            dispatch(modifySearchURL(''))
+            dispatch(modifyResults(null))
+            dispatch(modifyTotalPages(1))
+            dispatch(modifyLoading(false))
+            dispatch(modifyCurrentPage(1))
+        }
+    }, [dispatch])
+
+    // This hook allows us to handle the changes of radioValue state
+    useEffect(() => {
+        if (radioValue === '5') {
+            setUsed(false);
+            setTitle('');
+            dispatch(modifyResults(null));
+        } else {
+            if (title) {
+                setUsed(true);
+                searchData(title);
+            }
+        }
+    }, [radioValue])
+
+    // This hooks acts when title changes
+    useEffect(() => {
+        if (title) { setUsed(true); searchData(title); } else { setUsed(false) }
+    }, [title])
+
+    // This hooks acts when genre or sortingQuery change
+    useEffect(() => {
+        if (genre) { setUsed(true); searchByGenre(genre); } else { setUsed(false) }
+        if (genre && sorting) { sortBy(sorting); } else { searchByGenre(genre) }
+    }, [genre, sorting])
+
+    // This hook allows us to search data using the url
+    useEffect(() => {
+        if (type) setRadioValue(radios.filter(e => e.name.toLowerCase() === type)[0].value);
+        searchQuery ? setTitle(searchQuery) : setTitle('')
+        searchedGenre ? setGenre(`${genres.filter(e => e.name.toLowerCase() === searchedGenre)[0].id}`) : setGenre('')
+        searchedGenre && sortingQuery ? setSorting(sortingQuery) : setSorting('popularity.desc')
+    }, [type, searchQuery, searchedGenre, sortingQuery]) // sortingQuery
 
     return (
         <>
@@ -112,7 +160,7 @@ export default function SearchBar() {
                                 name="searchType"
                                 value={radio.value}
                                 checked={radioValue === radio.value}
-                                onChange={(e) => setRadioValue(e.currentTarget.value)}
+                                onChange={(e) => { radio.name === 'Genres' ? history.push('/genres') : history.push(`/${radio.name.toLowerCase()}${title ? `/?search=${title}` : ''}`); setRadioValue(e.currentTarget.value) }}
                             >
                                 {radio.name}
                             </ToggleButton>
@@ -121,13 +169,13 @@ export default function SearchBar() {
                     {
                         ['1', '2', '3', '4'].includes(radioValue) ?
                             <div className={s.searchInput}>
-                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { e.target.value ? setUsed(true) : setUsed(false); setTitle(e.target.value); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
-                                <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setUsed(false); setTitle(''); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
+                                <Form.Control value={title} className={s.input} placeholder={radios.filter(e => e.value === radioValue)[0].search} onChange={e => { e.target.value ? setUsed(true) : setUsed(false); setTitle(e.target.value); e.target.value ? history.push(`/${radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}?search=${e.target.value}`) : history.push(`/${radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}`); e.target.value ? searchData(e.target.value) : dispatch(modifyResults(null)) }} />
+                                <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setUsed(false); setTitle(''); history.push(`/${radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}`); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                             </div>
                             :
                             <>
                                 <div className={s.selectContainer}>
-                                    <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setGenre(target.value) }}>
+                                    <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
                                         {genre ? null : <option>Select a movie genre</option>}
                                         {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
                                     </Form.Select>
@@ -184,7 +232,7 @@ export default function SearchBar() {
                             :
                             null
                     }
-                    {results && results.length ? <PaginationComponent origin=''/> : null}
+                    {results && results.length ? <PaginationComponent origin='' /> : null}
                 </div>
             </div>
 
@@ -214,7 +262,7 @@ export default function SearchBar() {
                                             checked={e.value === sorting}
                                             label={e.complete}
                                             name="sortingOptions"
-                                            onClick={() => {sortBy(e.value); setSorting(e.value); setShowSorting(false)}}
+                                            onClick={() => { setSorting(e.value); setShowSorting(false); history.push(`/genres/${searchedGenre}?sortBy=${e.value}`) }}
                                         />
                                     )
                                 }
