@@ -132,6 +132,7 @@
 }
 
 .fullCastMember {
+    position: relative;
     display: inline-block;
     max-width: 125px;
     margin: 8px;

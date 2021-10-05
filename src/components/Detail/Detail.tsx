@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux'
 import Card from '../Card/Card'
 import { Movie } from '../../extras/types';
 import heart from '../../img/icons/heart.svg'
+import CardPersonDetail from '../CardPersonDetail/CardPersonDetail'
 
 
 export default function Detail({ id }: SearchProps) {
@@ -35,9 +36,9 @@ export default function Detail({ id }: SearchProps) {
     const [selected, setSelected] = useState(false)
 
 
-    
+
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         const cancelToken = axios.CancelToken;
         const source = cancelToken.source();
@@ -130,13 +131,7 @@ export default function Detail({ id }: SearchProps) {
                                     <div className='w-100'><span className='bold'>Cast</span></div>
                                     <div className={s.castContainer}>
                                         {cast.map((e, index) =>
-                                            <Link key={index} className={`${s.fullCastMember} linkDiv`} to={`/person/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>
-                                                <img className={e.profile_path ? s.profilePic : s.defaultProfilePic} src={e.profile_path ? `https://image.tmdb.org/t/p/w500${e.profile_path}` : defaultProfile} alt={e.name}></img>
-                                                <div className={s.name}>
-                                                    <span className='bold block'>{e.name}</span>
-                                                    <span>{e.character}</span>
-                                                </div>
-                                            </Link>
+                                            <CardPersonDetail key={index} movie={e}></CardPersonDetail>
                                         )}
                                         {showAll ? <div className={s.showAllContainer}><button className='btn btn-primary' onClick={() => getAllCast()}>Show all</button></div> : null}
                                     </div>

@@ -48,6 +48,10 @@ export type CastMember = {
     character: string
 }
 
+export type CardPersonDetailProps = {
+    movie: CastMember
+}
+
 export type MovieVideo = {
     key: string,
     site: string,
