@@ -12,6 +12,9 @@ import closeCircle from '../../img/icons/close-circle-outline.svg';
 import { modifyResults, modifyTotalPages, modifySearchURL, modifyLoading, modifyCurrentPage } from '../../actions'
 import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
+import heart from '../../img/icons/heart.svg'
+import { modifyFavoriteCompanies } from '../../actions';
+
 
 
 
@@ -26,6 +29,8 @@ export default function Company({ id }: SearchProps) {
     })
     const [initialLoading, setInitialLoading] = useState(false)
     const [sorting, setSorting] = useState('popularity.desc')
+
+    const [selected, setSelected] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -73,6 +78,38 @@ export default function Company({ id }: SearchProps) {
         dispatch(modifyLoading(false))
     }
 
+
+    function addToFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteCompanies')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies)
+            if (!array.filter((e: number) => e === id).length) {
+                array.push(id)
+                localStorage.setItem('favoriteCompanies', JSON.stringify(array))
+            }
+        } else {
+            localStorage.setItem('favoriteCompanies', JSON.stringify([id]))
+        }
+        setSelected(true)
+    }
+
+    function deleteFromFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteCompanies')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies).filter((e: number) => e !== id)
+            localStorage.setItem('favoriteCompanies', JSON.stringify(array))
+        }
+        setSelected(false)
+        dispatch(modifyFavoriteCompanies(true))
+    }
+
+    useEffect(() => {
+        const favoriteMovies = localStorage.getItem('favoriteCompanies')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+        }
+    }, [])
+
     return (
         <>
             {!initialLoading ?
@@ -80,7 +117,12 @@ export default function Company({ id }: SearchProps) {
                     <div className={s.firstSection}>
                         <div className={s.companyInfo}>
                             <div className={s.left}>
-                                <img className={s.logo} src={company.logo_path ? `https://image.tmdb.org/t/p/w500${company.logo_path}` : defaultLogo} alt={company.name}></img>
+                                <div className={s.logoContainer}>
+                                    <img className={s.logo} src={company.logo_path ? `https://image.tmdb.org/t/p/w500${company.logo_path}` : defaultLogo} alt={company.name}></img>
+                                    <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                        <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                    </div>
+                                </div>
                             </div>
                             <div className={s.right}>
                                 <div>
@@ -124,7 +166,7 @@ export default function Company({ id }: SearchProps) {
                                 :
                                 null
                         }
-                        {results && results.length ? <PaginationComponent origin=''/> : null}
+                        {results && results.length ? <PaginationComponent origin='' /> : null}
                     </div>
                 </div>
                 :
