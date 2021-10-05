@@ -4,14 +4,19 @@ import { useEffect, useState } from "react"
 import { CollectionType, SearchProps } from "../../extras/types"
 import Card from "../Card/Card";
 import { showMessage } from "../../extras/functions";
+import { useDispatch } from 'react-redux'
+import { modifyFavoriteCollections } from "../../actions";
+import s from './Collection.module.css'
+import heart from '../../img/icons/heart.svg'
 
 
 export default function Collection({ id }: SearchProps) {
 
-    
+
     const [collection, setCollection] = useState<CollectionType>({ id: 0, name: "", overview: "", parts: [] })
     const [loading, setLoading] = useState(false)
 
+    const [selected, setSelected] = useState(false)
 
     useEffect(() => {
         const cancelToken = axios.CancelToken;
@@ -26,7 +31,7 @@ export default function Collection({ id }: SearchProps) {
             } catch (e) {
                 if (e instanceof Error) {
                     if (e.message === "Unmounted") return "Unmounted";
-                } 
+                }
                 showMessage('Sorry, an error ocurred')
             }
         }
@@ -34,11 +39,48 @@ export default function Collection({ id }: SearchProps) {
         return () => { source.cancel("Unmounted"); }
     }, [id])
 
+    const dispatch = useDispatch()
+    function addToFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteCollections')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies)
+            if (!array.filter((e: number) => e === id).length) {
+                array.unshift(id)
+                localStorage.setItem('favoriteCollections', JSON.stringify(array))
+            }
+        } else {
+            localStorage.setItem('favoriteCollections', JSON.stringify([id]))
+        }
+        setSelected(true)
+    }
+
+    function deleteFromFavoriteMovies() {
+        const favoriteMovies = localStorage.getItem('favoriteCollections')
+        if (favoriteMovies) {
+            const array = JSON.parse(favoriteMovies).filter((e: number) => e !== id)
+            localStorage.setItem('favoriteCollections', JSON.stringify(array))
+        }
+        setSelected(false)
+        dispatch(modifyFavoriteCollections(true))
+    }
+
+    useEffect(() => {
+        const favoriteMovies = localStorage.getItem('favoriteCollections')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+        }
+    }, [])
+
     return (
         <>
             {!loading ?
                 <div className='flexCentered'>
-                    <h1 className='w-100 text-center'>{collection.name}</h1>
+                    <div className={s.nameContainer}>
+                        <h1 className='w-100 text-center'>{collection.name}</h1>
+                        <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                            <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                        </div>
+                    </div>
                     {collection.overview ? <p className='text-center'>{collection.overview}</p> : null}
                     <h2 className='w-100 mb-3 text-center'>Movies</h2>
                     <div className='cardsContainer'>
