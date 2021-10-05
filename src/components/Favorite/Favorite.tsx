@@ -8,7 +8,7 @@ import axios, { CancelToken } from 'axios';
 import { Movie } from '../../extras/types';
 import { useState, useEffect } from 'react';
 import Card from '../Card/Card';
-import { modifySearchURL, modifyCurrentPage, modifyResults, modifyTotalPages, modifyLoading, modifyFavoriteMovies } from '../../actions';
+import { modifySearchURL, modifyCurrentPage, modifyResults, modifyTotalPages, modifyLoading, modifyFavoriteMovies, modifyFavoritePeople, modifyFavoriteCompanies, modifyFavoriteCollections } from '../../actions';
 import loadingGif from '../../img/loadingGif.gif';
 import PaginationComponent from '../PaginationComponent/PaginationComponent';
 import noResults from '../../img/noResults.svg';
@@ -22,7 +22,11 @@ export default function Favorite() {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
-    const favorites = useSelector((state: { favorites: boolean }) => state.favorites)
+    const favoriteMovies = useSelector((state: {favoriteMovies: boolean}) => state.favoriteMovies)
+    const favoritePeople = useSelector((state: {favoritePeople: boolean}) => state.favoritePeople)
+    const favoriteCompanies = useSelector((state: {favoriteCompanies: boolean}) => state.favoriteCompanies)
+    const favoriteCollections = useSelector((state: {favoriteCollections: boolean}) => state.favoriteCollections)
+    const currentPage = useSelector((state: { currentPage: number }) => state.currentPage)
 
 
     const dispatch = useDispatch();
@@ -35,15 +39,15 @@ export default function Favorite() {
         { name: 'Collections', nameSingular: 'collection', value: '4' },
     ];
 
-    async function getFavorites(cancelToken: CancelToken) {
+    async function getFavorites(cancelToken: CancelToken | null) {
         try {
             dispatch(modifyLoading(true))
             const movies = localStorage.getItem(radioValue === '1' ? "favoriteMovies" : radioValue === '2' ? "favoritePeople" : radioValue === '3' ? "favoriteCompanies" : "favoriteCollections")
             if (movies) {
                 let localMovies: Movie[] = []
                 // const localItems = JSON.parse(localStorage.getItem("favoriteMovies") || '[]')
-                for (const e of JSON.parse(movies).slice(0, 20)) {
-                    const movieInfo = await axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, { cancelToken })
+                for (const e of JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20))) {
+                    const movieInfo = await axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined)
                     const movie = movieInfo.data
                     localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country }];
                 }
@@ -51,11 +55,13 @@ export default function Favorite() {
                 let pages = JSON.parse(movies).length / 20
                 if (pages % 1 != 0) pages = parseInt(`${pages}`) + 1
                 dispatch(modifyTotalPages(pages))
-                dispatch(modifyCurrentPage(1))
             } else {
                 dispatch(modifyResults([]))
             }
             dispatch(modifyFavoriteMovies(false))
+            dispatch(modifyFavoritePeople(false))
+            dispatch(modifyFavoriteCompanies(false))
+            dispatch(modifyFavoriteCollections(false))
             dispatch(modifyLoading(false))
         } catch (e) {
             if (e instanceof Error) {
@@ -64,20 +70,17 @@ export default function Favorite() {
         }
     }
 
+    useEffect(() => {
+        if (favoriteMovies || favoritePeople || favoriteCompanies || favoriteCollections) getFavorites(null)
+    }, [favoriteMovies, favoritePeople, favoriteCompanies, favoriteCollections])
 
     useEffect(() => {
-        const cancelToken = axios.CancelToken;
-        const source = cancelToken.source();
-        if (favorites) getFavorites(source.token)
-    }, [favorites])
-
-    useEffect(() => {
-        const cancelToken = axios.CancelToken;
-        const source = cancelToken.source();
-        getFavorites(source.token)
+        document.title = `${radioValue === '1' ? 'Favorite movies' : radioValue === '2' ? 'Favorite people' : radioValue === '3' ? 'Favorite companies' : 'Favorite collections'}`
+        getFavorites(null)
     }, [radioValue])
 
     useEffect(() => {
+        document.title = 'Favorite movies'
         const cancelToken = axios.CancelToken;
         const source = cancelToken.source();
         getFavorites(source.token);
