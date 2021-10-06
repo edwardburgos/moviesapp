@@ -14,8 +14,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { modifyResults, modifyTotalPages, modifySearchURL, modifyLoading, modifyCurrentPage } from '../../actions'
 import { useHistory, useLocation } from "react-router"
 
-
 export default function Genre({ id }: SearchProps) {
+
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
 
@@ -44,7 +44,7 @@ export default function Genre({ id }: SearchProps) {
                 const genreName = genres.data.genres.filter((e: GenreType) => e.id === id)[0].name
                 setGenreName(genreName)
                 document.title = `${genreName} Movies`
-                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}`: ''}&with_genres=${id}&page=`
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}` : ''}&with_genres=${id}&page=`
                 const results = await axios.get(`${url}1`);
                 dispatch(modifySearchURL(url))
                 dispatch(modifyResults(results.data.results))
@@ -66,7 +66,7 @@ export default function Genre({ id }: SearchProps) {
             dispatch(modifyLoading(false))
             dispatch(modifyCurrentPage(1))
         }
-    }, [id])
+    }, [dispatch, id, sortingQuery])
 
     async function sortBy(sortParameter: string) {
         dispatch(modifyLoading(true))
@@ -102,10 +102,6 @@ export default function Genre({ id }: SearchProps) {
                             <img src={closeCircle} className={sorting === 'popularity.desc' ? s.invisible : s.iconDumb} onClick={() => { setSorting('popularity.desc'); }} alt={'Remove selected sorting'} />
                         </div>
                     </div>
-                    {/* <div className='cardsContainer'>
-                        {results && results.length ? results.map((e, index) => <Card key={index} movie={e}></Card>) : null}
-                        {results && results.length ? <PaginationComponent /> : null}
-                    </div> */}
                     <div className={results ? s.resultsPagination : s.noResultsPagination}>
                         {results ?
                             !loading ?
@@ -128,7 +124,7 @@ export default function Genre({ id }: SearchProps) {
                                 :
                                 null
                         }
-                        {results && results.length ? <PaginationComponent origin=''/> : null}
+                        {results && results.length ? <PaginationComponent origin='' /> : null}
                     </div>
                 </div>
                 :

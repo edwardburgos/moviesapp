@@ -1,5 +1,4 @@
 import s from './PaginationComponent.module.css';
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { modifyResults, modifyLoading } from '../../actions';
 import { Pagination } from 'react-bootstrap';

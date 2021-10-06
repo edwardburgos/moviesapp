@@ -42,7 +42,7 @@ export default function CardCompany({ movie }: CardProps) {
         if (favoriteMovies) {
             if (JSON.parse(favoriteMovies).includes(movie.id)) setSelected(true)
         }
-    }, [])
+    }, [movie])
 
     return (
         <>

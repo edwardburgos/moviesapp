@@ -1,12 +1,8 @@
-.castMember, .fullCastMember {
-    /* display: inline; */
+.fullCastMember {
     background-color: #d4d4d4;
     border-radius: 10px;
     margin: 16px;
     cursor: pointer;
-}
-
-.fullCastMember {
     position: relative;
     display: inline-block;
     max-width: 125px;
@@ -53,7 +49,7 @@
     background-color: transparent;
 }
 
-.heartIcon, .ellipseIcon {
+.heartIcon {
     height: 13px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }

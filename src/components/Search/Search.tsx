@@ -18,7 +18,6 @@ import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
 import config from '../../img/icons/options-outline.svg'
 import { useHistory, useLocation } from 'react-router';
-import { couldStartTrivia } from 'typescript';
 
 export default function SearchBar({ type, searchedGenre }: SearchComponentProps) {
 
@@ -32,8 +31,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
     const query = useQuery()
     const searchQuery = query.get('search');
     const sortingQuery = query.get('sortBy');
-    //const [genre, setGenre] = useState(searchedGenre ? genres.filter(e => e.name.toLowerCase() === searchedGenre)[0].id : '')
-    // const [title, setTitle] = useState<string>(searchQuery ? searchQuery : '');
+
     const [genre, setGenre] = useState('')
     const [title, setTitle] = useState('');
     const radios = [
@@ -43,14 +41,11 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
         { name: 'Collections', nameSingular: 'collection', search: 'Search a collection', value: '4' },
         { name: 'Genres', nameSingular: 'genre', value: '5' }
     ];
-    //const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
-    //const [sorting, setSorting] = useState(sortingQuery ? sortingQuery : 'popularity.desc')
+
     const [radioValue, setRadioValue] = useState('1');
     const [sorting, setSorting] = useState('popularity.desc')
     const [showSorting, setShowSorting] = useState(false)
     const [used, setUsed] = useState(false)
-
-
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -61,7 +56,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
             dispatch(modifyLoading(true))
             const url = `https://api.themoviedb.org/3/search/${radios.filter(e => e.value === radioValue)[0].nameSingular}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&query=${title}&page=`
             const results = await axios.get(`${url}1`)
-            console.log(results)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
@@ -124,7 +118,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                 searchData(title);
             }
         }
-    }, [radioValue])
+    }, [dispatch, radioValue])
 
     // This hooks acts when title changes
     useEffect(() => {
@@ -134,7 +128,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {
         if (genre) { setUsed(true); searchByGenre(genre); } else { setUsed(false) }
-        if (genre && sorting) { sortBy(sorting); } else { searchByGenre(genre) }
+        if (genre && sorting) { sortBy(sorting); }
     }, [genre, sorting])
 
     // This hook allows us to search data using the url
@@ -160,7 +154,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                 name="searchType"
                                 value={radio.value}
                                 checked={radioValue === radio.value}
-                                onChange={(e) => { radio.name === 'Genres' ? history.push('/genres') : history.push(`/${radio.name.toLowerCase()}${title ? `/?search=${title}` : ''}`); setRadioValue(e.currentTarget.value) }}
+                                onChange={(e) => { radio.name === 'Genres' ? history.push('/genres') : history.push(`/${radio.name.toLowerCase()}${title ? `/?search=${title}` : ''}`); setRadioValue(radio.value) }}
                             >
                                 {radio.name}
                             </ToggleButton>
@@ -174,13 +168,13 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                             </div>
                             :
                             <>
-                                <div className={s.selectContainer}>
+                                <div className={results && results.length ? s.selectContainer : s.fullSelectContainer}>
                                     <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
                                         {genre ? null : <option>Select a movie genre</option>}
                                         {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
                                     </Form.Select>
                                     <div className={genre === '' ? s.invisible : s.iconContainer}>
-                                        <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); }} alt={'Remove selected genre'} />
+                                        <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); history.push('/genres') }} alt={'Remove selected genre'} />
                                     </div>
                                 </div>
                                 {
@@ -252,7 +246,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                 <Modal.Body >
                     <div className={s.modalForm}>
                         <Form>
-                            <div key='default-radio' className="mb-3">
+                            <div key='default-radio'>
                                 {
                                     sortingOptions.map(e =>
                                         <Form.Check
@@ -262,7 +256,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                             checked={e.value === sorting}
                                             label={e.complete}
                                             name="sortingOptions"
-                                            onClick={() => { setSorting(e.value); setShowSorting(false); history.push(`/genres/${searchedGenre}?sortBy=${e.value}`) }}
+                                            onChange={() => { setSorting(e.value); setShowSorting(false); history.push(`/genres/${searchedGenre}?sortBy=${e.value}`) }}
                                         />
                                     )
                                 }

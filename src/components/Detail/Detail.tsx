@@ -1,11 +1,10 @@
 import { CastMember, SearchProps, MovieDetail, MovieVideo } from '../../extras/types';
 import defaultPoster from '../../img/icons/alert-circle-outline.svg';
-import defaultProfile from '../../img/icons/person-outline.svg';
 import defaultLogo from '../../img/icons/tv-outline.svg'
 import s from './Detail.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { ProgressBar, Modal, AccordionCollapse } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { isoLangs } from '../../extras/globalVariables';
@@ -18,7 +17,6 @@ import { Movie } from '../../extras/types';
 import heart from '../../img/icons/heart.svg'
 import CardPersonDetail from '../CardPersonDetail/CardPersonDetail'
 import { Form } from 'react-bootstrap'
-
 
 export default function Detail({ id }: SearchProps) {
 
@@ -72,7 +70,6 @@ export default function Detail({ id }: SearchProps) {
                 setCast(filteredCast.slice(0, 10))
                 setShowAllCrew(filteredCrew.length === 11)
                 setCrew(filteredCrew.slice(0, 10))
-                console.log(filteredCrew)
                 const trailer = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
                 const officialTrailer = trailer.data.results.filter((e: MovieVideo) => e.type === 'Trailer' && e.site === 'YouTube');
                 if (officialTrailer.length) {
@@ -205,17 +202,17 @@ export default function Detail({ id }: SearchProps) {
                                                     <div key='default-radio'>
                                                         {Object.keys(providers).map(e =>
                                                             e !== 'link' ?
-                                                            <Form.Check
-                                                                inline
-                                                                type='radio'
-                                                                id={e}
-                                                                key={e}
-                                                                checked={e === selectedProvider}
-                                                                label={['buy' || 'rent'].includes(e) ? `Available to ${e} at` : 'Included in'}
-                                                                name='providers'
-                                                                className='bold'
-                                                                onClick={() => { setSelectedProvider(e) }}
-                                                            /> : null
+                                                                <Form.Check
+                                                                    inline
+                                                                    type='radio'
+                                                                    id={e}
+                                                                    key={e}
+                                                                    checked={e === selectedProvider}
+                                                                    label={['buy' || 'rent'].includes(e) ? `Available to ${e} at` : 'Included in'}
+                                                                    name='providers'
+                                                                    className='bold'
+                                                                    onChange={() => { setSelectedProvider(e) }}
+                                                                /> : null
                                                         )}
                                                     </div>
                                                 </Form>

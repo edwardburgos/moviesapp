@@ -4,7 +4,6 @@
     cursor: pointer;
     display: flex;
     justify-content: center;
-
 }
 
 .cardContent {
@@ -37,10 +36,6 @@
     -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
 }
 
-.maxWidth {
-    max-width: 170;
-}
-
 .heartIconContainer, .noColor {
     width: 20px;
     height: 20px;
@@ -61,7 +56,7 @@
     background-color: transparent;
 }
 
-.heartIcon, .ellipseIcon {
+.heartIcon {
     height: 13px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }

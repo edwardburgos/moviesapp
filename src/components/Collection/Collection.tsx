@@ -9,9 +9,7 @@ import { modifyFavoriteCollections } from "../../actions";
 import s from './Collection.module.css'
 import heart from '../../img/icons/heart.svg'
 
-
 export default function Collection({ id }: SearchProps) {
-
 
     const [collection, setCollection] = useState<CollectionType>({ id: 0, name: "", overview: "", parts: [] })
     const [loading, setLoading] = useState(false)
@@ -36,6 +34,10 @@ export default function Collection({ id }: SearchProps) {
             }
         }
         getCollection();
+        const favoriteMovies = localStorage.getItem('favoriteCollections')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+        }
         return () => { source.cancel("Unmounted"); }
     }, [id])
 
@@ -63,14 +65,6 @@ export default function Collection({ id }: SearchProps) {
         setSelected(false)
         dispatch(modifyFavoriteCollections(true))
     }
-
-    useEffect(() => {
-        const favoriteMovies = localStorage.getItem('favoriteCollections')
-        if (favoriteMovies) {
-            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
-        }
-    }, [])
-
     return (
         <>
             {!loading ?

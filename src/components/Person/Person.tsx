@@ -15,12 +15,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
 import moment from 'moment'
 import heart from '../../img/icons/heart.svg'
-import { modifyFavoriteMovies, modifyShowTrendingModal, modifyFavoritePeople } from '../../actions';
+import { modifyFavoritePeople } from '../../actions';
 import { useHistory, useLocation } from "react-router"
 
-
-
 export default function Person({ id }: SearchProps) {
+
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
 
@@ -33,7 +32,6 @@ export default function Person({ id }: SearchProps) {
     const [photos, setPhotos] = useState<string[]>([])
     const [sorting, setSorting] = useState('popularity.desc')
     const [selected, setSelected] = useState(false)
-
 
     const dispatch = useDispatch()
     const location = useLocation()
@@ -55,7 +53,7 @@ export default function Person({ id }: SearchProps) {
                 const person = await axios.get(`https://api.themoviedb.org/3/person/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`);
                 setPerson(person.data)
                 document.title = `${person.data.name}`
-                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}`: ''}&with_people=${id}&page=`
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}` : ''}&with_people=${id}&page=`
                 const results = await axios.get(`${url}1`);
                 dispatch(modifySearchURL(url))
                 dispatch(modifyResults(results.data.results))
@@ -71,6 +69,10 @@ export default function Person({ id }: SearchProps) {
             }
         }
         getCollection();
+        const favoriteMovies = localStorage.getItem('favoritePeople')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) { setSelected(true) } else { setSelected(false) }
+        }
         return () => {
             source.cancel("Unmounted");
             dispatch(modifySearchURL(''))
@@ -79,7 +81,7 @@ export default function Person({ id }: SearchProps) {
             dispatch(modifyLoading(false))
             dispatch(modifyCurrentPage(1))
         }
-    }, [id])
+    }, [dispatch, id, sortingQuery])
 
     async function sortBy(sortParameter: string) {
         dispatch(modifyLoading(true))
@@ -117,12 +119,6 @@ export default function Person({ id }: SearchProps) {
         dispatch(modifyFavoritePeople(true))
     }
 
-    useEffect(() => {
-        const favoriteMovies = localStorage.getItem('favoritePeople')
-        if (favoriteMovies) {
-            if (JSON.parse(favoriteMovies).includes(id)) { setSelected(true) } else { setSelected(false) }
-        }
-    }, [])
 
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {

@@ -16,9 +16,6 @@ import heart from '../../img/icons/heart.svg'
 import { modifyFavoriteCompanies } from '../../actions';
 import { useHistory, useLocation } from "react-router"
 
-
-
-
 export default function Company({ id }: SearchProps) {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
@@ -53,7 +50,7 @@ export default function Company({ id }: SearchProps) {
                 const company = await axios.get(`https://api.themoviedb.org/3/company/${id}?api_key=${process.env.REACT_APP_API_KEY}`)
                 setCompany(company.data)
                 document.title = `${company.data.name}`
-                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}`: ''}&with_companies=${id}&page=`
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US${sortingQuery ? `&sort_by=${sortingQuery}` : ''}&with_companies=${id}&page=`
                 const results = await axios.get(`${url}1`);
                 dispatch(modifySearchURL(url))
                 dispatch(modifyResults(results.data.results))
@@ -67,6 +64,10 @@ export default function Company({ id }: SearchProps) {
             }
         }
         getCompany();
+        const favoriteMovies = localStorage.getItem('favoriteCompanies')
+        if (favoriteMovies) {
+            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
+        }
         return () => {
             source.cancel("Unmounted");
             dispatch(modifySearchURL(''))
@@ -75,7 +76,7 @@ export default function Company({ id }: SearchProps) {
             dispatch(modifyLoading(false))
             dispatch(modifyCurrentPage(1))
         }
-    }, [id])
+    }, [dispatch, id, sortingQuery])
 
     async function sortBy(sortParameter: string) {
         dispatch(modifyLoading(true))
@@ -112,13 +113,6 @@ export default function Company({ id }: SearchProps) {
         setSelected(false)
         dispatch(modifyFavoriteCompanies(true))
     }
-
-    useEffect(() => {
-        const favoriteMovies = localStorage.getItem('favoriteCompanies')
-        if (favoriteMovies) {
-            if (JSON.parse(favoriteMovies).includes(id)) setSelected(true)
-        }
-    }, [])
 
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {

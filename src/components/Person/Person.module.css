@@ -6,7 +6,6 @@
 
 .photosContainer {
     position: relative;
-
 }
 
 .firstSection {
@@ -88,9 +87,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* flex: 1;
-    flex-direction: column; */
-
 }
 
 .cardsContainerFull {
@@ -136,7 +132,7 @@
     background-color: transparent;
 }
 
-.heartIcon, .ellipseIcon {
+.heartIcon {
     height: 13px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }

@@ -40,7 +40,7 @@
     background-color: transparent;
 }
 
-.heartIcon, .ellipseIcon {
+.heartIcon {
     height: 13px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }
@@ -76,24 +76,6 @@
     width: 100%;
 }
 
-.voteInfo {
-    display: flex;
-    margin: 8px 0;
-    align-items: center;
-}
-
-.label {
-    font-weight: 600;
-    margin-right: 16px;
-    display: block;
-    width: 50%;
-}
-
-.description {
-    display: block;
-    width: 50%;
-}
-
 .castInfo {
     width: 100%;
     display: flex;
@@ -120,46 +102,6 @@
     width: 100%;
     max-width: 100%;
     justify-content: space-between;
-}
-
-
-.castMember, .fullCastMember {
-    /* display: inline; */
-    background-color: #d4d4d4;
-    border-radius: 10px;
-    margin: 16px;
-    cursor: pointer;
-}
-
-.fullCastMember {
-    position: relative;
-    display: inline-block;
-    max-width: 125px;
-    margin: 8px;
-}
-
-.castMember:hover, .fullCastMember:hover {
-    box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
-    -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
-}
-
-.profilePic {
-    width: 125px;
-    height: 187px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-}
-
-.defaultProfilePic {
-    width: 125px;
-    height: 187px;
-    padding: 16px;
-    border-radius: 10px 10px 0 0;
-    background-color: #fff;
-}
-
-.name {
-    padding: 16px;
 }
 
 .showAllContainer {
@@ -213,11 +155,6 @@
     display: flex;
 }
 
-.cardContainer {
-    margin: 8px;
-    width: 25%;
-}
-
 .providersContainer {
     display: flex;
     flex-wrap: wrap;
@@ -247,12 +184,6 @@
     }
     .leftContainer {
         width: 40%;
-    } 
-    .label {
-        width: 30%;
-    }
-    .description {
-        width: 70%;
     }
     .castContainer {
         max-width: 60vw;

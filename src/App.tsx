@@ -17,24 +17,23 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import heart from './img/icons/heart-outline.svg'
 import { modifyShowTrendingModal } from './actions'
-
+import loadingGif from './img/loadingGif.gif';
 
 export default function App() {
 
   const showTrendingModal = useSelector((state: { showTrendingModal: boolean }) => state.showTrendingModal)
 
-  const [dailyTrending, setDailyTrending] = useState<Movie[]>([])
-  const [weeklyTrending, setWeeklyTrending] = useState<Movie[]>([])
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([])
   const [selected, setSelected] = useState<'daily' | 'weekly'>('daily')
-
+  const [loading, setLoading] = useState(false)
 
   const dispatch = useDispatch()
-  async function getTrendingMovies() {
-    const daily = await axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_API_KEY}`)
-    setDailyTrending(daily.data.results)
-    const weekly = await axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${process.env.REACT_APP_API_KEY}`)
-    setWeeklyTrending(weekly.data.results)
-    dispatch(modifyShowTrendingModal(true))
+  async function getTrendingMovies(frequency: string) {
+    setLoading(true)
+    const movies = await axios.get(`https://api.themoviedb.org/3/trending/movie/${frequency}?api_key=${process.env.REACT_APP_API_KEY}`)
+    setTrendingMovies(movies.data.results)
+    setLoading(false)
+    if (!showTrendingModal) dispatch(modifyShowTrendingModal(true))
   }
 
   return (
@@ -42,7 +41,7 @@ export default function App() {
       <div className={s.header}>
         <Link to="/favorites/movies"><img src={heart} className={s.heartIcon} alt={'Your favorite movies'} /></Link>
         <Link to="/movies"><img src={videocam} className={s.logo} alt={'Movies app'} /></Link>
-        <div onClick={() => getTrendingMovies()}><img src={trending} className={s.trendingIcon} alt={'Trending movies'} /></div>
+        <div onClick={() => getTrendingMovies('day')}><img src={trending} className={s.trendingIcon} alt={'Trending movies'} /></div>
       </div>
       <div className={s.container}>
         <Switch>
@@ -71,19 +70,19 @@ export default function App() {
         <Modal.Body className={s.modalBody}>
           <ButtonGroup id='trending'>
             <ToggleButton id="daily" type="radio" variant="outline-primary" key="daily" name="trending"
-              className='mb-2' value='daily' checked={selected === 'daily'} onChange={() => setSelected('daily')}
+              className='mb-2' value='daily' checked={selected === 'daily'} onChange={() => { setSelected('daily'); getTrendingMovies('day') }}
             > Daily trending </ToggleButton>
             <ToggleButton id="weekly" type="radio" variant="outline-primary" key="weekly" name="trending"
-              className='mb-2' value='weekly' checked={selected === 'weekly'} onChange={() => setSelected('weekly')}
+              className='mb-2' value='weekly' checked={selected === 'weekly'} onChange={() => { setSelected('weekly'); getTrendingMovies('week') }}
             > Weekly trending </ToggleButton>
           </ButtonGroup>
           <div className={s.cardsContainer}>
-            {
-              selected === 'daily' ?
-                dailyTrending.map((e, index) => <Card key={index} movie={e}></Card>)
-                :
-                weeklyTrending.map((e, index) => <Card key={index} movie={e}></Card>)
-            }
+            {loading ?
+              <div className={s.modalContentCenter}>
+                <img className='loading' src={loadingGif} alt='loadingGif'></img>
+              </div>
+              :
+              trendingMovies.map((e, index) => <Card key={index} movie={e}></Card>)}
           </div>
         </Modal.Body>
       </Modal>

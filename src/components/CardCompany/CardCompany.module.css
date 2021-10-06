@@ -22,13 +22,9 @@
     background-color: #fff;
 }
 
-.poster:hover, .posterDefault:hover {
+.poster:hover {
     box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
     -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%) !important;
-}
-
-.maxWidth {
-    max-width: 170;
 }
 
 .heartIconContainer, .noColor {
@@ -51,7 +47,7 @@
     background-color: transparent;
 }
 
-.heartIcon, .ellipseIcon {
+.heartIcon {
     height: 13px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }
@@ -62,6 +58,6 @@
 }
 
 @media screen and (min-width: 400px) { .card { width: 50%; } .poster { width: 170px; height: 255px; min-height: 255px; }
-                                       .cardContent { width: 170px; } .posterDefault { width: 170px; height: 255px; min-height: 255px; }}
+                                       .cardContent { width: 170px; }}
 @media screen and (min-width: 800px) { .card {width: 25%} }
 @media screen and (min-width: 1200px) { .card {width: 20%} }

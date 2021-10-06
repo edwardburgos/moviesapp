@@ -26,7 +26,6 @@
     cursor: pointer;
 }
 
-
 .configIcon {
     width: 30px;
     height: 30px;
@@ -54,7 +53,6 @@
     align-items: center;
     flex: 1;
     flex-direction: column;
-
 }
 
 .noResultsPagination {
@@ -84,15 +82,15 @@
     align-items: center;
 }
 
-.selectContainer, .selectSortingContainer {
+.selectContainer, .fullSelectContainer {
     display: flex;
     position: relative;
     align-items: center;
-    width: calc(100% - 51px);
+    width: 100%;
 }
 
-.selectSortingContainer {
-    margin-top: 16px;
+.selectContainer {
+    width: calc(100% - 51px);
 }
 
 .iconContainer {

@@ -1,8 +1,5 @@
-import { CardProps, FavoriteProps } from '../../extras/types';
+import { FavoriteProps } from '../../extras/types';
 import s from './Favorite.module.css'
-import defaultPoster from '../../img/icons/alert-circle-outline.svg';
-import { Link } from 'react-router-dom';
-import { months } from '../../extras/globalVariables';
 import { useDispatch, useSelector } from 'react-redux';
 import axios, { CancelToken } from 'axios';
 import { Movie } from '../../extras/types';
@@ -18,15 +15,14 @@ import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
 import { useHistory } from 'react-router';
 
-
-export default function Favorite({type}: FavoriteProps) {
+export default function Favorite({ type }: FavoriteProps) {
 
     const results = useSelector((state: { results: null | Movie[] }) => state.results)
     const loading = useSelector((state: { loading: boolean }) => state.loading)
-    const favoriteMovies = useSelector((state: {favoriteMovies: boolean}) => state.favoriteMovies)
-    const favoritePeople = useSelector((state: {favoritePeople: boolean}) => state.favoritePeople)
-    const favoriteCompanies = useSelector((state: {favoriteCompanies: boolean}) => state.favoriteCompanies)
-    const favoriteCollections = useSelector((state: {favoriteCollections: boolean}) => state.favoriteCollections)
+    const favoriteMovies = useSelector((state: { favoriteMovies: boolean }) => state.favoriteMovies)
+    const favoritePeople = useSelector((state: { favoritePeople: boolean }) => state.favoritePeople)
+    const favoriteCompanies = useSelector((state: { favoriteCompanies: boolean }) => state.favoriteCompanies)
+    const favoriteCollections = useSelector((state: { favoriteCollections: boolean }) => state.favoriteCollections)
     const currentPage = useSelector((state: { currentPage: number }) => state.currentPage)
 
 
@@ -39,12 +35,12 @@ export default function Favorite({type}: FavoriteProps) {
         { name: 'Collections', nameSingular: 'collection', value: '4' },
     ];
     const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
-    
+
     useEffect(() => {
         setRadioValue(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
-        
+
     }, [type])
-    
+
     async function getFavorites(cancelToken: CancelToken | null) {
         try {
             dispatch(modifyLoading(true))
@@ -61,7 +57,7 @@ export default function Favorite({type}: FavoriteProps) {
                 })
                 dispatch(modifyResults(localMovies))
                 let pages = JSON.parse(movies).length / 20
-                if (pages % 1 != 0) pages = parseInt(`${pages}`) + 1
+                if (pages % 1 !== 0) pages = parseInt(`${pages}`) + 1
                 dispatch(modifyTotalPages(pages))
             } else {
                 dispatch(modifyResults([]))
@@ -115,7 +111,7 @@ export default function Favorite({type}: FavoriteProps) {
                         name="searchType"
                         value={radio.value}
                         checked={radioValue === radio.value}
-                        onChange={(e) => {history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(e.currentTarget.value)}}
+                        onChange={(e) => { history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(radio.value) }}
                     >
                         {radio.name}
                     </ToggleButton>
@@ -166,21 +162,5 @@ export default function Favorite({type}: FavoriteProps) {
                 {results && results.length ? <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} /> : null}
             </div>
         </div>
-
-                    // {!loading ?
-                    //     <>
-                    //         {
-                    //             results && results.length ?
-                    //                 results.map((e, index) => <Card key={index} movie={e}></Card>)
-                    //                 :
-                    //                 null
-                    //         }
-                    //     </>
-                    //     :
-                    //     <div className='contentCenter'>
-                    //         <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                    //     </div>
-                    // }
-                    // <PaginationComponent origin='favorite' />
     );
 }

@@ -7,7 +7,6 @@
   min-height: calc(100vh - 80px);
 }
 
-
 .header {
   margin-bottom: 16px;
   padding: 8px;
@@ -16,7 +15,6 @@
   justify-content: center;
   position: relative;
   width: 100%;
-  /* box-shadow: 0 4px 2px -2px gray; */
   box-shadow: 0 1px 12px -1px rgb(0 0 0 / 24%) !important;
   -webkit-box-shadow: 0 1px 12px -1px rgb(0 0 0 / 24%) !important;
 }
@@ -47,12 +45,22 @@
 }
 
 .cardsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    width: 100%;
-    max-width: 1587px;
-    text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 1587px;
+  text-align: left;
+}
+
+.modalContentCenter {
+  width: 100%;
+  max-width: 330px;
+  min-height: calc(100vh - 200px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .App {
