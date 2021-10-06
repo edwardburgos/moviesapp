@@ -17,7 +17,7 @@ import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
 import config from '../../img/icons/options-outline.svg'
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function SearchBar({ type, searchedGenre }: SearchComponentProps) {
 

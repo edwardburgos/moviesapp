@@ -13,7 +13,7 @@ import { ButtonGroup, ToggleButton } from 'react-bootstrap'
 import CardPerson from '../CardPerson/CardPerson'
 import CardCompany from '../CardCompany/CardCompany';
 import CardCollection from '../CardCollection/CardCollection';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 export default function Favorite({ type }: FavoriteProps) {
 
