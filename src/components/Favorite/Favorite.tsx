@@ -51,12 +51,14 @@ export default function Favorite({type}: FavoriteProps) {
             const movies = localStorage.getItem(radioValue === '1' ? "favoriteMovies" : radioValue === '2' ? "favoritePeople" : radioValue === '3' ? "favoriteCompanies" : "favoriteCollections")
             if (movies) {
                 let localMovies: Movie[] = []
-                // const localItems = JSON.parse(localStorage.getItem("favoriteMovies") || '[]')
-                for (const e of JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20))) {
-                    const movieInfo = await axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined)
-                    const movie = movieInfo.data
-                    localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country }];
-                }
+                await new Promise((resolve, reject) => {
+                    JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20)).forEach(async (e: number, index: number, array: Array<number>) => {
+                        const movieInfo = await axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined)
+                        const movie = movieInfo.data
+                        localMovies[index] = ({ id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country });
+                        if (index === array.length - 1) resolve('Completed');
+                    })
+                })
                 dispatch(modifyResults(localMovies))
                 let pages = JSON.parse(movies).length / 20
                 if (pages % 1 != 0) pages = parseInt(`${pages}`) + 1
