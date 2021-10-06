@@ -38,7 +38,7 @@ export default function Favorite({ type }: FavoriteProps) {
 
     useEffect(() => {
         setRadioValue(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type])
 
     async function getFavorites(cancelToken: CancelToken | null) {
@@ -76,11 +76,13 @@ export default function Favorite({ type }: FavoriteProps) {
 
     useEffect(() => {
         if (favoriteMovies || favoritePeople || favoriteCompanies || favoriteCollections) getFavorites(null)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [favoriteMovies, favoritePeople, favoriteCompanies, favoriteCollections])
 
     useEffect(() => {
         document.title = `${radioValue === '1' ? 'Favorite movies' : radioValue === '2' ? 'Favorite people' : radioValue === '3' ? 'Favorite companies' : 'Favorite collections'}`
         getFavorites(null)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [radioValue])
 
     useEffect(() => {
@@ -96,6 +98,7 @@ export default function Favorite({ type }: FavoriteProps) {
             dispatch(modifyTotalPages(1))
             dispatch(modifyLoading(false))
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
 
     return (

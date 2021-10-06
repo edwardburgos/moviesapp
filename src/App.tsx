@@ -2,7 +2,7 @@ import s from './App.module.css';
 import videocam from './img/icons/videocam-outline.svg'
 import trending from './img/icons/trending-up-outline.svg'
 import SearchBar from './components/Search/Search';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, Redirect } from 'react-router-dom';
 import Genre from './components/Genre/Genre';
 import Collection from './components/Collection/Collection';
 import Company from './components/Company/Company';
@@ -45,6 +45,9 @@ export default function App() {
       </div>
       <div className={s.container}>
         <Switch>
+          <Route exact path="/">
+            <Redirect to="/movies" />
+          </Route>
           <Route path="/favorites/:type" render={({ match }) => <Favorite type={match.params.type} />} />
           <Route path="/detail/:id/:name" render={({ match }) => <Detail id={parseInt(match.params.id)} />} />
           <Route path="/genre/:id/:name" render={({ match }) => <Genre id={parseInt(match.params.id)} />} />

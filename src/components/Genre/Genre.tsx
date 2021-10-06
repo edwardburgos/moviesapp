@@ -68,21 +68,21 @@ export default function Genre({ id }: SearchProps) {
         }
     }, [dispatch, id, sortingQuery])
 
-    async function sortBy(sortParameter: string) {
-        dispatch(modifyLoading(true))
-        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&with_genres=${id}&page=`
-        const results = await axios.get(`${url}1`)
-        dispatch(modifySearchURL(url))
-        dispatch(modifyCurrentPage(1))
-        dispatch(modifyResults(results.data.results))
-        dispatch(modifyTotalPages(results.data.total_pages))
-        dispatch(modifyLoading(false))
-    }
 
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {
+        async function sortBy(sortParameter: string) {
+            dispatch(modifyLoading(true))
+            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&with_genres=${id}&page=`
+            const results = await axios.get(`${url}1`)
+            dispatch(modifySearchURL(url))
+            dispatch(modifyCurrentPage(1))
+            dispatch(modifyResults(results.data.results))
+            dispatch(modifyTotalPages(results.data.total_pages))
+            dispatch(modifyLoading(false))
+        }
         sortBy(sorting);
-    }, [sorting])
+    }, [dispatch, id, sorting])
 
     // This hook allows us to search data using the url
     useEffect(() => {

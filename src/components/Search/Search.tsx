@@ -66,34 +66,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
         }
     }
 
-    async function searchByGenre(genreId: string) {
-        try {
-            dispatch(modifyLoading(true))
-            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genreId}&page=`
-            const results = await axios.get(`${url}1`)
-            dispatch(modifySearchURL(url))
-            dispatch(modifyResults(results.data.results))
-            dispatch(modifyTotalPages(results.data.total_pages))
-            dispatch(modifyLoading(false))
-        } catch (e) {
-            console.log(e)
-            showMessage('Sorry, an error ocurred')
-        }
-    }
-
-    async function sortBy(sortParameter: string) {
-        try {
-            dispatch(modifyLoading(true))
-            const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_genres=${genre}`
-            const results = await axios.get(url)
-            dispatch(modifyResults(results.data.results))
-            dispatch(modifyLoading(false))
-        } catch (e) {
-            console.log(e)
-            showMessage('Sorry, an error ocurred')
-        }
-    }
-
     // This hook change the document title
     useEffect(() => {
         document.title = `Movies app`
@@ -118,18 +90,46 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                 searchData(title);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, radioValue])
 
     // This hooks acts when title changes
     useEffect(() => {
         if (title) { setUsed(true); searchData(title); } else { setUsed(false) }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [title])
 
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {
+        async function searchByGenre(genreId: string) {
+            try {
+                dispatch(modifyLoading(true))
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&with_genres=${genreId}&page=`
+                const results = await axios.get(`${url}1`)
+                dispatch(modifySearchURL(url))
+                dispatch(modifyResults(results.data.results))
+                dispatch(modifyTotalPages(results.data.total_pages))
+                dispatch(modifyLoading(false))
+            } catch (e) {
+                console.log(e)
+                showMessage('Sorry, an error ocurred')
+            }
+        }
+        async function sortBy(sortParameter: string) {
+            try {
+                dispatch(modifyLoading(true))
+                const url = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=${sortParameter}&page=1&with_genres=${genre}`
+                const results = await axios.get(url)
+                dispatch(modifyResults(results.data.results))
+                dispatch(modifyLoading(false))
+            } catch (e) {
+                console.log(e)
+                showMessage('Sorry, an error ocurred')
+            }
+        }
         if (genre) { setUsed(true); searchByGenre(genre); } else { setUsed(false) }
         if (genre && sorting) { sortBy(sorting); }
-    }, [genre, sorting])
+    }, [dispatch, genre, sorting])
 
     // This hook allows us to search data using the url
     useEffect(() => {
@@ -137,7 +137,8 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
         searchQuery ? setTitle(searchQuery) : setTitle('')
         searchedGenre ? setGenre(`${genres.filter(e => e.name.toLowerCase() === searchedGenre)[0].id}`) : setGenre('')
         searchedGenre && sortingQuery ? setSorting(sortingQuery) : setSorting('popularity.desc')
-    }, [type, searchQuery, searchedGenre, sortingQuery]) // sortingQuery
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [type, searchQuery, searchedGenre, sortingQuery])
 
     return (
         <>
@@ -169,7 +170,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                             :
                             <>
                                 <div className={results && results.length ? s.selectContainer : s.fullSelectContainer}>
-                                    <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; searchByGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
+                                    <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; setGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
                                         {genre ? null : <option>Select a movie genre</option>}
                                         {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
                                     </Form.Select>
