@@ -63,7 +63,7 @@ export default function App() {
         centered
         size="xl"
         keyboard={false}
-        onHide={() => dispatch(modifyShowTrendingModal(false))}
+        onHide={() => { dispatch(modifyShowTrendingModal(false)); setSelected('daily')}}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
