@@ -172,7 +172,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                 <div className={results && results.length ? s.selectContainer : s.fullSelectContainer}>
                                     <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; setGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
                                         {genre ? null : <option>Select a movie genre</option>}
-                                        {genres.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
+                                        {genres.map((e, index) => <option value={e.id} key={index}>{e.name}</option>)}
                                     </Form.Select>
                                     <div className={genre === '' ? s.invisible : s.iconContainer}>
                                         <img src={closeCircle} className={genre === '' ? s.invisible : s.selectIconDumb} onClick={() => { dispatch(modifyResults(null)); setGenre(''); history.push('/genres') }} alt={'Remove selected genre'} />
@@ -249,11 +249,11 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                         <Form>
                             <div key='default-radio'>
                                 {
-                                    sortingOptions.map(e =>
+                                    sortingOptions.map((e, index) =>
                                         <Form.Check
                                             type='radio'
                                             id={e.value}
-                                            key={e.value}
+                                            key={index}
                                             checked={e.value === sorting}
                                             label={e.complete}
                                             name="sortingOptions"

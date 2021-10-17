@@ -25,6 +25,7 @@ export default function Card({ movie }: CardProps) {
             localStorage.setItem('favoriteMovies', JSON.stringify([movie.id]))
         }
         setSelected(true)
+        dispatch(modifyFavoriteMovies(true))
     }
 
     function deleteFromFavoriteMovies() {
@@ -40,9 +41,9 @@ export default function Card({ movie }: CardProps) {
     useEffect(() => {
         const favoriteMovies = localStorage.getItem('favoriteMovies')
         if (favoriteMovies) {
-            if (JSON.parse(favoriteMovies).includes(movie.id)) setSelected(true)
+            if (JSON.parse(favoriteMovies).includes(movie.id)) { setSelected(true) } else { setSelected(false) }
         }
-    }, [movie])
+    }, [movie.id])
 
     return (
         <>

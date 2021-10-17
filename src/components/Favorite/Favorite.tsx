@@ -45,15 +45,21 @@ export default function Favorite({ type }: FavoriteProps) {
         try {
             dispatch(modifyLoading(true))
             const movies = localStorage.getItem(radioValue === '1' ? "favoriteMovies" : radioValue === '2' ? "favoritePeople" : radioValue === '3' ? "favoriteCompanies" : "favoriteCollections")
-            if (movies) {
+            if (movies && JSON.parse(movies).length) {
                 let localMovies: Movie[] = []
-                await new Promise((resolve, reject) => {
-                    JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20)).forEach(async (e: number, index: number, array: Array<number>) => {
-                        const movieInfo = await axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined)
-                        const movie = movieInfo.data
-                        localMovies[index] = ({ id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country });
-                        if (index === array.length - 1) resolve('Completed');
-                    })
+                let arrayToWork = JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20))
+                if (!arrayToWork.length) {
+                    arrayToWork = JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 2) * 20), (currentPage === 1 ? 20 : ((currentPage - 2) * 20) + 20))
+                    dispatch(modifyCurrentPage(currentPage - 1))
+                }
+                let promises: Promise<{data: Movie}>[] = []
+                arrayToWork.forEach((e: number, index: number, array: Array<number>) => {
+                    promises.push(axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined))
+                })
+                let resolvedPromises: {data: Movie}[] = await Promise.all(promises);
+                localMovies = resolvedPromises.map(e => {
+                    const movie = e.data
+                    return { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.known_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country };
                 })
                 dispatch(modifyResults(localMovies))
                 let pages = JSON.parse(movies).length / 20
@@ -121,48 +127,42 @@ export default function Favorite({ type }: FavoriteProps) {
                 ))}
             </ButtonGroup>
             <h1 className='w-100 text-center'>Your favorite {radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}</h1>
-            <div className={results ? s.resultsPagination : s.noResultsPagination}>
-                {results ?
-                    !loading ?
-                        <div className={s.cardsContainerFull}>
-                            {results.length ?
-                                <>
-                                    {results.map((e, index) =>
-                                        e.id && (e.name || e.title) ?
-                                            ['1', '5'].includes(radioValue) ?
-                                                <Card key={index} movie={e}></Card>
-                                                :
-                                                radioValue === '3' ?
-                                                    <CardCompany key={index} movie={e}></CardCompany>
+            <div className={s.resultsPagination}>
+                {
+                    results && results.length ?
+                        <>
+                            {
+                                !loading ?
+                                    <div className={s.cardsContainerFull}>
+                                        {results.map((e, index) =>
+                                            e.id && (e.name || e.title) ?
+                                                ['1', '5'].includes(radioValue) ?
+                                                    <Card key={index} movie={e}></Card>
                                                     :
-                                                    radioValue === '4' ?
-                                                        <CardCollection key={index} movie={e}></CardCollection>
+                                                    radioValue === '3' ?
+                                                        <CardCompany key={index} movie={e}></CardCompany>
                                                         :
-                                                        <CardPerson key={index} movie={e}></CardPerson>
-                                            : null)}
-                                </>
-                                :
-                                <div className={s.noResultsContainer}>
-                                    <div>
-                                        <img className={s.noResults} src={noResults} alt='noResults'></img>
-                                        <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
+                                                        radioValue === '4' ?
+                                                            <CardCollection key={index} movie={e}></CardCollection>
+                                                            :
+                                                            <CardPerson key={index} movie={e}></CardPerson>
+                                                : null)}
                                     </div>
-                                </div>
+                                    :
+                                    <div className={s.loadingContainer}>
+                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                    </div>
                             }
-                        </div>
+                            <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} />
+                        </>
                         :
-                        <div className={s.loadingContainer}>
-                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                        <div className={s.noResultsContainer}>
+                            <div>
+                                <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
+                            </div>
                         </div>
-                    :
-                    loading ?
-                        <div className={s.loadingContainer}>
-                            <img className='loading' src={loadingGif} alt='loadingGif'></img>
-                        </div>
-                        :
-                        null
                 }
-                {results && results.length ? <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} /> : null}
             </div>
         </div>
     );

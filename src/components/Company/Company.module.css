@@ -22,10 +22,10 @@
 .left {
     display: flex;
     justify-content: center;
-    width: 40%;
-    padding-right: 30px;
+    width: 100%;
     align-items: center;
     flex-wrap: wrap;
+    padding-bottom: 16px;
 }
 
 .logoContainer {
@@ -37,7 +37,6 @@
     max-width: 300px;
     max-height: 450px;
     object-fit: contain;
-    border-radius: 10px;
 }
 
 .right {
@@ -140,3 +139,5 @@
     height: 13px;
     filter: invert(18%) sepia(100%) saturate(6387%) hue-rotate(356deg) brightness(95%) contrast(121%);
 }
+
+@media screen and (min-width: 576px) { .left {width: 40%; padding-right: 30px; padding-bottom: 0;} }

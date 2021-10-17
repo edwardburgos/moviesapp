@@ -200,15 +200,15 @@ export default function Detail({ id }: SearchProps) {
                                             <>
                                                 <Form>
                                                     <div key='default-radio'>
-                                                        {Object.keys(providers).map(e =>
+                                                        {Object.keys(providers).map((e, index) =>
                                                             e !== 'link' ?
                                                                 <Form.Check
                                                                     inline
                                                                     type='radio'
                                                                     id={e}
-                                                                    key={e}
+                                                                    key={index}
                                                                     checked={e === selectedProvider}
-                                                                    label={['buy' || 'rent'].includes(e) ? `Available to ${e} at` : 'Included in'}
+                                                                    label={e === 'buy' ? `Available to buy at` : e === 'rent' ? `Available to rent at` : 'Included in'}
                                                                     name='providers'
                                                                     className='bold'
                                                                     onChange={() => { setSelectedProvider(e) }}
@@ -217,8 +217,8 @@ export default function Detail({ id }: SearchProps) {
                                                     </div>
                                                 </Form>
                                                 <div className={s.providersContainer}>
-                                                    {providers[selectedProvider].map(e =>
-                                                        <div className={s.providerContainer}>
+                                                    {providers[selectedProvider].map((e, index) =>
+                                                        <div className={s.providerContainer} key={index}>
                                                             <img src={e.logo_path ? `https://image.tmdb.org/t/p/w500${e.logo_path}` : defaultLogo} alt={e.provider_name} className={s.providerLogo}></img>
                                                             <span>{e.provider_name}</span>
                                                         </div>

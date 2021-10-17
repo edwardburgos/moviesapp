@@ -60,7 +60,7 @@
 }
 
 .resultsPagination {
-    min-height: calc(100vh - 170px);
+    min-height: calc(100vh - 224px);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -120,3 +120,6 @@
     padding: 8px;
     padding-top: 0;
 }
+
+@media screen and (min-width: 476px) {.resultsPagination {min-height: calc(100vh - 170px);} }
+
