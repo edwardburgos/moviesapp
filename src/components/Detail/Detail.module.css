@@ -6,7 +6,8 @@
 }
 
 .info {
-    width: 100%;    
+    width: 100%; 
+    margin-top: 8px;   
 }
 
 .leftContainer {
@@ -181,6 +182,7 @@
 @media screen and (min-width: 768px) { 
     .info {
         width: 55%;
+        margin-top: 0;
     }
     .leftContainer {
         width: 40%;
