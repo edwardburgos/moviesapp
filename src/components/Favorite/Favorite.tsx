@@ -35,7 +35,7 @@ export default function Favorite({ type }: FavoriteProps) {
         { name: 'Collections', nameSingular: 'collection', value: '4' },
     ];
     const [radioValue, setRadioValue] = useState(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
-
+    const [globalLoading, setGlobalLoading] = useState(false)
     useEffect(() => {
         setRadioValue(type ? radios.filter(e => e.name.toLowerCase() === type)[0].value : '1');
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,11 +52,11 @@ export default function Favorite({ type }: FavoriteProps) {
                     arrayToWork = JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 2) * 20), (currentPage === 1 ? 20 : ((currentPage - 2) * 20) + 20))
                     dispatch(modifyCurrentPage(currentPage - 1))
                 }
-                let promises: Promise<{data: Movie}>[] = []
+                let promises: Promise<{ data: Movie }>[] = []
                 arrayToWork.forEach((e: number, index: number, array: Array<number>) => {
                     promises.push(axios.get(`https://api.themoviedb.org/3/${radios.filter(e => e.value === radioValue)[0].nameSingular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`, cancelToken ? { cancelToken } : undefined))
                 })
-                let resolvedPromises: {data: Movie}[] = await Promise.all(promises);
+                let resolvedPromises: { data: Movie }[] = await Promise.all(promises);
                 localMovies = resolvedPromises.map(e => {
                     const movie = e.data
                     return { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.known_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country };
@@ -95,7 +95,12 @@ export default function Favorite({ type }: FavoriteProps) {
         document.title = 'Favorite movies'
         const cancelToken = axios.CancelToken;
         const source = cancelToken.source();
-        getFavorites(source.token);
+        async function firstLoad() {
+            setGlobalLoading(true);
+            await getFavorites(source.token);
+            setGlobalLoading(false);
+        }
+        firstLoad();
         return () => {
             source.cancel("Unmounted");
             dispatch(modifySearchURL(''))
@@ -108,62 +113,72 @@ export default function Favorite({ type }: FavoriteProps) {
     }, [dispatch])
 
     return (
-        <div className={s.container}>
-            <ButtonGroup id='searchType'>
-                {radios.map((radio, idx) => (
-                    <ToggleButton
-                        key={idx}
-                        id={`radio-${idx}`}
-                        type="radio"
-                        variant='outline-primary'
-                        className='mb-3'
-                        name="searchType"
-                        value={radio.value}
-                        checked={radioValue === radio.value}
-                        onChange={(e) => { history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(radio.value) }}
-                    >
-                        {radio.name}
-                    </ToggleButton>
-                ))}
-            </ButtonGroup>
-            <h1 className='w-100 text-center'>Your favorite {radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}</h1>
-            <div className={s.resultsPagination}>
-                {
-                    results && results.length ?
-                        <>
+        <>
+            {
+                !globalLoading ?
+                    <div className={s.container}>
+                        <ButtonGroup id='searchType'>
+                            {radios.map((radio, idx) => (
+                                <ToggleButton
+                                    key={idx}
+                                    id={`radio-${idx}`}
+                                    type="radio"
+                                    variant='outline-primary'
+                                    className='mb-3'
+                                    name="searchType"
+                                    value={radio.value}
+                                    checked={radioValue === radio.value}
+                                    onChange={(e) => { history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(radio.value) }}
+                                >
+                                    {radio.name}
+                                </ToggleButton>
+                            ))}
+                        </ButtonGroup>
+                        <h1 className='w-100 text-center'>Your favorite {radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}</h1>
+                        <div className={s.resultsPagination}>
                             {
-                                !loading ?
-                                    <div className={s.cardsContainerFull}>
-                                        {results.map((e, index) =>
-                                            e.id && (e.name || e.title) ?
-                                                ['1', '5'].includes(radioValue) ?
-                                                    <Card key={index} movie={e}></Card>
-                                                    :
-                                                    radioValue === '3' ?
-                                                        <CardCompany key={index} movie={e}></CardCompany>
-                                                        :
-                                                        radioValue === '4' ?
-                                                            <CardCollection key={index} movie={e}></CardCollection>
-                                                            :
-                                                            <CardPerson key={index} movie={e}></CardPerson>
-                                                : null)}
-                                    </div>
+                                results && results.length ?
+                                    <>
+                                        {
+                                            !loading ?
+                                                <div className={s.cardsContainerFull}>
+                                                    {results.map((e, index) =>
+                                                        e.id && (e.name || e.title) ?
+                                                            ['1', '5'].includes(radioValue) ?
+                                                                <Card key={index} movie={e}></Card>
+                                                                :
+                                                                radioValue === '3' ?
+                                                                    <CardCompany key={index} movie={e}></CardCompany>
+                                                                    :
+                                                                    radioValue === '4' ?
+                                                                        <CardCollection key={index} movie={e}></CardCollection>
+                                                                        :
+                                                                        <CardPerson key={index} movie={e}></CardPerson>
+                                                            : null)}
+                                                </div>
+                                                :
+                                                <div className={s.loadingContainer}>
+                                                    <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                                </div>
+                                        }
+                                        <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} />
+                                    </>
                                     :
-                                    <div className={s.loadingContainer}>
-                                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                                    <div className={s.noResultsContainer}>
+                                        <div>
+                                            <img className={s.noResults} src={noResults} alt='noResults'></img>
+                                            <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
+                                        </div>
                                     </div>
                             }
-                            <PaginationComponent origin={`favorite${radios.filter(e => e.value === radioValue)[0].name}`} />
-                        </>
-                        :
-                        <div className={s.noResultsContainer}>
-                            <div>
-                                <img className={s.noResults} src={noResults} alt='noResults'></img>
-                                <p className='bold mb-0 text-center'>You have not liked any {radios.filter(e => e.value === radioValue)[0].nameSingular} yet</p>
-                            </div>
                         </div>
-                }
-            </div>
-        </div>
+                    </div>
+                    :
+                    <div className='contentCenter'>
+                        <img className='loading' src={loadingGif} alt='loadingGif'></img>
+                    </div>
+            }
+        </>
+
     );
 }
