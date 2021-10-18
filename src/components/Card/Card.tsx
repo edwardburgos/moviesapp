@@ -4,6 +4,7 @@ import defaultPoster from '../../img/icons/alert-circle-outline.svg';
 import { Link } from 'react-router-dom';
 import { months } from '../../extras/globalVariables';
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import { useEffect, useState } from 'react';
 import { modifyFavoriteMovies, modifyShowTrendingModal } from '../../actions';
 import { useDispatch } from 'react-redux'
@@ -54,8 +55,9 @@ export default function Card({ movie }: CardProps) {
                             <Link to={`/detail/${movie.id}/${movie.title.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`} onClick={() => dispatch(modifyShowTrendingModal(false))}><img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title} className={movie.poster_path ? s.poster : s.posterDefault}></img></Link>
                             <Link className='bold block mb-0 customLink' to={`/detail/${movie.id}/${movie.title.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`} onClick={() => dispatch(modifyShowTrendingModal(false))}>{movie.title}</Link>
                             {movie.release_date ? <p className='mb-0'>{`${movie.release_date.split('-')[2]} ${months[parseInt(movie.release_date.split('-')[1]) - 1]} ${movie.release_date.split('-')[0]}`}</p> : null}
-                            <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                            <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                 <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                             </div>
                         </div>
                     </div>

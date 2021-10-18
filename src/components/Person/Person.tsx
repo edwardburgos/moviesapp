@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
 import moment from 'moment'
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import { modifyFavoritePeople } from '../../actions';
 import { useHistory, useLocation } from "react-router"
 
@@ -153,8 +154,9 @@ export default function Person({ id }: SearchProps) {
                                     :
                                     <img className={person.profile_path ? s.profilePic : s.defaultProfilePic} src={person.profile_path ? `https://image.tmdb.org/t/p/w500${person.profile_path}` : defaultProfile} alt={person.name}></img>
                                 }
-                                <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                     <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                    <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                                 </div>
                             </div>
                         </div>

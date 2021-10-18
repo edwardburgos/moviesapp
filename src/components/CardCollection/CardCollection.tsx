@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { modifyFavoriteCollections } from '../../actions';
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
+
 
 export default function CardCollection({ movie }: CardProps) {
 
@@ -49,8 +51,9 @@ export default function CardCollection({ movie }: CardProps) {
                     <div className={s.card}>
                         <div className={s.cardContent}>
                             <Link className={s.collectionLink} to={`/collection/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.name}</Link>
-                            <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                            <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                 <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                             </div>
                         </div>
                     </div>

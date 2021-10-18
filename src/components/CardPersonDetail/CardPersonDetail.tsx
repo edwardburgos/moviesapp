@@ -3,6 +3,7 @@ import s from './CardPersonDetail.module.css'
 import defaultProfile from '../../img/icons/person-outline.svg';
 import { Link } from 'react-router-dom';
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import { modifyFavoritePeople } from '../../actions';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux'
@@ -53,8 +54,9 @@ export default function CardPersonDetail({ movie }: CardPersonDetailProps) {
                             <span className='bold block'>{movie.name}</span>
                             {movie.character || movie.job ? <span>{movie.character ? movie.character : movie.job ? movie.job : null}</span> : null}
                         </Link>
-                        <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
-                            <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite people'} />
+                        <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                            <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                            <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                         </div>
                     </div>
                     :

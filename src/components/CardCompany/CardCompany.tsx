@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { countries } from '../../extras/globalVariables'
 import { useState, useEffect } from 'react';
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import { useDispatch } from 'react-redux';
 import { modifyFavoriteCompanies } from '../../actions';
 
@@ -53,8 +54,9 @@ export default function CardCompany({ movie }: CardProps) {
                             <Link to={`/company/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}><img src={movie.logo_path ? `https://image.tmdb.org/t/p/w500${movie.logo_path}` : defaultLogo} alt={movie.name} className={s.poster}></img></Link>
                             <Link className='bold block mb-0 customLink' to={`/company/${movie.id}/${movie.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.name}</Link>
                             {movie.origin_country && countries.filter(e => e.code === movie.origin_country).length ? <span className='block'>{countries.filter(e => e.code === movie.origin_country)[0].name}</span> : null}
-                            <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                            <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                 <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                             </div>
                         </div>
                     </div>

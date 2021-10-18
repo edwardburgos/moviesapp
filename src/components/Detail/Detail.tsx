@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux'
 import Card from '../Card/Card'
 import { Movie } from '../../extras/types';
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import CardPersonDetail from '../CardPersonDetail/CardPersonDetail'
 import { Form } from 'react-bootstrap'
 
@@ -138,8 +139,9 @@ export default function Detail({ id }: SearchProps) {
                         <div className={s.leftContainer}>
                             <div className={s.posterContainer}>
                                 <img className={movie.poster_path ? s.poster : s.posterDefault} src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : defaultPoster} alt={movie.title}></img>
-                                <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                     <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                    <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                                 </div>
                             </div>
                             {trailer.key ? <div className='text-center mb-3 w-100'><a className={`btn btn-primary ${s.buttonWidth}`} href={`https://www.youtube.com/watch?v=${trailer.key}`} target="_blank" rel="noreferrer">Watch trailer</a></div> : null}

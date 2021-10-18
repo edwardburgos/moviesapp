@@ -33,33 +33,31 @@
     padding-right: 20px;
 }
 
-.heartIconContainer, .noColor {
-    width: 20px;
-    height: 20px;
+.heartIconContainer {
+    height: 21px;
+    width: 21px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000;
     position: absolute;
     right: 10px;
     top: 10px;
     cursor: pointer;
-    border-radius: 50%;
-    padding-right: 0.2px;
-    padding-top: 0.3px;
-}
-
-.noColor {
-    background-color: transparent;
 }
 
 .heartIcon {
-    height: 13px;
+    height: 20px;
     filter: invert(100%) sepia(6%) saturate(7479%) hue-rotate(176deg) brightness(113%) contrast(103%);
 }
 
+.heartBorder {
+    height: 20px;
+    filter: invert(0%) sepia(2%) saturate(26%) hue-rotate(273deg) brightness(84%) contrast(100%);
+    position: absolute;
+}
+
 .redHeart {
-    height: 13px;
+    height: 20px;
     filter: invert(18%) sepia(100%) saturate(6387%) hue-rotate(356deg) brightness(95%) contrast(121%);
 }
 

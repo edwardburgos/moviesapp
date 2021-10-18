@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { modifyFavoriteCollections } from "../../actions";
 import s from './Collection.module.css'
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 
 export default function Collection({ id }: SearchProps) {
 
@@ -71,8 +72,9 @@ export default function Collection({ id }: SearchProps) {
                 <div className='flexCentered'>
                     <div className={s.nameContainer}>
                         <h1 className='w-100 text-center'>{collection.name}</h1>
-                        <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
-                            <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                        <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                         </div>
                     </div>
                     {collection.overview ? <p className='text-center'>{collection.overview}</p> : null}

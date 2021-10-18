@@ -13,6 +13,7 @@ import { modifyResults, modifyTotalPages, modifySearchURL, modifyLoading, modify
 import { useSelector, useDispatch } from 'react-redux'
 import PaginationComponent from "../PaginationComponent/PaginationComponent"
 import heart from '../../img/icons/heart.svg'
+import heartOutline from '../../img/icons/heart-outline.svg'
 import { modifyFavoriteCompanies } from '../../actions';
 import { useHistory, useLocation } from "react-router"
 
@@ -131,8 +132,9 @@ export default function Company({ id }: SearchProps) {
                             <div className={s.left}>
                                 <div className={s.logoContainer}>
                                     <img className={s.logo} src={company.logo_path ? `https://image.tmdb.org/t/p/w500${company.logo_path}` : defaultLogo} alt={company.name}></img>
-                                    <div className={selected ? s.noColor : s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
+                                    <div className={s.heartIconContainer} onClick={() => selected ? deleteFromFavoriteMovies() : addToFavoriteMovies()}>
                                         <img src={heart} className={selected ? s.redHeart : s.heartIcon} alt={'Add to favorite movies'} />
+                                        <img src={heartOutline} className={s.heartBorder} alt={'Add to favorite movies'} />
                                     </div>
                                 </div>
                             </div>
