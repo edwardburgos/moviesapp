@@ -28,14 +28,19 @@ export default function PaginationComponent({ origin }: PaginationProps) {
       dispatch(modifyLoading(true))
       if (['favoriteMovies', 'favoritePeople', 'favoriteCompanies', 'favoriteCollections'].includes(origin)) {
         const movies = localStorage.getItem(origin)
-        if (movies) {
+        if (movies && JSON.parse(movies).length) {
           let localMovies: Movie[] = []
-          for (const e of JSON.parse(movies).slice((parseInt(number) === 1 ? 0 : (parseInt(number) - 1) * 20), (parseInt(number) === 1 ? 20 : ((parseInt(number) - 1) * 20) + 20))) {
+          let arrayToWork = JSON.parse(movies).slice((parseInt(number) === 1 ? 0 : (parseInt(number) - 1) * 20), (parseInt(number) === 1 ? 20 : ((parseInt(number) - 1) * 20) + 20))
+          let promises: Promise<{ data: Movie }>[] = [];
+          arrayToWork.forEach((e: number, index: number, array: Array<number>) => {
             const singular = origin === 'favoriteMovies' ? 'movie' : origin === "favoritePeople" ? 'person' : origin === "favoriteCompanies" ? 'company' : 'collection';
-            const movieInfo = await axios.get(`https://api.themoviedb.org/3/${singular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`)
-            const movie = movieInfo.data
-            localMovies = [...localMovies, { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.know_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country }];
-          }
+            promises.push(axios.get(`https://api.themoviedb.org/3/${singular}/${e}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`))
+          })
+          let resolvedPromises: { data: Movie }[] = await Promise.all(promises);
+          localMovies = resolvedPromises.map(e => {
+            const movie = e.data
+            return { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.known_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country };
+          })
           newResult = localMovies
         }
       } else {

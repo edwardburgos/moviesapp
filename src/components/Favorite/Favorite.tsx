@@ -46,11 +46,19 @@ export default function Favorite({ type }: FavoriteProps) {
             dispatch(modifyLoading(true))
             const movies = localStorage.getItem(radioValue === '1' ? "favoriteMovies" : radioValue === '2' ? "favoritePeople" : radioValue === '3' ? "favoriteCompanies" : "favoriteCollections")
             if (movies && JSON.parse(movies).length) {
+                let pages = JSON.parse(movies).length / 20
+                if (pages % 1 !== 0) pages = parseInt(`${pages}`) + 1
+                let usedCurrentPage = currentPage
+                if (usedCurrentPage > pages) {
+                    usedCurrentPage = 1;
+                    dispatch(modifyCurrentPage(1));
+                }
+                dispatch(modifyTotalPages(pages))
                 let localMovies: Movie[] = []
-                let arrayToWork = JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 1) * 20), (currentPage === 1 ? 20 : ((currentPage - 1) * 20) + 20))
+                let arrayToWork = JSON.parse(movies).slice((usedCurrentPage === 1 ? 0 : (usedCurrentPage - 1) * 20), (usedCurrentPage === 1 ? 20 : ((usedCurrentPage - 1) * 20) + 20))
                 if (!arrayToWork.length) {
-                    arrayToWork = JSON.parse(movies).slice((currentPage === 1 ? 0 : (currentPage - 2) * 20), (currentPage === 1 ? 20 : ((currentPage - 2) * 20) + 20))
-                    dispatch(modifyCurrentPage(currentPage - 1))
+                    arrayToWork = JSON.parse(movies).slice((usedCurrentPage === 1 ? 0 : (usedCurrentPage - 2) * 20), (usedCurrentPage === 1 ? 20 : ((usedCurrentPage - 2) * 20) + 20))
+                    dispatch(modifyCurrentPage(usedCurrentPage - 1))
                 }
                 let promises: Promise<{ data: Movie }>[] = []
                 arrayToWork.forEach((e: number, index: number, array: Array<number>) => {
@@ -62,9 +70,6 @@ export default function Favorite({ type }: FavoriteProps) {
                     return { id: movie.id, poster_path: movie.poster_path, release_date: movie.release_date, title: movie.title, name: movie.name, profile_path: movie.profile_path, known_for_department: movie.known_for_department, logo_path: movie.logo_path, origin_country: movie.origin_country };
                 })
                 dispatch(modifyResults(localMovies))
-                let pages = JSON.parse(movies).length / 20
-                if (pages % 1 !== 0) pages = parseInt(`${pages}`) + 1
-                dispatch(modifyTotalPages(pages))
             } else {
                 dispatch(modifyResults([]))
             }
@@ -79,6 +84,7 @@ export default function Favorite({ type }: FavoriteProps) {
             }
         }
     }
+
 
     useEffect(() => {
         if (favoriteMovies || favoritePeople || favoriteCompanies || favoriteCollections) getFavorites(null)
@@ -112,6 +118,10 @@ export default function Favorite({ type }: FavoriteProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
 
+    useEffect(() => {
+        console.log(currentPage)
+    }, [currentPage])
+
     return (
         <>
             {
@@ -128,7 +138,10 @@ export default function Favorite({ type }: FavoriteProps) {
                                     name="searchType"
                                     value={radio.value}
                                     checked={radioValue === radio.value}
-                                    onChange={(e) => { history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(radio.value) }}
+                                    onChange={(e) => {
+                                        history.push(`/favorites/${radio.name.toLowerCase()}`); setRadioValue(radio.value); dispatch(modifySearchURL('')); dispatch(modifyCurrentPage(1));
+                                        dispatch(modifyTotalPages(1)); dispatch(modifyLoading(false));
+                                    }}
                                 >
                                     {radio.name}
                                 </ToggleButton>

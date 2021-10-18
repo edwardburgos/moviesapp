@@ -59,6 +59,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
             dispatch(modifySearchURL(url))
             dispatch(modifyResults(results.data.results))
             dispatch(modifyTotalPages(results.data.total_pages))
+            dispatch(modifyCurrentPage(1)); 
             dispatch(modifyLoading(false))
         } catch (e) {
             console.log(e)
@@ -155,7 +156,8 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                 name="searchType"
                                 value={radio.value}
                                 checked={radioValue === radio.value}
-                                onChange={(e) => { radio.name === 'Genres' ? history.push('/genres') : history.push(`/${radio.name.toLowerCase()}${title ? `/?search=${title}` : ''}`); setRadioValue(radio.value) }}
+                                onChange={(e) => { radio.name === 'Genres' ? history.push('/genres') : history.push(`/${radio.name.toLowerCase()}${title ? `/?search=${title}` : ''}`); setRadioValue(radio.value); dispatch(modifySearchURL('')); dispatch(modifyCurrentPage(1)); 
+                                dispatch(modifyTotalPages(1)); dispatch(modifyLoading(false));  }}
                             >
                                 {radio.name}
                             </ToggleButton>
