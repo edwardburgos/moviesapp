@@ -118,10 +118,6 @@ export default function Favorite({ type }: FavoriteProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
 
-    useEffect(() => {
-        console.log(currentPage)
-    }, [currentPage])
-
     return (
         <>
             {

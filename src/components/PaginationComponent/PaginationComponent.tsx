@@ -50,7 +50,6 @@ export default function PaginationComponent({ origin }: PaginationProps) {
       dispatch(modifyResults(newResult))
       dispatch(modifyLoading(false))
     } catch (e) {
-      console.log(e)
       showMessage('Sorry, an error ocurred')
     }
   }

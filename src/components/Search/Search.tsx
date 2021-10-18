@@ -62,7 +62,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
             dispatch(modifyCurrentPage(1)); 
             dispatch(modifyLoading(false))
         } catch (e) {
-            console.log(e)
             showMessage('Sorry, an error ocurred')
         }
     }
@@ -112,7 +111,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                 dispatch(modifyTotalPages(results.data.total_pages))
                 dispatch(modifyLoading(false))
             } catch (e) {
-                console.log(e)
                 showMessage('Sorry, an error ocurred')
             }
         }
@@ -124,7 +122,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                 dispatch(modifyResults(results.data.results))
                 dispatch(modifyLoading(false))
             } catch (e) {
-                console.log(e)
                 showMessage('Sorry, an error ocurred')
             }
         }
