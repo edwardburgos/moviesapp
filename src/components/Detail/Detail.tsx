@@ -242,18 +242,18 @@ export default function Detail({ id }: SearchProps) {
                             {movie.belongs_to_collection ?
                                 <>
                                     <span className='bold'>Collection</span>
-                                    <div className='mb-2'><Link className='btn btn-primary customLink block m-2' to={`/collection/${movie.belongs_to_collection.id}/${movie.belongs_to_collection.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.belongs_to_collection.name}</Link></div>
+                                    <div className='mb-2'><Link className='btn btn-primary m-2' to={`/collection/${movie.belongs_to_collection.id}/${movie.belongs_to_collection.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.belongs_to_collection.name}</Link></div>
                                 </> : null}
                             {movie.genres.length !== 0 ?
                                 movie.genres.length === 1 ?
                                     <>
                                         <span className='bold'>Genre</span>
-                                        <div className='mb-2'><Link className='btn btn-primary customLink block m-2' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></div>
+                                        <div className='mb-2'><Link className='btn btn-primary m-2' to={`/genre/${movie.genres[0].id}/${movie.genres[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.genres[0].name}</Link></div>
                                     </>
                                     :
                                     <>
                                         <span className='bold'>Genres</span>
-                                        <div className='mb-2'>{movie.genres.map((e, index) => <Link key={index} className='btn btn-primary customLink block m-2' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
+                                        <div className='mb-2'>{movie.genres.map((e, index) => <Link key={index} className='btn btn-primary m-2' to={`/genre/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                     </>
                                 : null
                             }
@@ -262,12 +262,12 @@ export default function Detail({ id }: SearchProps) {
                                     movie.production_companies.length === 1 ?
                                         <>
                                             <span className='bold'>Production company</span>
-                                            <div className='mb-2'><Link className='btn btn-primary customLink block m-2' to={`/company/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></div>
+                                            <div className='mb-2'><Link className='btn btn-primary m-2' to={`/company/${movie.production_companies[0].id}/${movie.production_companies[0].name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{movie.production_companies[0].name}</Link></div>
                                         </>
                                         :
                                         <>
                                             <span className='bold'>Production companies</span>
-                                            <div className='mb-2'>{movie.production_companies.map((e, index) => <Link key={index} className='btn btn-primary customLink block m-2' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
+                                            <div className='mb-2'>{movie.production_companies.map((e, index) => <Link key={index} className='btn btn-primary m-2' to={`/company/${e.id}/${e.name.toLowerCase().replace(/[^0-9a-z-A-Z ]/g, "").replaceAll(' ', '-')}`}>{e.name}</Link>)}</div>
                                         </>
                                     : null
                             }
