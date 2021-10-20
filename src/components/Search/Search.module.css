@@ -82,6 +82,12 @@
     align-items: center;
 }
 
+.selectParentContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
 .selectContainer, .fullSelectContainer {
     display: flex;
     position: relative;
@@ -90,7 +96,7 @@
 }
 
 .selectContainer {
-    width: calc(100% - 51px);
+    flex: 1;
 }
 
 .iconContainer {

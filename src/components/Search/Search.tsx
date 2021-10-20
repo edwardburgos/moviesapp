@@ -167,7 +167,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                 <img src={title ? closeCircle : search} className={s.iconDumb} onClick={() => { setUsed(false); setTitle(''); history.push(`/${radios.filter(e => e.value === radioValue)[0].name.toLowerCase()}`); dispatch(modifyResults(null)); }} alt={title ? 'Remove movie title' : 'Search a movie'} />
                             </div>
                             :
-                            <>
+                            <div className={s.selectParentContainer}>
                                 <div className={results && results.length ? s.selectContainer : s.fullSelectContainer}>
                                     <Form.Select aria-label="Default select example" value={genre} onChange={(e) => { const target = e.target as HTMLSelectElement; setGenre(target.value); setUsed(true); setGenre(target.value); history.push(`/genres/${genres.filter(e => e.id === parseInt(target.value))[0].name.toLowerCase()}`) }}>
                                         {genre ? null : <option>Select a movie genre</option>}
@@ -182,7 +182,7 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
                                         <img src={config} className={s.configIcon} onClick={() => { setShowSorting(true) }} alt={'Apply sorting'} />
                                         : null
                                 }
-                            </>
+                            </div>
                     }
                 </div>
                 <div className={used ? s.resultsPagination : s.noResultsPagination}>
