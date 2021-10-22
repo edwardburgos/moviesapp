@@ -108,7 +108,6 @@ export default function Person({ id }: SearchProps) {
         dispatch(modifyFavoritePeople(true))
     }
 
-
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {
         async function sortBy(sortParameter: string) {
@@ -128,7 +127,6 @@ export default function Person({ id }: SearchProps) {
     useEffect(() => {
         sortingQuery ? setSorting(sortingQuery) : setSorting('popularity.desc')
     }, [sortingQuery])
-
 
     return (
         <>

@@ -50,7 +50,6 @@ export default function SearchBar({ type, searchedGenre }: SearchComponentProps)
     const dispatch = useDispatch();
     const history = useHistory();
 
-
     async function searchData(title: string) {
         try {
             dispatch(modifyLoading(true))

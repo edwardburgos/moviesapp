@@ -7,7 +7,6 @@ import { modifyFavoriteCollections } from '../../actions';
 import heart from '../../img/icons/heart.svg'
 import heartOutline from '../../img/icons/heart-outline.svg'
 
-
 export default function CardCollection({ movie }: CardProps) {
 
     const [selected, setSelected] = useState(false)

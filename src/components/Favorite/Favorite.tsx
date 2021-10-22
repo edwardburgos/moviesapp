@@ -25,7 +25,6 @@ export default function Favorite({ type }: FavoriteProps) {
     const favoriteCollections = useSelector((state: { favoriteCollections: boolean }) => state.favoriteCollections)
     const currentPage = useSelector((state: { currentPage: number }) => state.currentPage)
 
-
     const dispatch = useDispatch();
     const history = useHistory();
     const radios = [
@@ -84,7 +83,6 @@ export default function Favorite({ type }: FavoriteProps) {
             }
         }
     }
-
 
     useEffect(() => {
         if (favoriteMovies || favoritePeople || favoriteCompanies || favoriteCollections) getFavorites(null)

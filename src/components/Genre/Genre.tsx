@@ -68,7 +68,6 @@ export default function Genre({ id }: SearchProps) {
         }
     }, [dispatch, id, sortingQuery])
 
-
     // This hooks acts when genre or sortingQuery change
     useEffect(() => {
         async function sortBy(sortParameter: string) {
