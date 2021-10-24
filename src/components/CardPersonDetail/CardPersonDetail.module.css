@@ -1,12 +1,11 @@
 .fullCastMember {
     background-color: #d4d4d4;
     border-radius: 10px;
-    margin: 16px;
     cursor: pointer;
     position: relative;
     display: inline-block;
     max-width: 125px;
-    margin: 8px;
+    margin: 8px 16px 8px 0;
 }
 
 .profilePic {
